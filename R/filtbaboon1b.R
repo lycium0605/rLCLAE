@@ -21,19 +21,17 @@
 #' @param outputdir The output directory of the genolik file.
 #'
 #' @return A file in which each line represents a snp. The line looks like chr, pos, -1. -1. -1. (missing data) or gl1, gl2, gl3 transformed from the phred score.
-#' @examples
-#' @importFrom Rcpp sourceCpp
-#' @export
 
 
 genolik<-function(inputdir,outputdir){
   #library(Rcpp)
-  Rcpp::sourceCpp('/Users/lycium/Desktop/Jennylab/rpackage_LCLAE/rcode/Aut/genolik.cpp')
+  #Rcpp::sourceCpp('/Users/lycium/Desktop/Jennylab/rpackage_LCLAE/rcode/Aut/genolik.cpp')
   #Rcpp::sourceCpp('./R/genolik.cpp')
   input=file(inputdir,'r')
   output=file(outputdir,'w')
   line=unlist(strsplit(readLines(input,n=1),split = '\t'))
   #print(line)
+  print(paste('Individuals number:',length(line)-2))
   while(length(line)!=0){
     sname=line[1]
     pos=line[2]
@@ -62,9 +60,9 @@ genolik<-function(inputdir,outputdir){
       #l1=10^(-gl[1]/10)
       #l2=10^(-gl[2]/10)
       #l3=10^(-gl[3]/10)
-      l1=glpow(gl[1])
-      l2=glpow(gl[2])
-      l3=glpow(gl[3])
+      l1=glpow_R(gl[1])
+      l2=glpow_R(gl[2])
+      l3=glpow_R(gl[3])
 
 
       sum=l1+l2+l3

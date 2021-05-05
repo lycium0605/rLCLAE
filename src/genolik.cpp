@@ -12,6 +12,10 @@ using namespace Rcpp;
 //   http://gallery.rcpp.org/
 //
 
+//' GL=10^(-pl)
+//'
+//' @param x A single double.
+//' @export
 // [[Rcpp::export]]
 double glpow(double x) {
   return pow(10,-x/10);
