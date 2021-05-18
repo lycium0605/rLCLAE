@@ -19,73 +19,25 @@
 #'
 #' @param inputdir The input directory of the cleaned vcf file.
 #' @param outputdir The output directory of the genolik file.
-#'
+#' @param type haplotype (i.e. male-X) or diploid (Autosome), dipoid as default
 #' @return A file in which each line represents a snp. The line looks like chr, pos, -1. -1. -1. (missing data) or gl1, gl2, gl3 transformed from the phred score.
 
 
-genolik<-function(inputdir,outputdir){
-  #library(Rcpp)
-  #Rcpp::sourceCpp('/Users/lycium/Desktop/Jennylab/rpackage_LCLAE/rcode/Aut/genolik.cpp')
-  #Rcpp::sourceCpp('./R/genolik.cpp')
+genolik<-function(inputdir,outputdir,type='dip'){
   input=file(inputdir,'r')
-  output=file(outputdir,'w')
   line=unlist(strsplit(readLines(input,n=1),split = '\t'))
-  #print(line)
-  print(paste('Individuals number:',length(line)-2))
-  while(length(line)!=0){
-    sname=line[1]
-    pos=line[2]
-    newline<-c(sname,pos)
-    cat(newline,file = output,sep = ' ')
-    cat(' ',file = output)
-    for (ind in 3:length(line)){
-      indinfo=line[ind]
-      indinfo<-unlist(strsplit(indinfo,split = ' '))
-      if(indinfo[1]=='999/999'){
-        nl1='-1.'
-        nl2='-1.'
-        nl3='-1.'
-      }
-      else{
-      gl<-indinfo[length(indinfo)]
-      gl<-unlist(strsplit(gl,split = ',')) # chr of 3, gl1, gl2,gl3
-      gl<-as.numeric(gl)
-      # Error report
-      if(length(gl)!=3){
-        print(paste('Error at',sname,pos,'! Each individual should have 3 PL score, not',length(gl)))
-        print(line[ind])
-        break
-      }
-      #Detecting missing data
-      #l1=10^(-gl[1]/10)
-      #l2=10^(-gl[2]/10)
-      #l3=10^(-gl[3]/10)
-      l1=glpow_R(gl[1])
-      l2=glpow_R(gl[2])
-      l3=glpow_R(gl[3])
-
-
-      sum=l1+l2+l3
-      nl1=l1/sum
-      nl2=l2/sum
-      nl3=l3/sum
-      nl1=sprintf("%.6f",nl1)
-      nl2=sprintf("%.6f",nl2)
-      nl3=sprintf("%.6f",nl3)
-      #nl1=format(round(l1/sum,digits=6),nsmall=6)
-      #nl2=format(round(l2/sum,digits=6),nsmall=6)
-      #nl3=format(round(l3/sum,digits=6),nsmall=6)
-      }
-      newline<-paste(nl1,nl2,nl3)
-      cat(newline,file = output,sep = ' ')
-      cat(' ',file = output)
-    }
-    cat('\n',file = output)
-    #writeLines(newline,con = output,sep = '\n')
-    line=unlist(strsplit(readLines(input,n=1),split = '\t'))
-  }
+  indnum=length(line)-2
   close(input)
-  close(output)
+  if(type == 'dip'){
+    filt1_dip(indnum,inputdir,outputdir)
+  }
+  else if(type=='hap'){
+    filt1_hap(indnum,inputdir,outputdir)
+  }
+  else{
+    print("Please specify a type, dip or hap")
+  }
+
 }
 
 
