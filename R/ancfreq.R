@@ -78,6 +78,6 @@ test_ancfreq<-function(){
   output=paste(data,"ancfreq",sep = '')
   ref1=paste(data,"fullref_anubis.h",sep = '')
   ref2=paste(data,"fullref_yellow.h",sep = '')
-  ancfreq(inputdir_dip = input,pop1_dip = ref2,pop2_dip = ref1,outputdir = output)
+  ancfreq(inputdir_dip = input,pop1_dip = ref1,pop2_dip = ref2,outputdir = output)
   }
 

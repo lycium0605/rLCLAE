@@ -18,9 +18,9 @@ void ancfreq_c(int n, int type, std::string pop1, std::string pop2, std::string 
 
   Rcout<<"Finding "<<n<<" individuals in the input"<<std::endl;
   FILE *pop1_, *pop2_, *geno, *out;
-  Pop1 = (int *) malloc (n * sizeof (int));
-  Pop2 = (int *) malloc (n * sizeof (int));
-  for (a=0; a<n; ++a) {
+  Pop1 = (int *) malloc ((n+1) * sizeof (int));
+  Pop2 = (int *) malloc ((n+1) * sizeof (int));
+  for (a=1; a<=n; ++a) {
     Pop1[a] = 0;
     Pop2[a] = 0;
   }
