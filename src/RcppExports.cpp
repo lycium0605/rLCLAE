@@ -20,6 +20,34 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// ancfreq_merge
+void ancfreq_merge(std::string hapfreq, std::string dipfreq, std::string outputdir, int type);
+RcppExport SEXP _rLCLAE_ancfreq_merge(SEXP hapfreqSEXP, SEXP dipfreqSEXP, SEXP outputdirSEXP, SEXP typeSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type hapfreq(hapfreqSEXP);
+    Rcpp::traits::input_parameter< std::string >::type dipfreq(dipfreqSEXP);
+    Rcpp::traits::input_parameter< std::string >::type outputdir(outputdirSEXP);
+    Rcpp::traits::input_parameter< int >::type type(typeSEXP);
+    ancfreq_merge(hapfreq, dipfreq, outputdir, type);
+    return R_NilValue;
+END_RCPP
+}
+// anclik_c
+void anclik_c(int sum, int type, int testid, std::string genolik, std::string ancfreq, std::string output);
+RcppExport SEXP _rLCLAE_anclik_c(SEXP sumSEXP, SEXP typeSEXP, SEXP testidSEXP, SEXP genolikSEXP, SEXP ancfreqSEXP, SEXP outputSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type sum(sumSEXP);
+    Rcpp::traits::input_parameter< int >::type type(typeSEXP);
+    Rcpp::traits::input_parameter< int >::type testid(testidSEXP);
+    Rcpp::traits::input_parameter< std::string >::type genolik(genolikSEXP);
+    Rcpp::traits::input_parameter< std::string >::type ancfreq(ancfreqSEXP);
+    Rcpp::traits::input_parameter< std::string >::type output(outputSEXP);
+    anclik_c(sum, type, testid, genolik, ancfreq, output);
+    return R_NilValue;
+END_RCPP
+}
 // filt1_dip
 void filt1_dip(int n, std::string input, std::string output);
 RcppExport SEXP _rLCLAE_filt1_dip(SEXP nSEXP, SEXP inputSEXP, SEXP outputSEXP) {
@@ -58,6 +86,8 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_rLCLAE_ancfreq_c", (DL_FUNC) &_rLCLAE_ancfreq_c, 6},
+    {"_rLCLAE_ancfreq_merge", (DL_FUNC) &_rLCLAE_ancfreq_merge, 4},
+    {"_rLCLAE_anclik_c", (DL_FUNC) &_rLCLAE_anclik_c, 6},
     {"_rLCLAE_filt1_dip", (DL_FUNC) &_rLCLAE_filt1_dip, 3},
     {"_rLCLAE_filt1_hap", (DL_FUNC) &_rLCLAE_filt1_hap, 3},
     {"_rLCLAE_glpow", (DL_FUNC) &_rLCLAE_glpow, 1},

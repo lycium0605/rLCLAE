@@ -14,6 +14,30 @@ ancfreq_c <- function(n, type, pop1, pop2, input, output) {
     invisible(.Call(`_rLCLAE_ancfreq_c`, n, type, pop1, pop2, input, output))
 }
 
+#' ancfreq_merge: Merging haploid & dipoid dataset
+#'
+#' @param hapfreq The dir to file containing ancfreq for haploid data
+#' @param dipfreq The dir to file containing ancfreq for diploid data
+#' @param type An integer, 0-intersection 1-keep all haploid snp 2-keep all diploid snp 3-union
+#' @param outputdir The output dir
+#' @export
+ancfreq_merge <- function(hapfreq, dipfreq, outputdir, type) {
+    invisible(.Call(`_rLCLAE_ancfreq_merge`, hapfreq, dipfreq, outputdir, type))
+}
+
+#' anclik_c: Calculating the ancestral likelihood of a test individual
+#'
+#' @param sum an integer, the number of individuals contain in the input
+#' @param type 1 or 2, specifying diploid/haploid data.
+#' @param testid the individual to be estimate
+#' @param genolik the dir to genolik file
+#' @param ancfreq the dir to ancfreq file
+#' @param output the dir of the output ancfreq file
+#' @export
+anclik_c <- function(sum, type, testid, genolik, ancfreq, output) {
+    invisible(.Call(`_rLCLAE_anclik_c`, sum, type, testid, genolik, ancfreq, output))
+}
+
 #' filt1_dip: transforming the phred score to relative genotype likelihood
 #'
 #' @param n an integer, the number of individuals contain in the vcf
