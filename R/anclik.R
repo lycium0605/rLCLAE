@@ -1,6 +1,18 @@
 #void ancfreq_c(int sum, int type, int testid,
 #std::string genolik, std::string ancfreq, std::string output)
 
+#' anclik
+#'
+#' @param genodir genotype likelihood file
+#' @param ancfreqdir ancestral allele frequency file
+#' @param outputdir ancestral state estimation
+#' @param type 'hap' or 'dip'
+#' @param test the individual number to be estimated
+#'
+#' @return nothing
+#' @export
+#'
+# @examples
 anclik<-function(genodir,ancfreqdir,outputdir,type='dip',test){
   input=file(genodir,'r')
   line=unlist(strsplit(readLines(input,n=1),split = ' '))
