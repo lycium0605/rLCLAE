@@ -7,14 +7,14 @@
 #' @param pop1_hap The dir to a file containing information of reference population 1 for haploid data.
 #' @param pop2_hap The dir to a file containing information of reference population 2 for haploid data.
 #' @param outputdir The dir to the output file. A postfix ('_dip','_hap','_merge') will be added.
-#'
+#' @param mergetype A parameter for merging type ("intersect","union","full_dip","full_hap")
 # @return Nothing
 # @export
 #'
 # @examples
 ancfreq<-function(inputdir_dip="missing",pop1_dip="missing",pop2_dip="missing",
                   inputdir_hap="missing",pop1_hap="missing",pop2_hap="missing",
-                  outputdir){
+                  outputdir,mergetype="union"){
 
   #Check input
   flag=0
@@ -67,10 +67,35 @@ ancfreq<-function(inputdir_dip="missing",pop1_dip="missing",pop2_dip="missing",
     #Do ancestral allele frequency calculation
     if(inputdir_dip!="missing"&&inputdir_hap!="missing"){
       print('Generating ancestral allele frequency for diploid, haploid data and merge them.')
-      outmerge=paste(outputdir,'_merge')
-      #int n, int type, std::string pop1, std::string pop2, std::string input, std::string output
-      ancfreq_c(n=indnum_dip,type=2,pop1=pop1_dip,pop2=pop2_dip,input=inputdir_dip,output=outdip)
-      ancfreq_c(n=indnum_hap,type=1,pop1=pop1_hap,pop2=pop2_hap,input=inputdir_hap,output=outhap)
+      typenum=-1
+      #"intersect","union","full_dip","full_hap"
+      if(mergetype=="intersect"){
+        typenum=0
+        print("Taking only the intersect of snps during merging.")
+      }
+      else if(mergetype=="full_dip"){
+        typenum=2
+        print("Keeping all snps in diploid data during merging.")
+      }
+      else if(mergetype=="full_hap"){
+        typenum=1
+        print("Keeping all snps in haploid data during merging.")
+      }
+      else if(mergetype=="union"){
+        typenum=3
+        print("Keeping the union of snps during merging.")
+      }
+      else{
+        print(paste("Merge type",mergetype,"not found, please choose from intersect,union,full_dip and full_hap"))
+      }
+      if(typenum>=0){
+        outmerge=paste(outputdir,'_merge')
+        #int n, int type, std::string pop1, std::string pop2, std::string input, std::string output
+        ancfreq_c(n=indnum_dip,type=2,pop1=pop1_dip,pop2=pop2_dip,input=inputdir_dip,output=outdip)
+        ancfreq_c(n=indnum_hap,type=1,pop1=pop1_hap,pop2=pop2_hap,input=inputdir_hap,output=outhap)
+        #std::string hapfreq, std::string dipfreq, std::string outputdir, int type
+        ancfreq_merge(hapfreq=outhap,dipfreq=outdip,outputdir=outmerge,type=typenum)
+      }
     }
     else if(inputdir_dip!='missing'){
       print('Generating ancestral allele frequency for diploid data only.')
@@ -94,4 +119,5 @@ test_ancfreq<-function(){
   ref2=paste(data,"fullref_yellow.h",sep = '')
   ancfreq(inputdir_dip = input,pop1_dip = ref1,pop2_dip = ref2,outputdir = output)
   }
+
 

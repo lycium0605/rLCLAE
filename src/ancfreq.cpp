@@ -146,6 +146,55 @@ void ancfreq_c(int n, int type, std::string pop1, std::string pop2, std::string 
   fclose(geno);
   fclose(out);
   Rcout<<"Ancestral allele frequency calculation finished."<<std::endl;
-
-
 }
+
+//' ancfreq_merge: Merging haploid & dipoid dataset
+//'
+//' @param hapfreq The dir to file containing ancfreq for haploid data
+//' @param dipfreq The dir to file containing ancfreq for diploid data
+//' @param type An integer, 0-intersection 1-keep all haploid snp 2-keep all diploid snp 3-union
+//' @param outputdir The output dir
+//' @export
+// [[Rcpp::export]]
+void ancfreq_merge(std::string hapfreq, std::string dipfreq, std::string outputdir, int type) {
+  int pos_m, pos_f, pos, anc1_m, anc2_m,anc1_f, anc2_f,anc1,anc2;
+  double f1_m, f2_m, f1_f, f2_f,f1, f2, deltaf;
+  FILE *hap, *dip , *out;
+  //pop1_=fopen(pop1.c_str(),"r");
+  hap=fopen(hapfreq.c_str(),"r");
+  dip=fopen(dipfreq.c_str(),"r");
+  out=fopen(outputdir.c_str(),"w");
+  while (std::fscanf (hap,"%d\t%lf\t%lf\t%d\t%d",
+                      &pos_m, &f1_m, &f2_m, &anc1_m, &anc2_m)!= EOF){
+    fscanf(dip,"%d\t%lf\t%lf\t%d\t%d", &pos_f, &f1_f, &f2_f, &anc1_f, &anc2_f);
+    //For data-specifec snps
+    while (pos_m != pos_f) {
+      //For haploid specific snps
+      if (pos_m < pos_f){
+        if(type==1||type==3){
+          fprintf(out,"%d\t%lf\t%lf\t%d\t%d",pos_m, f1_m, f2_m, anc1_m, anc2_m);
+        }
+        fscanf (hap,"%d\t%lf\t%lf\t%d\t%d",&pos_m, &f1_m, &f2_m, &anc1_m, &anc2_m);
+      }
+      //For diploid specific snps
+      else if (pos_m > pos_f){
+        if(type==2||type==3){
+          fprintf(out,"%d\t%lf\t%lf\t%d\t%d",pos_f, f1_f, f2_f, anc1_f, anc2_f);
+        }
+        fscanf (dip,"%d\t%lf\t%lf\t%d\t%d",&pos_f, &f1_f, &f2_f, &anc1_f, &anc2_f);
+      }
+    }
+    //For shared snps
+    pos = pos_f;
+    f1 = (f1_m * anc1_m + 2 * (f1_f * anc1_f))/(2 * anc1_f + anc1_m);
+    f2 = (f2_m * anc2_m + 2 * (f2_f * anc2_f))/(2 * anc2_f + anc2_m);
+    deltaf = (f1 > f2) ? (f1-f2) : (f2-f1) ;
+    anc1 = anc1_f+anc1_m;
+    anc2 = anc2_f+anc2_m;
+    fprintf(out,"%d\t%.8lf\t%.8lf\t%.6lf\t%d\t%d\n", pos, f1, f2, deltaf,anc1,anc2);
+  }
+  fclose(out);
+  fclose(hap);
+  fclose(dip);
+}
+
