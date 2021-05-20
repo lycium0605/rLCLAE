@@ -5,6 +5,20 @@
 
 using namespace Rcpp;
 
+// anccall_c
+void anccall_c(double deltaf, int window, int SMAX, std::string anclikdir, std::string output);
+RcppExport SEXP _rLCLAE_anccall_c(SEXP deltafSEXP, SEXP windowSEXP, SEXP SMAXSEXP, SEXP anclikdirSEXP, SEXP outputSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type deltaf(deltafSEXP);
+    Rcpp::traits::input_parameter< int >::type window(windowSEXP);
+    Rcpp::traits::input_parameter< int >::type SMAX(SMAXSEXP);
+    Rcpp::traits::input_parameter< std::string >::type anclikdir(anclikdirSEXP);
+    Rcpp::traits::input_parameter< std::string >::type output(outputSEXP);
+    anccall_c(deltaf, window, SMAX, anclikdir, output);
+    return R_NilValue;
+END_RCPP
+}
 // ancfreq_c
 void ancfreq_c(int n, int type, std::string pop1, std::string pop2, std::string input, std::string output);
 RcppExport SEXP _rLCLAE_ancfreq_c(SEXP nSEXP, SEXP typeSEXP, SEXP pop1SEXP, SEXP pop2SEXP, SEXP inputSEXP, SEXP outputSEXP) {
@@ -85,6 +99,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_rLCLAE_anccall_c", (DL_FUNC) &_rLCLAE_anccall_c, 5},
     {"_rLCLAE_ancfreq_c", (DL_FUNC) &_rLCLAE_ancfreq_c, 6},
     {"_rLCLAE_ancfreq_merge", (DL_FUNC) &_rLCLAE_ancfreq_merge, 4},
     {"_rLCLAE_anclik_c", (DL_FUNC) &_rLCLAE_anclik_c, 6},
