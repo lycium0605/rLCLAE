@@ -11,7 +11,8 @@ ancfreq(
   inputdir_hap = "missing",
   pop1_hap = "missing",
   pop2_hap = "missing",
-  outputdir
+  outputdir,
+  mergetype = "union"
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ ancfreq(
 \item{pop2_hap}{The dir to a file containing information of reference population 2 for haploid data.}
 
 \item{outputdir}{The dir to the output file. A postfix ('_dip','_hap','_merge') will be added.}
+
+\item{mergetype}{A parameter for merging type ("intersect","union","full_dip","full_hap")}
 }
 \description{
 ancfreq

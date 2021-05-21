@@ -4,10 +4,14 @@
 \alias{filt1_hap}
 \title{filt1_hap: transforming the phred score to relative genotype likelihood}
 \usage{
-filt1_hap(n, input, output)
+filt1_hap(n, skip, dur, input, output)
 }
 \arguments{
 \item{n}{an integer, the number of individuals contain in the vcf}
+
+\item{skip}{an integer, lines to skip}
+
+\item{dur}{an ingerger, lines for current chromosome}
 
 \item{input}{a string, the dir to cleaned vcf file}
 

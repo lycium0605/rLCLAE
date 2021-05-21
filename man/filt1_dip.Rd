@@ -4,10 +4,14 @@
 \alias{filt1_dip}
 \title{filt1_dip: transforming the phred score to relative genotype likelihood}
 \usage{
-filt1_dip(n, input, output)
+filt1_dip(n, skip, dur, input, output)
 }
 \arguments{
 \item{n}{an integer, the number of individuals contain in the vcf}
+
+\item{skip}{an integer, lines to skip}
+
+\item{dur}{an ingerger, lines for current chromosome}
 
 \item{input}{a string, the dir to cleaned vcf file}
 
