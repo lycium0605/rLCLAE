@@ -13,7 +13,7 @@ using namespace Rcpp;
 //' @export
 // [[Rcpp::export]]
 void ancfreq_c(int n, int type, std::string pop1, std::string pop2, std::string input, std::string output) {
-  int a, b, test1, pos, flag, *Pop1, *Pop2, c, anc1, anc2;
+  int a, b, pos, flag, *Pop1, *Pop2, c, anc1, anc2;
   double L1, L2, L3, f1, f2, **lik, deltaf, anc1_num, anc2_num;
 
   Rcout<<"Finding "<<n<<" individuals in the input"<<std::endl;

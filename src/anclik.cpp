@@ -17,7 +17,7 @@ void anclik_c(int sum, int type, int testid,
 
   Rcout<<"Finding "<<sum<<" individuals in the input"<<std::endl;
 
-  int a, b, pos, pos_anc, flag;
+  int a, pos, pos_anc, flag;
   double gl1, gl2, gl3, L1, L2, L3, f1, f2, deltaf;
   FILE *geno, *freq, *out;
 
