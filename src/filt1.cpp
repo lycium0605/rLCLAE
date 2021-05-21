@@ -33,7 +33,7 @@ void filt1_dip(int n, int skip, int dur,
   //while (std::fscanf(fin,"%s %d ",sname,&pos) != EOF){
   for(i=0;i<dur;i++){
 
-    std::fscanf(fin,"%s %d ",&sname,&pos);
+    std::fscanf(fin,"%s %d ",sname,&pos);
     std::fprintf(fout,"%s %d ",sname,pos);
 
     for (a=0; a<n; ++a) {
@@ -71,8 +71,8 @@ void filt1_dip(int n, int skip, int dur,
 void filt1_hap(int n, int skip, int dur,
                std::string input, std::string output) {
 
-  int a, i, pos, g1, g2, g3, cov;
-  double l1, l2, l3;
+  int a, i, pos, g1, g3, cov;
+  double l1,l3;
   char sname[20];
 
   Rcout<<n<<"individuals in the input"<<std::endl;
@@ -91,7 +91,7 @@ void filt1_hap(int n, int skip, int dur,
   //while (std::fscanf(fin,"%s %d ",sname,&pos) != EOF){
   for(i=0;i<dur;i++){
 
-    std::fscanf(fin,"%s %d ",&sname,&pos);
+    std::fscanf(fin,"%s %d ",sname,&pos);
     std::fprintf(fout,"%s %d ", sname, pos);
     for (a=0; a<n; ++a) {
       fscanf (fin,"%d\n", &cov);

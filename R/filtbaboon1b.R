@@ -9,6 +9,15 @@
 #followed by the 3 genotype likelihoods (or -1. for missing data) for each
 #of n different individuals.  n=47 for the example data.
 
+## usethis namespace: start
+#' @useDynLib rLCLAE, .registration = TRUE
+## usethis namespace: end
+NULL
+
+## usethis namespace: start
+#' @importFrom Rcpp sourceCpp
+## usethis namespace: end
+NULL
 
 #inputdir='/Users/lycium/Desktop/Jennylab/rpackage_LCLAE/rawtestdata/test_clean.vcf'
 #outputdir='/Users/lycium/Desktop/Jennylab/rpackage_LCLAE/rawtestdata/test.genolik_R'
@@ -21,7 +30,7 @@
 #' @param outputdir The output directory of the genolik file.
 #' @param type haplotype (i.e. male-X) or diploid (Autosome), dipoid as default
 #' @return A file in which each line represents a snp. The line looks like chr, pos, -1. -1. -1. (missing data) or gl1, gl2, gl3 transformed from the phred score.
-
+#' @export
 
 genolik<-function(inputdir,outputdir,type='dip'){
   root=outputdir
