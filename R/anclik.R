@@ -14,9 +14,17 @@
 #'
 # @examples
 anclik<-function(genodir,ancfreqdir,outputdir,type='dip',test){
+  flag=0
+  if(!file.exists(genodir)){
+    print("The genotype likelihood file you provided does not exist. Please check.")
+    flag=1
+  }
+  if(!file.exists(ancfreqdir)){
+    print("The ancestral frequency file you provided does not exist. Please check.")
+    flag=1
+  }
   input=file(genodir,'r')
   line=unlist(strsplit(readLines(input,n=1),split = ' '))
-  flag = 0
   if(type=='dip'){
     typenum=2
     indnum=(length(line)-2)/3
@@ -47,6 +55,12 @@ anclik<-function(genodir,ancfreqdir,outputdir,type='dip',test){
 
 }
 
+#' test_anclik
+#'
+#' @return nothing
+#' @export
+#'
+# @examples
 test_anclik<-function(){
   data="/Users/lycium/Desktop/Jennylab/rpackage_LCLAE/rawtestdata/"
   input1=paste(data,"test.genolik_R",sep = '')
