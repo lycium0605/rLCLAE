@@ -32,6 +32,9 @@ ancfreq(
 
 \item{mergetype}{A parameter for merging type ("intersect","union","full_dip","full_hap")}
 }
+\value{
+Nothing
+}
 \description{
 ancfreq
 }
