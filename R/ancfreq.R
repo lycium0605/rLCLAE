@@ -111,6 +111,12 @@ ancfreq<-function(inputdir_dip="missing",pop1_dip="missing",pop2_dip="missing",
   }
 }
 
+#' test_ancfreq
+#'
+#' @return nothing
+#' @export
+#'
+# @examples
 test_ancfreq<-function(){
   data="/Users/lycium/Desktop/Jennylab/rpackage_LCLAE/rawtestdata/"
   input=paste(data,"test.genolik_R",sep = '')
