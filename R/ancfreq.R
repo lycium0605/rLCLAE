@@ -8,8 +8,8 @@
 #' @param pop2_hap The dir to a file containing information of reference population 2 for haploid data.
 #' @param outputdir The dir to the output file. A postfix ('_dip','_hap','_merge') will be added.
 #' @param mergetype A parameter for merging type ("intersect","union","full_dip","full_hap")
-# @return Nothing
-# @export
+#' @return Nothing
+#' @export
 #'
 # @examples
 ancfreq<-function(inputdir_dip="missing",pop1_dip="missing",pop2_dip="missing",
