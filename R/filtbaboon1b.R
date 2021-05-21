@@ -24,24 +24,86 @@
 
 
 genolik<-function(inputdir,outputdir,type='dip'){
+  root=outputdir
+  skip_line=0
+
   input=file(inputdir,'r')
   line=unlist(strsplit(readLines(input,n=1),split = '\t'))
   indnum=length(line)-2
   close(input)
-  if(type == 'dip'){
-    filt1_dip(indnum,inputdir,outputdir)
-  }
-  else if(type=='hap'){
-    filt1_hap(indnum,inputdir,outputdir)
-  }
-  else{
-    print("Please specify a type, dip or hap")
-  }
 
+  x<-get_chrlist(inputdir)
+  chr<-x[seq(2,length(x),2)]
+  rep<-as.numeric(x[seq(1,length(x),2)])
+
+  print(paste("Finding",length(chr),"unique chromosomes in the input vcf."))
+
+  for(i in 1:length(chr)){
+    print(paste("Calculating genotype likelihood for chromosome",chr[i]))
+    root_chr=paste(root,"_",chr[i],sep = "")
+    #print(root_chr)
+    read_line=as.integer(rep[i])
+    skip_line=as.integer(skip_line)
+    #print(data.class(read_line))
+    if(type == 'dip'){
+      filt1_dip(indnum,skip_line,read_line,inputdir,root_chr)
+    }
+    else if(type=='hap'){
+      filt1_hap(indnum,skip_line,read_line,inputdir,root_chr)
+    }
+    else{
+      print("Please specify a type, dip or hap")
+    }
+    skip_line=skip_line+read_line
+    #print(skip_line)
+  }
 }
 
 
+#' get_chrlist
+#'
+#' @param vcf the input vcf file
+#'
+#' @return a character vector rep,chr
+#' @export
+#'
+# @examples
+get_chrlist<-function(vcf="/Users/lycium/Desktop/Jennylab/rpackage_LCLAE/rawtestdata/test_clean.vcf"){
+  c=paste("echo $(cat ",vcf, " | cut -f 1 | uniq -c)",sep = '')
+  system(c,intern = TRUE) -> out
+  out<-strsplit(unlist(out),split = ' ')
+  unlist(out)->x
+  return (x)
+}
 
+#' test_genolik
+#'
+#' @return nothing
+#' @export
+#'
+# @examples
+test_genolik<-function(){
+  i= "/Users/lycium/Desktop/Jennylab/rpackage_LCLAE/rawtestdata/multi_chr.vcf"
+  o= "/Users/lycium/Desktop/Jennylab/rpackage_LCLAE/rawtestdata/test.genolik_Rcpp"
+  genolik(inputdir = i, outputdir = o, type='dip')
+}
+
+#' test_chrlist
+#'
+#' @return nothing
+#' @export
+#'
+# @examples
+test_chrlist<-function(){
+  x<-get_chrlist()
+  chr<-x[seq(2,length(x),2)]
+  rep<-as.numeric(x[seq(1,length(x),2)])
+  print(x)
+  print(chr)
+  print(rep)
+  print(length(chr))
+
+}
 
 
 

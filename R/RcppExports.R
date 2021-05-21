@@ -53,21 +53,25 @@ anclik_c <- function(sum, type, testid, genolik, ancfreq, output) {
 #' filt1_dip: transforming the phred score to relative genotype likelihood
 #'
 #' @param n an integer, the number of individuals contain in the vcf
+#' @param skip an integer, lines to skip
+#' @param dur an ingerger, lines for current chromosome
 #' @param input a string, the dir to cleaned vcf file
 #' @param output a string, the dir to the output file
 #' @export
-filt1_dip <- function(n, input, output) {
-    invisible(.Call(`_rLCLAE_filt1_dip`, n, input, output))
+filt1_dip <- function(n, skip, dur, input, output) {
+    invisible(.Call(`_rLCLAE_filt1_dip`, n, skip, dur, input, output))
 }
 
 #' filt1_hap: transforming the phred score to relative genotype likelihood
 #'
 #' @param n an integer, the number of individuals contain in the vcf
+#' @param skip an integer, lines to skip
+#' @param dur an ingerger, lines for current chromosome
 #' @param input a string, the dir to cleaned vcf file
 #' @param output a string, the dir to the output file
 #' @export
-filt1_hap <- function(n, input, output) {
-    invisible(.Call(`_rLCLAE_filt1_hap`, n, input, output))
+filt1_hap <- function(n, skip, dur, input, output) {
+    invisible(.Call(`_rLCLAE_filt1_hap`, n, skip, dur, input, output))
 }
 
 #' GL=10^(-pl)
