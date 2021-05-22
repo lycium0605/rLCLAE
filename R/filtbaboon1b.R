@@ -28,7 +28,7 @@ NULL
 #'
 #' @param inputdir The input directory of the cleaned vcf file.
 #' @param outputdir The output directory of the genolik file.
-#' @param type haplotype (i.e. male-X) or diploid (Autosome), dipoid as default
+#' @param type haploid (i.e. male-X) or diploid (Autosome), dipoid as default
 #' @return A file in which each line represents a snp. The line looks like chr, pos, -1. -1. -1. (missing data) or gl1, gl2, gl3 transformed from the phred score.
 #' @export
 
