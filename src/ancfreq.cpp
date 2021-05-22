@@ -29,20 +29,28 @@ void ancfreq_c(int n, int type, std::string pop1, std::string pop2, std::string 
     lik[a] = (double *) malloc (3 * sizeof (double *));
 
   pop1_=fopen(pop1.c_str(),"r");
-  std::fscanf(pop1_, "%d ", &b);
+  if(std::fscanf(pop1_, "%d ", &b)==EOF){
+    Rcout<<"Fscanf meets EOF, please recheck input!"<<std::endl;
+  }
 
   Rcout<<"Finding "<<b<<" individuals for reference population 1"<<std::endl;
   for (a=0; a<b; ++a) {
-    fscanf (pop1_, "%d ", &c);
+    if(fscanf (pop1_, "%d ", &c)==EOF){
+      Rcout<<"Fscanf meets EOF, please recheck input!"<<std::endl;
+    }
     Pop1[c] = 1;
   }
   fclose (pop1_);
 
   pop2_=fopen(pop2.c_str(),"r");
-  std::fscanf(pop2_, "%d ", &b);
+  if(std::fscanf(pop2_, "%d ", &b)==EOF){
+    Rcout<<"Fscanf meets the EOF, please recheck your input!"<<std::endl;
+  }
   Rcout<<"Finding "<<b<<" individuals for reference population 2"<<std::endl;
   for (a=0; a<b; ++a) {
-    fscanf (pop2_, "%d ", &c);
+    if(fscanf (pop2_, "%d ", &c)==EOF){
+      Rcout<<"Fscanf meets the EOF, please recheck your input!"<<std::endl;
+    }
     Pop2[c] = 1;
   }
   fclose (pop2_);
@@ -56,7 +64,9 @@ void ancfreq_c(int n, int type, std::string pop1, std::string pop2, std::string 
     while (std::fscanf (geno,"%*s %d ", &pos) != EOF) {
       flag = 0;
       for (a=1; a<=n; ++a)
-        fscanf (geno,"%lf %lf %lf", &lik[a][0], &lik[a][1], &lik[a][2]);
+        if(fscanf (geno,"%lf %lf %lf", &lik[a][0], &lik[a][1], &lik[a][2])==EOF){
+          Rcout<<"Fscanf meets the EOF, please recheck your input!"<<std::endl;
+        }
 
       f1 = f2 = 0.;
       L1 = L2 = L3 = 0.;
@@ -103,7 +113,9 @@ void ancfreq_c(int n, int type, std::string pop1, std::string pop2, std::string 
     while (std::fscanf (geno,"%*s %d ", &pos) != EOF) {
       flag = 0;
       for (a=1; a<=n; ++a)
-        fscanf (geno,"%lf %lf ", &lik[a][0], &lik[a][1]);
+        if(fscanf (geno,"%lf %lf ", &lik[a][0], &lik[a][1])==EOF){
+          Rcout<<"Fscanf meets the EOF, please recheck your input!"<<std::endl;
+        }
 
       f1 = f2 = 0.;
       L1 = L2 = L3 = 0.;
@@ -166,7 +178,10 @@ void ancfreq_merge(std::string hapfreq, std::string dipfreq, std::string outputd
   out=fopen(outputdir.c_str(),"w");
   while (std::fscanf (hap,"%d\t%lf\t%lf\t%d\t%d",
                       &pos_m, &f1_m, &f2_m, &anc1_m, &anc2_m)!= EOF){
-    fscanf(dip,"%d\t%lf\t%lf\t%d\t%d", &pos_f, &f1_f, &f2_f, &anc1_f, &anc2_f);
+
+    if(fscanf(dip,"%d\t%lf\t%lf\t%d\t%d", &pos_f, &f1_f, &f2_f, &anc1_f, &anc2_f)==EOF){
+      Rcout<<"Fscanf meets EOF, please recheck input!"<<std::endl;
+    }
     //For data-specifec snps
     while (pos_m != pos_f) {
       //For haploid specific snps
@@ -174,14 +189,20 @@ void ancfreq_merge(std::string hapfreq, std::string dipfreq, std::string outputd
         if(type==1||type==3){
           fprintf(out,"%d\t%lf\t%lf\t%d\t%d",pos_m, f1_m, f2_m, anc1_m, anc2_m);
         }
-        fscanf (hap,"%d\t%lf\t%lf\t%d\t%d",&pos_m, &f1_m, &f2_m, &anc1_m, &anc2_m);
+        if(fscanf (hap,"%d\t%lf\t%lf\t%d\t%d",&pos_m, &f1_m, &f2_m, &anc1_m, &anc2_m)==EOF){
+          Rcout<<"Fscanf meets EOF, please recheck input!"<<std::endl;
+        }
       }
       //For diploid specific snps
       else if (pos_m > pos_f){
         if(type==2||type==3){
           fprintf(out,"%d\t%lf\t%lf\t%d\t%d",pos_f, f1_f, f2_f, anc1_f, anc2_f);
         }
-        fscanf (dip,"%d\t%lf\t%lf\t%d\t%d",&pos_f, &f1_f, &f2_f, &anc1_f, &anc2_f);
+        if(fscanf (dip,"%d\t%lf\t%lf\t%d\t%d",&pos_f, &f1_f, &f2_f, &anc1_f, &anc2_f)==EOF){
+
+            Rcout<<"Fscanf meets EOF, please recheck input!"<<std::endl;
+
+        }
       }
     }
     //For shared snps

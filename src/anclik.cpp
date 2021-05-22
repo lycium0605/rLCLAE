@@ -29,12 +29,22 @@ void anclik_c(int sum, int type, int testid,
   Rcout<<"Starting ancestral likelihood estimation for individual "<<testid<<std::endl;
 
   while (fscanf (geno,"%*s %d ", &pos) != EOF){
-    fscanf(freq,"%d\t%lf\t%lf\t%lf\t%*d\t%*d", &pos_anc, &f1, &f2, &deltaf);
+    if(fscanf(freq,"%d\t%lf\t%lf\t%lf\t%*d\t%*d", &pos_anc, &f1, &f2, &deltaf)==EOF){
+      Rcout<<"Fscanf meets EOF, please recheck input!"<<std::endl;
+    }
     while(pos != pos_anc){
       if(pos<pos_anc){
         for (a=1;a<=sum;++a){
-          if(type==2){fscanf(geno,"%*lf %*lf %*lf ");}
-          if(type==1){fscanf(geno,"%*lf %*lf ");}
+          if(type==2){
+            if(fscanf(geno,"%*lf %*lf %*lf ")==EOF){
+              Rcout<<"Fscanf meets EOF, please recheck input!"<<std::endl;
+            }
+                 }
+          if(type==1){
+            if(fscanf(geno,"%*lf %*lf ")==EOF){
+              Rcout<<"Fscanf meets EOF, please recheck input!"<<std::endl;
+            }
+                 }
           }
       }
       else{
@@ -44,15 +54,39 @@ void anclik_c(int sum, int type, int testid,
       }
     if(flag==0){
       for (a=1;a<testid;++a){
-        if(type==2){fscanf(geno,"%*lf %*lf %*lf ");}
-        if(type==1){fscanf(geno,"%*lf %*lf ");}
+        if(type==2){
+          if(fscanf(geno,"%*lf %*lf %*lf ")==EOF){
+            Rcout<<"Fscanf meets EOF, please recheck input!"<<std::endl;
+          }
+               }
+        if(type==1){
+          if(fscanf(geno,"%*lf %*lf ")==EOF){
+            Rcout<<"Fscanf meets EOF, please recheck input!"<<std::endl;
+          }
+            }
         }
       gl2=0;
-      if(type==2){fscanf(geno,"%lf %lf %lf ", &gl1, &gl2, &gl3);}
-      if(type==1){fscanf(geno,"%lf %lf ", &gl1, &gl3);}
+      if(type==2){
+        if(fscanf(geno,"%lf %lf %lf ", &gl1, &gl2, &gl3)==EOF){
+          Rcout<<"Fscanf meets EOF, please recheck input!"<<std::endl;
+        }
+             }
+      if(type==1){
+        if(fscanf(geno,"%lf %lf ", &gl1, &gl3)==EOF){
+          Rcout<<"Fscanf meets EOF, please recheck input!"<<std::endl;
+        }
+             }
       for (a=testid+1;a<=sum;++a){
-        if(type==2){fscanf(geno,"%*lf %*lf %*lf ");}
-        if(type==1){fscanf(geno,"%*lf %*lf ");}
+        if(type==2){
+          if(fscanf(geno,"%*lf %*lf %*lf ")==EOF){
+            Rcout<<"Fscanf meets EOF, please recheck input!"<<std::endl;
+          }
+               }
+        if(type==1){
+          if(fscanf(geno,"%*lf %*lf ")==EOF){
+            Rcout<<"Fscanf meets EOF, please recheck input!"<<std::endl;
+          }
+          }
         }
       if(gl1 != -1 && gl2 != -1 && gl3 != -1){
         if(type==2){

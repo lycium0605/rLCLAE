@@ -26,28 +26,34 @@ void filt1_dip(int n, int skip, int dur,
 
   if(skip>0){
     for(i=0;i<skip;i++){
-      fscanf(fin,"%*[^\n]%*c");
+      //Rcout<<i<<std::endl;
+      if(fscanf(fin,"%*[^\n]%*c")==EOF){
+        Rcout<<"Skipping too many lines"<<std::endl;
+      }
     }
   }
 
   //while (std::fscanf(fin,"%s %d ",sname,&pos) != EOF){
   for(i=0;i<dur;i++){
 
-    std::fscanf(fin,"%s %d ",sname,&pos);
-    std::fprintf(fout,"%s %d ",sname,pos);
-
+    if(std::fscanf(fin,"%s %d ",sname,&pos)){
+      std::fprintf(fout,"%s %d ",sname,pos);
+    }
     for (a=0; a<n; ++a) {
-      fscanf (fin,"%d\n", &cov);
-      if (cov == 999) {
-        fscanf (fin,"%*s %*s %*s %*s %*s ");
-        fprintf (fout,"-1. -1. -1. ");
-      }
-      else {
-        fscanf (fin,"%*s %*s %*s %*s %d,%d,%d ", &g1, &g2, &g3);
-        l1 = pow (10., -g1/10.);
-        l2 = pow (10., -g2/10.);
-        l3 = pow (10., -g3/10.);
-        fprintf (fout,"%lf %lf %lf ", l1/(l1+l2+l3), l2/(l1+l2+l3), l3/(l1+l2+l3));
+      if(fscanf (fin,"%d\n", &cov)){
+        if (cov == 999) {
+          if(fscanf (fin,"%*s %*s %*s %*s %*s ")!=EOF){
+            fprintf (fout,"-1. -1. -1. ");
+          }
+        }
+        else {
+          if(fscanf (fin,"%*s %*s %*s %*s %d,%d,%d ", &g1, &g2, &g3)!=EOF){
+            l1 = pow (10., -g1/10.);
+            l2 = pow (10., -g2/10.);
+            l3 = pow (10., -g3/10.);
+            fprintf (fout,"%lf %lf %lf ", l1/(l1+l2+l3), l2/(l1+l2+l3), l3/(l1+l2+l3));
+          }
+        }
       }
     }
 
@@ -84,26 +90,33 @@ void filt1_hap(int n, int skip, int dur,
 
   if(skip>0){
     for(i=0;i<skip;i++){
-      fscanf(fin,"%*[^\n]%*c");
+      if(fscanf(fin,"%*[^\n]%*c")==EOF){
+        Rcout<<"Fscanf meets EOF, please recheck input!"<<std::endl;
+      }
     }
   }
 
   //while (std::fscanf(fin,"%s %d ",sname,&pos) != EOF){
   for(i=0;i<dur;i++){
 
-    std::fscanf(fin,"%s %d ",sname,&pos);
-    std::fprintf(fout,"%s %d ", sname, pos);
+    if(std::fscanf(fin,"%s %d ",sname,&pos)!=EOF){
+      std::fprintf(fout,"%s %d ", sname, pos);
+    }
     for (a=0; a<n; ++a) {
-      fscanf (fin,"%d\n", &cov);
+      if(fscanf (fin,"%d\n", &cov)==EOF){
+        Rcout<<"Error in scanning individuals."<<std::endl;
+      }
       if (cov == 999) {
-        fscanf (fin,"%*s %*s %*s %*s ");
-        fprintf (fout,"-1. -1. ");
+        if(fscanf (fin,"%*s %*s %*s %*s ")!=EOF){
+          fprintf (fout,"-1. -1. ");
+        }
       }
       else {
-        fscanf (fin,"%*s %*s %*s %d,%d ", &g1, &g3);
-        l1 = pow (10., -g1/10.);
-        l3 = pow (10., -g3/10.);
-        fprintf (fout,"%lf %lf", l1/(l1+l3),l3/(l1+l3));
+        if(fscanf (fin,"%*s %*s %*s %d,%d ", &g1, &g3)!=EOF){
+          l1 = pow (10., -g1/10.);
+          l3 = pow (10., -g3/10.);
+          fprintf (fout,"%lf %lf", l1/(l1+l3),l3/(l1+l3));
+        }
       }
     }
     fprintf(fout,"\n");
