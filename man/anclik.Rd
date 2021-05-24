@@ -4,7 +4,7 @@
 \alias{anclik}
 \title{anclik}
 \usage{
-anclik(genodir, ancfreqdir, outputdir, type = "dip", test)
+anclik(genodir, ancfreqdir, outputdir, type = "dip", test = "all")
 }
 \arguments{
 \item{genodir}{genotype likelihood file}
@@ -15,7 +15,7 @@ anclik(genodir, ancfreqdir, outputdir, type = "dip", test)
 
 \item{type}{'hap' or 'dip'}
 
-\item{test}{the individual number to be estimated}
+\item{test}{can be 'all' or a numeric vector containing the individual number to be estimated}
 }
 \value{
 nothing

@@ -2,7 +2,7 @@
 % Please edit documentation in R/anclik.R
 \name{test_anclik}
 \alias{test_anclik}
-\title{test_anclik}
+\title{test_ancli m k}
 \usage{
 test_anclik()
 }
@@ -10,5 +10,5 @@ test_anclik()
 nothing
 }
 \description{
-test_anclik
+test_ancli m k
 }
