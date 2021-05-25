@@ -13,9 +13,9 @@ using namespace Rcpp;
 // [[Rcpp::export]]
 void filt1_dip(int n, int skip, int dur,
                std::string input, std::string output) {
-  int a, pos, g1, g2, g3, cov,i;
+  int a, pos, g1, g2, g3, i; //cov,i;
   double l1, l2, l3;
-  char sname[20];
+  char sname[20], cov[20];
 
   Rcout<<n<<" individuals in the input"<<std::endl;
 
@@ -40,14 +40,15 @@ void filt1_dip(int n, int skip, int dur,
       std::fprintf(fout,"%s %d ",sname,pos);
     }
     for (a=0; a<n; ++a) {
-      if(fscanf (fin,"%d\n", &cov)){
-        if (cov == 999) {
-          if(fscanf (fin,"%*s %*s %*s %*s %*s ")!=EOF){
+      //if(fscanf (fin,"%d\n", &cov)){
+      if(fscanf(fin,"%s ", cov)){
+        if (strcmp(cov,"999/999") == 0 || strcmp(cov,"999")==0) {
+          if(fscanf (fin,"%*s %*s %*s %*s ")!=EOF){
             fprintf (fout,"-1. -1. -1. ");
           }
         }
         else {
-          if(fscanf (fin,"%*s %*s %*s %*s %d,%d,%d ", &g1, &g2, &g3)!=EOF){
+          if(fscanf (fin,"%*s %*s %*s %d,%d,%d ", &g1, &g2, &g3)!=EOF){
             l1 = pow (10., -g1/10.);
             l2 = pow (10., -g2/10.);
             l3 = pow (10., -g3/10.);
@@ -113,9 +114,11 @@ void filt1_hap(int n, int skip, int dur,
       }
       else {
         if(fscanf (fin,"%*s %*s %*s %d,%d ", &g1, &g3)!=EOF){
+
           l1 = pow (10., -g1/10.);
           l3 = pow (10., -g3/10.);
-          fprintf (fout,"%lf %lf", l1/(l1+l3),l3/(l1+l3));
+          fprintf (fout,"%lf %lf ", l1/(l1+l3),l3/(l1+l3));
+
         }
       }
     }
