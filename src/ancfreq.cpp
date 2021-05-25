@@ -169,50 +169,105 @@ void ancfreq_c(int n, int type, std::string pop1, std::string pop2, std::string 
 //' @export
 // [[Rcpp::export]]
 void ancfreq_merge(std::string hapfreq, std::string dipfreq, std::string outputdir, int type) {
-  int pos_m, pos_f, pos, anc1_m, anc2_m,anc1_f, anc2_f,anc1,anc2;
-  double f1_m, f2_m, f1_f, f2_f,f1, f2, deltaf;
+  int pos_m, pos_f, pos, anc1_m, anc2_m,anc1_f, anc2_f,anc1,anc2,endf,endm;
+  double f1_m, f2_m, f1_f, f2_f,f1, f2, deltaf_f,deltaf_m,deltaf;
   FILE *hap, *dip , *out;
   //pop1_=fopen(pop1.c_str(),"r");
+  endf=0;
+  endm=0;
   hap=fopen(hapfreq.c_str(),"r");
   dip=fopen(dipfreq.c_str(),"r");
   out=fopen(outputdir.c_str(),"w");
-  while (std::fscanf (hap,"%d\t%lf\t%lf\t%d\t%d",
-                      &pos_m, &f1_m, &f2_m, &anc1_m, &anc2_m)!= EOF){
+  while (std::fscanf (hap,"%d\t%lf\t%lf\t%lf\t%d\t%d",
+                      &pos_m, &f1_m, &f2_m, &deltaf_m, &anc1_m, &anc2_m)!= EOF){
 
-    if(fscanf(dip,"%d\t%lf\t%lf\t%d\t%d", &pos_f, &f1_f, &f2_f, &anc1_f, &anc2_f)==EOF){
-      Rcout<<"Fscanf meets EOF, please recheck input!"<<std::endl;
+    if(fscanf(dip,"%d\t%lf\t%lf\t%lf\t%d\t%d", &pos_f, &f1_f, &f2_f, &deltaf_f, &anc1_f, &anc2_f)==EOF){
+      if(type==0 || type == 2){
+        Rcout<<"Fscanf meets EOF in diploid file, merging finished!"<<std::endl;
+        break;
+      }
+      else{
+        fprintf(out,"%d\t%lf\t%lf\t%lf\t%d\t%d\n",pos_m, f1_m, f2_m, deltaf_m, anc1_m, anc2_m);
+
+        while (std::fscanf (hap,"%d\t%lf\t%lf\t%lf\t%d\t%d",
+                            &pos_m, &f1_m, &f2_m, &deltaf_m, &anc1_m, &anc2_m)!= EOF){
+          fprintf(out,"%d\t%lf\t%lf\t%lf\t%d\t%d\n",pos_m, f1_m, f2_m, deltaf_m, anc1_m, anc2_m);
+        }
+
+        Rcout<<"Fscanf meets EOF in haploid file, merging finished!"<<std::endl;
+        break;
+      }
+    }
+
+    else{
+      while (pos_m != pos_f) {
+        //For haploid specific snps
+        if (pos_m < pos_f){
+          if(type==1||type==3){
+            fprintf(out,"%d\t%lf\t%lf\t%lf\t%d\t%d\n",pos_m, f1_m, f2_m, deltaf_m, anc1_m, anc2_m);
+          }
+          if(fscanf (hap,"%d\t%lf\t%lf\t%lf\t%d\t%d",&pos_m, &f1_m, &f2_m, &deltaf_m, &anc1_m, &anc2_m ) == EOF){
+            //Rcout<<"Fscanf meets EOF in haploid file, merging finished!"<<std::endl;
+            endm=1;
+            break;
+          }
+        }
+        //For diploid specific snps
+        else if (pos_m > pos_f){
+          if(type==2||type==3){
+            fprintf(out,"%d\t%lf\t%lf\t%lf\t%d\t%d\n",pos_f, f1_f, f2_f, deltaf_f, anc1_f, anc2_f);
+          }
+          if(fscanf (dip,"%d\t%lf\t%lf\t%lf\t%d\t%d",&pos_f, &f1_f, &f2_f, &deltaf_f, &anc1_f, &anc2_f)==EOF){
+            endf=1;
+            //Rcout<<"Fscanf meets EOF in diploid file, merging finished!"<<std::endl;
+            break;
+
+          }
+        }
+      }
+
+      if(endf==0 && endm==0){
+        //For shared snps
+        pos = pos_f;
+        f1 = (f1_m * anc1_m + 2 * (f1_f * anc1_f))/(2 * anc1_f + anc1_m);
+        f2 = (f2_m * anc2_m + 2 * (f2_f * anc2_f))/(2 * anc2_f + anc2_m);
+        deltaf = (f1 > f2) ? (f1-f2) : (f2-f1) ;
+        anc1 = anc1_f+anc1_m;
+        anc2 = anc2_f+anc2_m;
+        fprintf(out,"%d\t%.8lf\t%.8lf\t%.6lf\t%d\t%d\n", pos, f1, f2, deltaf,anc1,anc2);
+      }
+      else if(endm==1){
+        if(type==0 || type==1){
+          Rcout<<"Fscanf meets EOF in haploid file, merging finished!"<<std::endl;
+          break;
+        }
+        else{
+          fprintf(out,"%d\t%lf\t%lf\t%lf\t%d\t%d\n",pos_f, f1_f, f2_f, deltaf_f, anc1_f, anc2_f);
+          while (std::fscanf (dip,"%d\t%lf\t%lf\t%lf\t%d\t%d",
+                              &pos_f, &f1_f, &f2_f, &deltaf_f, &anc1_f, &anc2_f)!= EOF){
+            fprintf(out,"%d\t%lf\t%lf\t%lf\t%d\t%d\n",pos_f, f1_f, f2_f, deltaf_f, anc1_f, anc2_f);
+          }
+          Rcout<<"Fscanf meets EOF in diploid file, merging finished!"<<std::endl;
+          break;
+        }
+      }
+      else if(endf==1){
+        if(type==0 || type==2){
+          Rcout<<"Fscanf meets EOF in diploid file, merging finished!"<<std::endl;
+          break;
+        }
+        else{
+          fprintf(out,"%d\t%lf\t%lf\t%lf\t%d\t%d\n",pos_m, f1_m, f2_m, deltaf_m, anc1_m, anc2_m);
+          while (std::fscanf (hap,"%d\t%lf\t%lf\t%lf\t%d\t%d",
+                              &pos_m, &f1_m, &f2_m, &deltaf, &anc1_m, &anc2_m)!= EOF){
+            fprintf(out,"%d\t%lf\t%lf\t%lf\t%d\t%d\n",pos_m, f1_m, f2_m, deltaf_m, anc1_m, anc2_m);
+          }
+          Rcout<<"Fscanf meets EOF in haploid file, merging finished!"<<std::endl;
+        }
+      }
     }
     //For data-specifec snps
-    while (pos_m != pos_f) {
-      //For haploid specific snps
-      if (pos_m < pos_f){
-        if(type==1||type==3){
-          fprintf(out,"%d\t%lf\t%lf\t%d\t%d",pos_m, f1_m, f2_m, anc1_m, anc2_m);
-        }
-        if(fscanf (hap,"%d\t%lf\t%lf\t%d\t%d",&pos_m, &f1_m, &f2_m, &anc1_m, &anc2_m)==EOF){
-          Rcout<<"Fscanf meets EOF, please recheck input!"<<std::endl;
-        }
-      }
-      //For diploid specific snps
-      else if (pos_m > pos_f){
-        if(type==2||type==3){
-          fprintf(out,"%d\t%lf\t%lf\t%d\t%d",pos_f, f1_f, f2_f, anc1_f, anc2_f);
-        }
-        if(fscanf (dip,"%d\t%lf\t%lf\t%d\t%d",&pos_f, &f1_f, &f2_f, &anc1_f, &anc2_f)==EOF){
 
-            Rcout<<"Fscanf meets EOF, please recheck input!"<<std::endl;
-
-        }
-      }
-    }
-    //For shared snps
-    pos = pos_f;
-    f1 = (f1_m * anc1_m + 2 * (f1_f * anc1_f))/(2 * anc1_f + anc1_m);
-    f2 = (f2_m * anc2_m + 2 * (f2_f * anc2_f))/(2 * anc2_f + anc2_m);
-    deltaf = (f1 > f2) ? (f1-f2) : (f2-f1) ;
-    anc1 = anc1_f+anc1_m;
-    anc2 = anc2_f+anc2_m;
-    fprintf(out,"%d\t%.8lf\t%.8lf\t%.6lf\t%d\t%d\n", pos, f1, f2, deltaf,anc1,anc2);
   }
   fclose(out);
   fclose(hap);
