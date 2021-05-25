@@ -89,7 +89,7 @@ ancfreq<-function(inputdir_dip="missing",pop1_dip="missing",pop2_dip="missing",
         print(paste("Merge type",mergetype,"not found, please choose from intersect,union,full_dip and full_hap"))
       }
       if(typenum>=0){
-        outmerge=paste(outputdir,'_merge')
+        outmerge=paste(outputdir,'_merge',sep = '')
         #int n, int type, std::string pop1, std::string pop2, std::string input, std::string output
         ancfreq_c(n=indnum_dip,type=2,pop1=pop1_dip,pop2=pop2_dip,input=inputdir_dip,output=outdip)
         ancfreq_c(n=indnum_hap,type=1,pop1=pop1_hap,pop2=pop2_hap,input=inputdir_hap,output=outhap)
@@ -111,19 +111,5 @@ ancfreq<-function(inputdir_dip="missing",pop1_dip="missing",pop2_dip="missing",
   }
 }
 
-#' test_ancfreq
-#'
-#' @return nothing
-#' @export
-#'
-# @examples
-test_ancfreq<-function(){
-  data="/Users/lycium/Desktop/Jennylab/rpackage_LCLAE/rawtestdata/"
-  input=paste(data,"test.genolik_R",sep = '')
-  output=paste(data,"ancfreq",sep = '')
-  ref1=paste(data,"fullref_anubis.h",sep = '')
-  ref2=paste(data,"fullref_yellow.h",sep = '')
-  ancfreq(inputdir_dip = input,pop1_dip = ref1,pop2_dip = ref2,outputdir = output)
-  }
 
 

@@ -85,34 +85,6 @@ get_chrlist<-function(vcf="/Users/lycium/Desktop/Jennylab/rpackage_LCLAE/rawtest
   return (x)
 }
 
-#' test_genolik
-#'
-#' @return nothing
-#' @export
-#'
-# @examples
-test_genolik<-function(){
-  i= "/Users/lycium/Desktop/Jennylab/rpackage_LCLAE/rawtestdata/multi_chr.vcf"
-  o= "/Users/lycium/Desktop/Jennylab/rpackage_LCLAE/rawtestdata/test.genolik_Rcpp"
-  genolik(inputdir = i, outputdir = o, type='dip')
-}
-
-#' test_chrlist
-#'
-#' @return nothing
-#' @export
-#'
-# @examples
-test_chrlist<-function(){
-  x<-get_chrlist()
-  chr<-x[seq(2,length(x),2)]
-  rep<-as.numeric(x[seq(1,length(x),2)])
-  print(x)
-  print(chr)
-  print(rep)
-  print(length(chr))
-
-}
 
 
 

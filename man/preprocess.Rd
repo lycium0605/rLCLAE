@@ -19,6 +19,3 @@ nothing
 preprocess
 A function to preprocess the vcf file
 }
-\examples{
-preprocess("\data\\vcf","\data\\vcf_clean")
-}

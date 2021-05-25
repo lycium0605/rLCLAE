@@ -17,6 +17,3 @@ nothing
 inputcheck
 A function to check the format of the input cleaned-up vcf file
 }
-\examples{
-inputcheck('\data\cleanvcf')
-}

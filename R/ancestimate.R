@@ -26,15 +26,3 @@ anccall<-function(delta=0.2, window_size=50000, inputdir,outputdir){
     anccall_c(deltaf=delta,window=window_size,SMAX=smax,anclikdir=inputdir,output=outputdir)
   }
   }
-
-#' test_anccall
-#'
-#' @return nothing
-#' @export
-#'
-# @examples
-test_anccall<-function(){
-  testdir="/Users/lycium/Desktop/Jennylab/rpackage_LCLAE/rawtestdata/anclik_R"
-  genolik2="/Users/lycium/Desktop/Jennylab/rpackage_LCLAE/rawtestdata/test.call_R"
-  anccall(inputdir=testdir,outputdir=genolik2)
-}

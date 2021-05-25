@@ -71,17 +71,3 @@ anclik<-function(genodir,ancfreqdir,outputdir,type='dip',test='all'){
 
 }
 
-#' test_ancli m k
-#'
- #' @return nothing
-# @export
-#'
-# @examples
-test_anclik<-function(){
-  data="/Users/lycium/Desktop/Jennylab/rpackage_LCLAE/rawtestdata/"
-  input1=paste(data,"test.genolik_R",sep = '')
-  input2=paste(data,"ancfreq_dip",sep = '')
-  output_=paste(data,"anclik_R",sep = '')
-  anclik(genodir = input1,ancfreqdir = input2,outputdir =output_,
-         type = 'dip',test = 1 )
-}
