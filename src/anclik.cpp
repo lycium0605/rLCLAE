@@ -29,11 +29,24 @@ void anclik_c(int sum, int type, int testid,
   Rcout<<"Starting ancestral likelihood estimation for individual "<<testid<<std::endl;
 
   while (fscanf (geno,"%*s %d ", &pos) != EOF){
+    //Rcout<<pos<<std::endl;
     if(fscanf(freq,"%d\t%lf\t%lf\t%lf\t%*d\t%*d", &pos_anc, &f1, &f2, &deltaf)==EOF){
-      Rcout<<"Fscanf meets EOF, please recheck input!"<<std::endl;
+      Rcout<<"Fscanf meets EOF in ancestral frequncy file."<<std::endl;
+      flag=1;
     }
     while(pos != pos_anc){
       if(pos<pos_anc){
+        if(fscanf(geno,"%*[^\n]%*c")==EOF){
+          Rcout<<"Reaching the end to genolikelihood file."<<std::endl;
+          flag=1;
+          break;
+        }
+        if(fscanf(geno,"%*s %d ", &pos)==EOF){
+          Rcout<<"Reaching the end to genolikelihood file."<<std::endl;
+          flag=1;
+          break;
+        }
+        /*
         for (a=1;a<=sum;++a){
           if(type==2){
             if(fscanf(geno,"%*lf %*lf %*lf ")==EOF){
@@ -46,13 +59,22 @@ void anclik_c(int sum, int type, int testid,
             }
                  }
           }
+        */
       }
-      else{
-        Rcout<<"The snp in ancestral frequency file is missing in the genotype likelihood file, please check."<<std::endl;
-        flag=1;
+      else if(pos>pos_anc){
+        if(fscanf(freq,"%d\t%lf\t%lf\t%lf\t%*d\t%*d", &pos_anc, &f1, &f2, &deltaf)==EOF){
+          Rcout<<"Reaching the end of the ancestral frequency file."<<std::endl;
+          flag=1;
+          break;
+        }
+        //Rcout<<"The snp in ancestral frequency file is missing in the genotype likelihood file, please check."<<std::endl;
+        //flag=1;
       }
       }
-    if(flag==0){
+    if(flag==1){
+      break;
+    }
+    else if(flag==0){
       for (a=1;a<testid;++a){
         if(type==2){
           if(fscanf(geno,"%*lf %*lf %*lf ")==EOF){
