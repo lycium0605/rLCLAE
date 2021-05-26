@@ -36,36 +36,43 @@ genolik<-function(inputdir,outputdir,type='dip'){
   root=outputdir
   skip_line=0
 
-  input=file(inputdir,'r')
-  line=unlist(strsplit(readLines(input,n=1),split = '\t'))
-  indnum=length(line)-2
-  close(input)
+  #Check the input
+  datacheck(inputdir,'[^0-9/[:space:],]','2-')->checkpoint
+  if(checkpoint==0){
+    #Get individual number
+    input=file(inputdir,'r')
+    line=unlist(strsplit(readLines(input,n=1),split = '\t'))
+    indnum=length(line)-2
+    close(input)
 
-  x<-get_chrlist(inputdir)
-  chr<-x[seq(2,length(x),2)]
-  rep<-as.numeric(x[seq(1,length(x),2)])
+    #Checking for chromosomes and snps
+    x<-get_chrlist(inputdir)
+    chr<-x[seq(2,length(x),2)]
+    rep<-as.numeric(x[seq(1,length(x),2)])
 
-  print(paste("Finding",length(chr),"unique chromosomes in the input vcf."))
+    print(paste("Finding",length(chr),"unique chromosomes in the input vcf."))
 
-  for(i in 1:length(chr)){
-    print(paste("Calculating genotype likelihood for chromosome",chr[i]))
-    root_chr=paste(root,"_",chr[i],sep = "")
-    #print(root_chr)
-    read_line=as.integer(rep[i])
-    skip_line=as.integer(skip_line)
-    #print(data.class(read_line))
-    if(type == 'dip'){
-      filt1_dip(indnum,skip_line,read_line,inputdir,root_chr)
+    for(i in 1:length(chr)){
+      print(paste("Calculating genotype likelihood for chromosome",chr[i]))
+      root_chr=paste(root,"_",chr[i],sep = "")
+      #print(root_chr)
+      read_line=as.integer(rep[i])
+      skip_line=as.integer(skip_line)
+      #print(data.class(read_line))
+      if(type == 'dip'){
+        filt1_dip(indnum,skip_line,read_line,inputdir,root_chr)
+      }
+      else if(type=='hap'){
+        filt1_hap(indnum,skip_line,read_line,inputdir,root_chr)
+      }
+      else{
+        print("Please specify a type, dip or hap")
+      }
+      skip_line=skip_line+read_line
+      #print(skip_line)
     }
-    else if(type=='hap'){
-      filt1_hap(indnum,skip_line,read_line,inputdir,root_chr)
-    }
-    else{
-      print("Please specify a type, dip or hap")
-    }
-    skip_line=skip_line+read_line
-    #print(skip_line)
   }
+
 }
 
 

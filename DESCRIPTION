@@ -5,7 +5,7 @@ Version: 0.1.0
 Author: He Shuyu
 Maintainer: He Shuyu <sh591@duke.edu>
 Depends: R (>= 3.3.0)
-Description: LCLAE rewritten in R.
+Description: Low coverage local ancestry estimation method rewritten in R.
 License: GPL
 Encoding: UTF-8
 LazyData: true

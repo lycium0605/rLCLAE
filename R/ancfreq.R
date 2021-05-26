@@ -18,8 +18,8 @@ ancfreq<-function(inputdir_dip="missing",pop1_dip="missing",pop2_dip="missing",
 
   #Check input
   flag=0
-
   if(inputdir_dip!='missing'){
+    flag=datacheck(inputdir_dip,character='[^0-9.[:space:]-]',field = '2- -d \" \"')
     if(pop1_dip=='missing'){
       print("Please provide input for diploid reference population 1.")
       flag=1
@@ -47,6 +47,7 @@ ancfreq<-function(inputdir_dip="missing",pop1_dip="missing",pop2_dip="missing",
   }
   if(flag==0){
     if(inputdir_hap!='missing'){
+      flag=datacheck(inputdir_hap,character='[^0-9.[:space:]-]',field = '2- -d \" \"')
       if(pop1_hap=='missing'){
         print("Please provide input for haploid reference population 1.")
         flag=1

@@ -14,7 +14,7 @@
 #'
 # @examples
 anclik<-function(genodir,ancfreqdir,outputdir,type='dip',test='all'){
-  flag=0
+  flag=datacheck(ancfreqdir,'[^0-9.[:space:]]')
   if(!file.exists(genodir)){
     print("The genotype likelihood file you provided does not exist. Please check.")
     flag=1
