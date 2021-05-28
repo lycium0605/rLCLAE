@@ -1,5 +1,5 @@
-#' ancfreq
-#'
+#' @title ancfreq
+#' @description A function to calculate ancestral allele frequency based on two reference populations.
 #' @param inputdir_dip The dir to a file containing diploid genotype likelihood data.
 #' @param pop1_dip The dir to a file containing information of reference population 1 for diploid data.
 #' @param pop2_dip The dir to a file containing information of reference population 2 for diploid data.
@@ -12,9 +12,9 @@
 #' @export
 #'
 # @examples
-ancfreq<-function(inputdir_dip="missing",pop1_dip="missing",pop2_dip="missing",
+ancfreq<-function(outputdir,inputdir_dip="missing",pop1_dip="missing",pop2_dip="missing",
                   inputdir_hap="missing",pop1_hap="missing",pop2_hap="missing",
-                  outputdir,mergetype="union"){
+                  mergetype="union"){
 
   #Check input
   flag=0
@@ -111,6 +111,25 @@ ancfreq<-function(inputdir_dip="missing",pop1_dip="missing",pop2_dip="missing",
     }
   }
 }
+
+#' @title mergefreq
+#' @description A function to merge existing ancestral frequency files
+#' @param hap The ancestral frequency calculated for haploid data
+#' @param dip The ancestral frequency calculated for diploid data
+#' @param merge The output directory for merged ancestral frequency
+#' @param type A parameter for merging type ("intersect","union","full_dip","full_hap"). 'union' for default.
+#'
+#' @return A merged ancfreq file
+#' @export
+#'
+# @examples
+mergefreq<-function(hap,dip,merge,type='union'){
+  dict=c("union"=3,"full_dip"=2,"full_hap"=1,"intersect"=0)
+  typenum=as.numeric(dict[type])
+  #print(typenum)
+  ancfreq_merge(hapfreq=hap,dipfreq=dip,outputdir=merge,type=typenum)
+}
+
 
 
 
