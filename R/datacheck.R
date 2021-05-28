@@ -10,7 +10,7 @@
 #' @return 0 pass 1 error
 # @export
 #'
-#' @examples
+# @examples
 #' datacheck(genolik,'[^0-9[:space:]]','2-')
 #'
 datacheck<-function(input,character="[^0-9[:space:]]",field='1-'){
@@ -31,3 +31,25 @@ datacheck<-function(input,character="[^0-9[:space:]]",field='1-'){
   }
 
 }
+
+#' @title freqsum
+#' @description Basic summary for ancestral frequency file
+#' @param freq The dir to ancestral allele frequency file
+#'
+#' @return A numeric vector of the difference of allele frequency
+#' @export
+#'
+# @examples
+freqsum<-function(freq){
+  com=paste(sep='','cat ',freq,' | cut -f 4')
+  as.numeric(system(command = com, intern = TRUE)) -> difffreq
+  hist(difffreq,xlab = 'Allele frequency difference', main = 'Ancestral population divergence')
+  print(paste('The average value is:',mean(difffreq)))
+  print(paste('The medium value is:',median(difffreq)))
+  print(paste('The maximum value is:',max(difffreq)))
+  print(paste('The minimum value is:',min(difffreq)))
+  return(difffreq)
+}
+
+
+
