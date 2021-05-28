@@ -1,11 +1,11 @@
 
-#' preprocess
-#' A function to preprocess the vcf file
+#' @title  preprocess
+#' @description  A function to preprocess the vcf file
 #'
 #' @param inputdir dir to orginial vcf file
 #' @param outputdir dir to store cleaned_up vcf file
 #'
-#' @return nothing
+# @return
 #' @export
 #'
 
@@ -16,11 +16,11 @@ preprocess<-function(inputdir,outputdir){
   inputcheck(outputdir)
 }
 
-#' inputcheck
-#' A function to check the format of the input cleaned-up vcf file
+#' @title inputcheck
+#' @description A function to check the format of the input cleaned-up vcf file
 #' @param inputdir dir to clean vcf
 #'
-#' @return nothing
+#' @return A string indicating the result of the input check
 #' @export
 #'
 
@@ -29,7 +29,7 @@ inputcheck<-function(inputdir){
   com = '| cut -f 2- | grep [^0-9,[:space:]/] > /dev/null&& echo "Unexpected character, please double check your input" || echo "Pass character test"'
   command_ = paste(sep=' ', 'cat',inputdir,com)
   system(command = command_,intern = TRUE) -> charcheck
-  print(charcheck)
+  return(charcheck)
   if(charcheck=="Pass character test"){
     #Check individual number
     input=file(inputdir,'r')

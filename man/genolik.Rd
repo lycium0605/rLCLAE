@@ -11,10 +11,10 @@ genolik(inputdir, outputdir, type = "dip")
 
 \item{outputdir}{The output directory of the genolik file.}
 
-\item{type}{haploid (i.e. male-X) or diploid (Autosome), dipoid as default}
+\item{type}{'hap' for haploid (i.e. male-X) data or 'dip' for diploid (Autosome), 'dip' as default}
 }
 \value{
-A file in which each line represents a snp. The line looks like chr, pos, -1. -1. -1. (missing data) or gl1, gl2, gl3 transformed from the phred score.
+Output a file in which each line represents a snp. The line looks like chr, pos, -1. -1. -1. (missing data) or gl1, gl2, gl3 transformed from the phred score.
 }
 \description{
 Calculating the relative genotype likelihood from a vcf file.

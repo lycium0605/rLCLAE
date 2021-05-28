@@ -1,0 +1,160 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%",
+  eval = FALSE,
+  echo = TRUE
+)
+```
+
+# rLCLAE
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+This is an R package for LCLAE, which stands for Low Coverage Local Ancestry Estimation. The goal of rLCLAE is to estimate the local ancestry based on SNP derived from low coverage whole genome sequencing data. 
+
+## Installation
+
+You can not yet install the released version of rLCLAE from [CRAN](https://CRAN.R-project.org) with:
+
+``` r
+install.packages("rLCLAE")
+```
+
+And the development version from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("lycium0605/rLCLAE")
+```
+## Example
+
+This is a basic example which shows you a common pipeline for rLCLAE:
+
+To get started, you need to prepare a vcf in required format. This vcf can be generated with bcftools by:
+`bcftools annotate -x ^INFO/DP,^FORMAT/GT,^FORMAT/AD,^FORMAT/DP,^FORMAT/GQ,^FORMAT/PL raw.vcf `>` original.vcf`
+
+From here, rLCLAE has four major steps: 1) calculating genotype likelihood, 2) calculating ancestral allele frequency, 3) calculating ancestral likelihood for test individuals, 4) calling ancestry and 5) generating ancestral tract.
+
+### 1. Calculating genotype likelihood
+
+In this step, the genotype likelihood is calculated based on the PL value in the vcf file. \
+If multiple chromosomes are detected, this function will automatically split it into multiple genolik files, one for a chromosome, and adding a chromosome name suffix (i.e. genolk_chrX).
+
+```{r prep & genolik, eval=FALSE}
+
+## Setting environment
+library(rLCLAE)
+
+## Preprocessing
+preprocess(inputdir = './original.vcf',outputdir = './clean.vcf')
+
+## Checking the clean.vcf, this step can be skipped
+inputcheck(inputdir = './clean.vcf')
+
+## Calculating genotype likelihood based on PL value
+genolik(inputdir = './clean.vcf', outputdir = './genolik', type = 'dip')
+```
+
+### 2. Calculating ancestral allele frequency
+
+In this step, ancestral allele frequency is calcluated based on the genotype likelihood data, and information of the reference panel.\
+To make use of the reference panel information, please create a txt file for each reference population. It should be a series of integer sepearted by ' ', the first one specifies the total number of reference individuals in this population, and the rest specifies the index of the individual in the vcf file. i.e. `5 23 24 25 26 28`\
+If you have only one type of data, you can generate one ancestral allele frequency using following code, it will add a suffix (_hap or _dip based on data type) to the output:
+
+```{r ancfreq_unitype}
+## For dipoid data 
+ancfreq(outputdir = './ancfreq',inputdir_dip = './genolik_dip_chrX',
+        pop1_dip = 'ref1dip.txt',pop2_dip = 'ref2dip.txt')
+
+## For hapoid data 
+ancfreq(outputdir = './ancfreq',inputdir_hap = './genolik_hap_chrX',
+        pop1_hap = 'ref1hap.txt',pop2_hap = 'ref2hap.txt')
+
+```
+
+However, if you have two different type of data (i.e. For X chromosome, you have haploid data for male and diploid data for female), you can do either of steps below:
+
+```{r ancfreq_bitype}
+
+## An easy way is to input them together, and three files (ancfreq_dip, ancfreq_hap, ancfreq_merge) will be generated
+
+ancfreq(outputdir = './ancfreq',
+        inputdir_hap = './genolik_hap_chrX',
+        pop1_hap = 'ref1hap.txt',pop2_hap = 'ref2hap.txt',
+        inputdir_dip = './genolik_dip_chrX',
+        pop1_dip = 'ref1dip.txt',pop2_dip = 'ref2dip.txt',
+        mergetype = "union")
+
+## Or you can use this function after calculating ancestry for both data type separately 
+
+mergefreq(hap = './ancfreq_hap', dip = './ancfreq_dip', 
+          merge = './ancfreq_merge', type = 'union')
+
+```
+
+Here the `mergetype` can be:\
+`union`: Keep the snps that appear in either the diploid or haploid data.\
+`intersect`: Keep the snps that appear both in haploid and diploid data.\
+`full_hap`: Keep all the snps that appear in haploid data.\
+`full_dip`: Keep all the snps that appear in diploid data.\
+After the ancfreq file is generated, you can check how diverge the two reference poplulations are by looking at the distribution of the allele frequency difference.
+
+```{r ancfreq_summary}
+
+# This should print the histgram of allele frequency difference distribution, and the mean/median/max/min of the data, and you can do further analysis on diff if necessary
+
+diff<-freqsum('./ancfreq_dip')
+```
+
+### 3. Calculating ancestral likelihood for test individuals
+
+In this step, you will calculate the ancestry likelihood for every snp in the target test individual. The default option allows you to do this for all individuals in a population. A suffix of individual index will be added (i.e. anclik_1).
+
+```{r anclik}
+
+## For all individuals
+anclik(genodir = './genolik_chrX', ancfreqdir = './ancfreq_merge',
+       outputdir = './anclik', type = 'dip', test = 'all')
+
+## For a specific individual: test = 1
+## For a part of the individuals:
+## a<-c(1,2,5,9)
+## test = a
+```
+
+### 4. Calling ancestry
+
+In this step, you will call ancestry based on the ancestry likihood using the majority rule. The output will be a file containing a number for snp position and a value of 0/1/2, 0 for pure ancestry 1 (based on the ancestry of reference population 1), 1 for hybrid ancestry, and 2 for pure ancestry 2.
+
+```{r anccall}
+# delta: The cutoff for ancestral allele frequency difference, snps less diverge than this will be filtered out
+# window_size: The size (in base pair) for the sliding window used in ancestry call, the large this is, the more shorter tract will be smoothed out. 
+anccall(delta = 0.2, window_size = 50000,
+        inputdir = './anclik_1', outputdir = './anccall_1')
+```
+
+### 5. Generating ancestral tract
+
+In this step, you will converse the snp level ancestry estimation to continuous ancestry tract. The output will be two files, one with a suffix of '.MajorityRule.txt' and one with '.tracts.txt'.
+
+```{r call2tract}
+gettract('./anccall_1', # input dir
+         './tract_1', # output dir
+         indiv_name = '1', # individual name, will add a column
+         chr='chrX', # chromosome name, will add a column
+         chrlength='142711496', #chromosome length in bp
+         value=35000, # window size
+         mode_n=0.5, # the minimum percentage for a call to be made using majority rule
+         min_n=20, # the minimum number of SNPs within the window to make a call
+         exclude=50000) # how much of the start/end of each chromosome to ignore
+```

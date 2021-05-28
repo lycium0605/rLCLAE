@@ -2,8 +2,7 @@
 % Please edit documentation in R/prep.R
 \name{preprocess}
 \alias{preprocess}
-\title{preprocess
-A function to preprocess the vcf file}
+\title{preprocess}
 \usage{
 preprocess(inputdir, outputdir)
 }
@@ -12,10 +11,6 @@ preprocess(inputdir, outputdir)
 
 \item{outputdir}{dir to store cleaned_up vcf file}
 }
-\value{
-nothing
-}
 \description{
-preprocess
 A function to preprocess the vcf file
 }

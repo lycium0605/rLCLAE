@@ -2,8 +2,7 @@
 % Please edit documentation in R/prep.R
 \name{inputcheck}
 \alias{inputcheck}
-\title{inputcheck
-A function to check the format of the input cleaned-up vcf file}
+\title{inputcheck}
 \usage{
 inputcheck(inputdir)
 }
@@ -11,9 +10,8 @@ inputcheck(inputdir)
 \item{inputdir}{dir to clean vcf}
 }
 \value{
-nothing
+A string indicating the result of the input check
 }
 \description{
-inputcheck
 A function to check the format of the input cleaned-up vcf file
 }

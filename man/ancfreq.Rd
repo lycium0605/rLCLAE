@@ -5,17 +5,19 @@
 \title{ancfreq}
 \usage{
 ancfreq(
+  outputdir,
   inputdir_dip = "missing",
   pop1_dip = "missing",
   pop2_dip = "missing",
   inputdir_hap = "missing",
   pop1_hap = "missing",
   pop2_hap = "missing",
-  outputdir,
   mergetype = "union"
 )
 }
 \arguments{
+\item{outputdir}{The dir to the output file. A postfix ('_dip','_hap','_merge') will be added.}
+
 \item{inputdir_dip}{The dir to a file containing diploid genotype likelihood data.}
 
 \item{pop1_dip}{The dir to a file containing information of reference population 1 for diploid data.}
@@ -28,13 +30,11 @@ ancfreq(
 
 \item{pop2_hap}{The dir to a file containing information of reference population 2 for haploid data.}
 
-\item{outputdir}{The dir to the output file. A postfix ('_dip','_hap','_merge') will be added.}
-
 \item{mergetype}{A parameter for merging type ("intersect","union","full_dip","full_hap")}
 }
 \value{
 Nothing
 }
 \description{
-ancfreq
+A function to calculate ancestral allele frequency based on two reference populations.
 }
