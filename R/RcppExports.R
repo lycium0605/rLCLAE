@@ -8,12 +8,13 @@
 #' @param SMAX The number of all snp sites
 #' @param anclikdir the dir to anclik file
 #' @param output the dir of the output ancfreq file
-#' @export
+
 anccall_c <- function(deltaf, window, SMAX, anclikdir, output) {
     invisible(.Call(`_rLCLAE_anccall_c`, deltaf, window, SMAX, anclikdir, output))
 }
 
-#' ancfreq_c: Calculating the allele frequency in two different ancestral population
+#' @title ancfreq_c
+#' @description Calculating the allele frequency in two different ancestral population
 #'
 #' @param n an integer, the number of individuals contain in the input
 #' @param type 1 or 2, specifying diploid/haploid data.
@@ -21,7 +22,6 @@ anccall_c <- function(deltaf, window, SMAX, anclikdir, output) {
 #' @param pop2 the dir of a file containing individuals belonging to reference population 2
 #' @param input the dir of the input genolik file
 #' @param output the dir of the output ancfreq file
-#' @export
 ancfreq_c <- function(n, type, pop1, pop2, input, output) {
     invisible(.Call(`_rLCLAE_ancfreq_c`, n, type, pop1, pop2, input, output))
 }
@@ -32,7 +32,6 @@ ancfreq_c <- function(n, type, pop1, pop2, input, output) {
 #' @param dipfreq The dir to file containing ancfreq for diploid data
 #' @param type An integer, 0-intersection 1-keep all haploid snp 2-keep all diploid snp 3-union
 #' @param outputdir The output dir
-#' @export
 ancfreq_merge <- function(hapfreq, dipfreq, outputdir, type) {
     invisible(.Call(`_rLCLAE_ancfreq_merge`, hapfreq, dipfreq, outputdir, type))
 }
@@ -45,7 +44,6 @@ ancfreq_merge <- function(hapfreq, dipfreq, outputdir, type) {
 #' @param genolik the dir to genolik file
 #' @param ancfreq the dir to ancfreq file
 #' @param output the dir of the output ancfreq file
-#' @export
 anclik_c <- function(sum, type, testid, genolik, ancfreq, output) {
     invisible(.Call(`_rLCLAE_anclik_c`, sum, type, testid, genolik, ancfreq, output))
 }
@@ -57,7 +55,6 @@ anclik_c <- function(sum, type, testid, genolik, ancfreq, output) {
 #' @param dur an ingerger, lines for current chromosome
 #' @param input a string, the dir to cleaned vcf file
 #' @param output a string, the dir to the output file
-#' @export
 filt1_dip <- function(n, skip, dur, input, output) {
     invisible(.Call(`_rLCLAE_filt1_dip`, n, skip, dur, input, output))
 }
@@ -69,7 +66,6 @@ filt1_dip <- function(n, skip, dur, input, output) {
 #' @param dur an ingerger, lines for current chromosome
 #' @param input a string, the dir to cleaned vcf file
 #' @param output a string, the dir to the output file
-#' @export
 filt1_hap <- function(n, skip, dur, input, output) {
     invisible(.Call(`_rLCLAE_filt1_hap`, n, skip, dur, input, output))
 }
@@ -77,7 +73,6 @@ filt1_hap <- function(n, skip, dur, input, output) {
 #' GL=10^(-pl)
 #'
 #' @param x A single double.
-#' @export
 glpow <- function(x) {
     .Call(`_rLCLAE_glpow`, x)
 }

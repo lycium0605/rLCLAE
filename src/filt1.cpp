@@ -9,7 +9,6 @@ using namespace Rcpp;
 //' @param dur an ingerger, lines for current chromosome
 //' @param input a string, the dir to cleaned vcf file
 //' @param output a string, the dir to the output file
-//' @export
 // [[Rcpp::export]]
 void filt1_dip(int n, int skip, int dur,
                std::string input, std::string output) {
@@ -73,7 +72,6 @@ void filt1_dip(int n, int skip, int dur,
 //' @param dur an ingerger, lines for current chromosome
 //' @param input a string, the dir to cleaned vcf file
 //' @param output a string, the dir to the output file
-//' @export
 // [[Rcpp::export]]
 void filt1_hap(int n, int skip, int dur,
                std::string input, std::string output) {

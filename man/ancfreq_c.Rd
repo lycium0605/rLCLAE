@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{ancfreq_c}
 \alias{ancfreq_c}
-\title{ancfreq_c: Calculating the allele frequency in two different ancestral population}
+\title{ancfreq_c}
 \usage{
 ancfreq_c(n, type, pop1, pop2, input, output)
 }
@@ -20,5 +20,5 @@ ancfreq_c(n, type, pop1, pop2, input, output)
 \item{output}{the dir of the output ancfreq file}
 }
 \description{
-ancfreq_c: Calculating the allele frequency in two different ancestral population
+Calculating the allele frequency in two different ancestral population
 }

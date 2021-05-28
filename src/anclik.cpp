@@ -10,7 +10,6 @@ using namespace Rcpp;
 //' @param genolik the dir to genolik file
 //' @param ancfreq the dir to ancfreq file
 //' @param output the dir of the output ancfreq file
-//' @export
 // [[Rcpp::export]]
 void anclik_c(int sum, int type, int testid,
                std::string genolik, std::string ancfreq, std::string output) {

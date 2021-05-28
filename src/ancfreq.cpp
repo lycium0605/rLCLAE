@@ -2,7 +2,8 @@
 #include<cmath>
 using namespace Rcpp;
 
-//' ancfreq_c: Calculating the allele frequency in two different ancestral population
+//' @title ancfreq_c
+//' @description Calculating the allele frequency in two different ancestral population
 //'
 //' @param n an integer, the number of individuals contain in the input
 //' @param type 1 or 2, specifying diploid/haploid data.
@@ -10,7 +11,6 @@ using namespace Rcpp;
 //' @param pop2 the dir of a file containing individuals belonging to reference population 2
 //' @param input the dir of the input genolik file
 //' @param output the dir of the output ancfreq file
-//' @export
 // [[Rcpp::export]]
 void ancfreq_c(int n, int type, std::string pop1, std::string pop2, std::string input, std::string output) {
   int a, b, pos, flag, *Pop1, *Pop2, c, anc1, anc2;
@@ -166,7 +166,6 @@ void ancfreq_c(int n, int type, std::string pop1, std::string pop2, std::string 
 //' @param dipfreq The dir to file containing ancfreq for diploid data
 //' @param type An integer, 0-intersection 1-keep all haploid snp 2-keep all diploid snp 3-union
 //' @param outputdir The output dir
-//' @export
 // [[Rcpp::export]]
 void ancfreq_merge(std::string hapfreq, std::string dipfreq, std::string outputdir, int type) {
   int pos_m, pos_f, pos, anc1_m, anc2_m,anc1_f, anc2_f,anc1,anc2,endf,endm;

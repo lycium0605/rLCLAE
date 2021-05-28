@@ -8,7 +8,7 @@ using namespace Rcpp;
 //' @param SMAX The number of all snp sites
 //' @param anclikdir the dir to anclik file
 //' @param output the dir of the output ancfreq file
-//' @export
+// @export
 // [[Rcpp::export]]
 void anccall_c(double deltaf, int window, int SMAX,
               std::string anclikdir, std::string output) {

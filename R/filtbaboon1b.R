@@ -82,7 +82,7 @@ genolik<-function(inputdir,outputdir,type='dip'){
 #' @param vcf the input vcf file
 #'
 #' @return a character vector rep,chr
-#' @export
+# @export
 #'
 # @examples
 get_chrlist<-function(vcf="/Users/lycium/Desktop/Jennylab/rpackage_LCLAE/rawtestdata/test_clean.vcf"){
