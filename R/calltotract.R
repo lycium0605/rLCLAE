@@ -50,8 +50,8 @@ gettract <- function(datadir,outputdir,
 #maj_dir<-paste(datadir,'/tract/',indiv_name,'.MajorityRule.txt',sep = '')
 #tractdir<-paste(datadir,'/tract/',indiv_name,'.tracts.txt',sep = '')
 filedir<-datadir
-maj_dir<-paste(outputdir,'.MajorityRule.txt',sep = '')
-tractdir<-paste(outputdir,'.tracts.txt',sep = '')
+maj_dir<-paste(outputdir,indiv_name,'MajorityRule.txt',sep = '.')
+tractdir<-paste(outputdir,indiv_name,'tracts.txt',sep = '.')
 fread(filedir,showProgress = T) -> indv_ #chr17 pos call
 data.table(indv_)->indv
 #indv$chrom <- 'chrX' #add a line full of chrX
