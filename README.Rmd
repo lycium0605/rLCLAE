@@ -43,41 +43,52 @@ devtools::install_github("lycium0605/rLCLAE")
 
 Below is the typical pipeline for transforming biallelic genomic data in vcf format to local ancestry calls. We assume that any quality control filtering of your variant calls (e.g., GATK's recommended hard filters, minor allele frequency threshold, etc.) has already been done. Note that your vcf can contain multiple chromosomes or a single chromosome at this stage.
 
-Before importing your genomic data into R, you must do XXX (???tell them exactly what needs to be done???) to your vcf (here, raw.vcf). We can do this using bcftools (http://www.htslib.org/doc/bcftools.html) with the following command:
-`bcftools annotate -x ^INFO/DP,^FORMAT/GT,^FORMAT/AD,^FORMAT/DP,^FORMAT/GQ,^FORMAT/PL raw.vcf `>` original.vcf` (???should we name it something other than original vcf - maybe tmp.vcf? original.vcf makes it seem like you haven't done anything to it which you have...i also think it might be better to call what you're calling raw.vcf as original.vcf...???)
+Before importing your genomic data into R, you must edit your vcf (here, original.vcf) to make sure only specific fields are kept. We can do this using bcftools (http://www.htslib.org/doc/bcftools.html) with the following command:
+`bcftools annotate -x ^INFO/DP,^FORMAT/GT,^FORMAT/AD,^FORMAT/DP,^FORMAT/GQ,^FORMAT/PL original.vcf `>` tmp.vcf` (???should we name it something other than original vcf - maybe tmp.vcf? original.vcf makes it seem like you haven't done anything to it which you have...i also think it might be better to call what you're calling raw.vcf as original.vcf...???)
 
-After your data is XXX, we will perform the following steps using rLCLAE: 1) calculate the genotype likelihoods for XXX (???all individuals? only the ancestral individuals? be a little more specific here???), 2) calculate the allele frequencies in both ancestral populations, 3) calculate the ancestral likelihood for the admixed individuals, 4) call local ancestry, and 5) generate ancestry tracts.
+### 0. Getting started
 
-### 1. Calculating genotype likelihood
-
-In this step, the genotype likelihood for XXX is calculated based on the PL value in the vcf file. \
-If multiple chromosomes are detected, this function will automatically split the data into multiple genotype likelihood files, one for each chromosome, and add the chromosome name to each file (e.g., genolk_chrX).
-
-```{r prep & genolik, eval=FALSE}
+```{r prep, eval=FALSE}
 
 ## ???I think lines 59-66 should be before the "1. Calculating genotype likelihood section" and in their own section on getting started/importing the data in R.
 ## After installing rLCLAE, load the rLCLAE package
 library(rLCLAE)
 
 ## Preprocessing (???What exactly is this function doing? Tell your reader/user???)
-preprocess(inputdir = './original.vcf',outputdir = './clean.vcf')
+## This function removes redundant information in the vcf file, replace some types of characters (e.g. | or :) with others so that the following processing can be easier.
+preprocess(inputdir = './tmp.vcf',outputdir = './clean.vcf')
 
 ## Checking the clean.vcf, this step can be skipped (???Tell your reader what this function is doing. What are common things that might happen when you run this function???)
+## This function check whether or not unexpected characters emerge. Your input should contain only numbers, comma, space or '/'.If it outputs "Unexpected character, please double check your input", it means something went wrong with your input. This function also output the individual number and unique chromosome list detected in the input file. If the information is against your prior knowledge, you should also check your input.
+
 inputcheck(inputdir = './clean.vcf')
+```
+
+After your data is cleaned and reformed, we will perform the following steps using rLCLAE: 1) calculate the genotype likelihoods for all individuals in the vcf, 2) calculate the allele frequencies in both ancestral populations, 3) calculate the ancestral likelihood for the admixed individuals, 4) call local ancestry, and 5) generate ancestry tracts.
+
+### 1. Calculating genotype likelihood
+
+In this step, the genotype likelihood for XXX is calculated based on the PL value in the vcf file. \
+If multiple chromosomes are detected, this function will automatically split the data into multiple genotype likelihood files, one for each chromosome, and add the chromosome name to each file (e.g., genolk_chrX).
+
+```{r genolik, eval=FALSE}
 
 ## Calculate the genotype likelihood based on PL value
+## Here the type parameter is set to 'dip' by default, it means the input is diploid data (e.g. autosomal data). If set to 'hap', it means the input is haploid data (e.g. X-chromosomal data of male).
 ## ???Need to say something about the "type" parameter here (I see that you mention it later but it doesn't help the reader/users if they don't know what it is at this step)???
 genolik(inputdir = './clean.vcf', outputdir = './genolik', type = 'dip')
 
 ## ???Tell the reader/user exactly what is generated here - what is in the geno like file? how many columns? what is in each column? etc.???
+## In this step, one genolik file will be generated for one chromosome. If your original.vcf contains more than one chromosome, they will be split into separate file with an additional suffix (e.g. genolik_chrX).
+## In genolik file, each line represents a snp. In a line, the first string represents the chromosome index (e.g. chrX), the second number is the position of the snp for this line. After that, every three numbers represent the genotype likelihood for one individual. (e.g. -1. -1. -1. means the data for this individual is missing, and .81, .12, .07 represents P(AA), P(Aa), P(aa).
 
 ```
 
 ### 2. Calculating ancestral population allele frequencies
 
 In this step, the allele frequencies for each ancestral population are calculated based on the genotype likelihoods for ancestral individuals.\
-We must define which individuals are in each ancestral population. To do so, create a text file for each ancestral population with a single line of integers separated by spaces. The first integer in the line is the total number individuals in the ancestral population followed by the order of each individual in the vcf/genolik file (the order should be the same). For example, in the file "anc1dip.txt", we'll specify that we have 5 total individuals in ancestral population 1 and they are at positions 23, 24, 25, 26, and 28 in the vcf/genolike files: `5 23 24 25 26 28`\ (???I'd also give them the option, and show an example here, how to generate this file in R???)
-If you have only one type of data, you can generate one ancestral allele frequency using the following code, it will add a suffix (_hap or _dip based on data type) to the output: (??? I'm confused by this sentence - if I only have diploid data, it will automatically detect that I have diploid data and add the suffix _dip? Or do I need to define pop1_dip and pop2_dip instead of pop1_hap and pop2_hap???)
+We must define which individuals are in each ancestral population. To do so, create a text file for each ancestral population with a single line of integers separated by spaces. The first integer in the line is the total number individuals in the ancestral population followed by the order of each individual in the vcf/genolik file (the order should be the same). For example, in the file "anc1dip.txt", we'll specify that we have 5 total individuals in ancestral population 1 and they are at positions 23, 24, 25, 26, and 28 in the vcf/genolike files: `5 23 24 25 26 28`\ (???I'd also give them the option, and show an example here, how to generate this file in R???)(??? It makes total sense, however I am thinking changing the code a bit to avoid using the text file, and allow the user to create a numeric vector in R and pass that directly into the c code as parameter. ???)
+If you have only one type of data, you can generate one ancestral allele frequency using the following code, it will add a suffix (_hap or _dip based on data type) to the output: If all three files (inputdir_dip, pop1_dip and pop2_dip) are provided, the output will have a suffix '_dip' and vice versa.(??? I'm confused by this sentence - if I only have diploid data, it will automatically detect that I have diploid data and add the suffix _dip? Or do I need to define pop1_dip and pop2_dip instead of pop1_hap and pop2_hap???)
 
 ```{r ancfreq_unitype}
 ## For diploid data 
@@ -90,7 +101,7 @@ ancfreq(outputdir = './ancfreq',inputdir_hap = './genolik_hap_chrX',
 
 ```
 
-However, if you have two different type of data (e.g. For X chromosome, you have haploid data for male and diploid data for female), you can do either of steps below: (???What other types of data could you have? Seems like it would only be haploid vs. diploid, right? If so, let's explicitly say this instead of using "types of data" which seems a little nebulous to me???)
+However, if you have both diploid and haploid data (e.g. For X chromosome, you have haploid data for male and diploid data for female), you can do either of steps below: (???What other types of data could you have? Seems like it would only be haploid vs. diploid, right? If so, let's explicitly say this instead of using "types of data" which seems a little nebulous to me???)
 
 ```{r ancfreq_bitype}
 
@@ -106,6 +117,8 @@ ancfreq(outputdir = './ancfreq',
 mergefreq(hap = './ancfreq_hap', dip = './ancfreq_dip', 
           merge = './ancfreq_merge', type = 'union')
 
+## This file contains six columns, the first refers to the snp position, the second and thrid columns refer to the allele frequency of 'A' in ancestral population 1 and 2, the fourth and fifth columns refer to the number of available chromosome used for allele frequency calculation in ancestral population 1 and 2, respectively.
+
 ## ???Again, tell the reader/user exactly what is generated here - what is in the ancfreq_dip file? how many columns? what is in each column? etc.???
 
 ```
@@ -119,7 +132,7 @@ After the ancfreq file is generated, you might want to check the distribution of
 
 ```{r ancfreq_summary}
 
-# Plot a histogram of allele frequency differences between the two ancestral populations and the mean/median/max/min of these data, and you can do further analysis on diff if necessary (???Not sure what "and you can do further analysis on diff if necessary" means - what kind of analysis would they do???)
+# Plot a histogram of allele frequency differences between the two ancestral populations and the mean/median/max/min of these data, and you can do further analysis on diff if necessary. For example, you can check the distribution and find the 25/50/75 percentile value, which may help you with your decision on the cutoff used in the following step.(???Not sure what "and you can do further analysis on diff if necessary" means - what kind of analysis would they do???)
 
 diff<-freqsum('./ancfreq_dip')
 ```
@@ -141,15 +154,15 @@ anclik(genodir = './genolik_chrX', ancfreqdir = './ancfreq_merge',
 ## sub<-c(1,2,5,9)
 ## test = sub
 anclik(genodir = './genolik_chrX', ancfreqdir = './ancfreq_merge',
-       outputdir = './anclik', type = 'dip', test = sub) #???Is this correct???
+       outputdir = './anclik', type = 'dip', test = sub) #???Is this correct???(They should be correct, I make corresponding changes in the code and test all three types, may I ask what is the worry here more specifically?)
 ```
 
 ### 4. Estimating local ancestry
 
-In this step, the ancestry state at each snp for each individual is estimated based on majority rule (???Need to explain what majority rule is???). The function, anccall, will output a data frame where each row corresponds to XXX. The first column corresponds to the snp position and the second column corresponds to the ancestry state called for that snp where a value of 0 corresponds to homozygous ancestry for ancestral population 1, 1 corresponds to heterozygous ancestry, and 2 corresponds to homozygous ancestry for ancestral population 2. (???Good - this should be included also for steps 1-3???)
+In this step, the ancestry state at each snp for each individual is estimated based on majority rule (???Need to explain what majority rule is???)(I am not sure how to explain this. The ancestry state with highest frequency in the defined sliding window?). The function, anccall, will output a data frame where each row corresponds to a snp. The first column corresponds to the snp position and the second column corresponds to the ancestry state called for that snp where a value of 0 corresponds to homozygous ancestry for ancestral population 1, 1 corresponds to heterozygous ancestry, and 2 corresponds to homozygous ancestry for ancestral population 2. (???Good - this should be included also for steps 1-3???)
 
 ```{r anccall}
-# delta: the minimum ancestral allele frequency difference for snps which will be evaluated; e.g., delta=0.2 will only evaluate snps with at least a 20% allele frequency difference between ancestral populations (??? Is it >20% or >=20%???)
+# delta: the minimum ancestral allele frequency difference for snps which will be evaluated; e.g., delta=0.2 will only evaluate snps with >= 20% allele frequency difference between ancestral populations (??? Is it >20% or >=20%???)
 # window_size: the size (in base pairs) for the sliding window used in ancestry calling where the larger this value is, the shorter tracts will be smoothed out; e.g., window_size=50000 will use 50 kb sliding windows
 anccall(delta = 0.2, window_size = 50000,
         inputdir = './anclik_1', outputdir = './anccall_1')
@@ -158,6 +171,7 @@ anccall(delta = 0.2, window_size = 50000,
 ### 5. Generating ancestry tracts
 
 In this step, neighboring snps with the same inferred ancestry stats can be assembled into ancestry tracts. The gettract command will generate two output files, one with a suffix of '.MajorityRule.txt' and one with '.tracts.txt'. (???Again, tell the reader/user exactly what is generated in each of these files here - what are the rows and columns in each output file? Also, how is the MajorityRule.txt file here different from the output file generated in the previous step because you say in that step that you're generating majority rule calls there???)
+(I actually never really look into the majority rule file in this step, will take a further look!)
 
 ```{r call2tract}
 gettract('./anccall_1', # input dir
@@ -168,5 +182,5 @@ gettract('./anccall_1', # input dir
          value=35000, # window size
          mode_n=0.5, # the minimum percentage for a call to be made using majority rule
          min_n=20, # the minimum number of SNPs within the window to make a call
-         exclude=50000) # how much of the start/end of each chromosome to ignore if any (???Can you do exclude=0 if you don't want to ignore anything???)
+         exclude=50000) # how much of the start/end of each chromosome to ignore if any (???Can you do exclude=0 if you don't want to ignore anything???) I think so??
 ```
