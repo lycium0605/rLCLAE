@@ -8,6 +8,7 @@
 #' @param SMAX The number of all snp sites
 #' @param anclikdir the dir to anclik file
 #' @param output the dir of the output ancfreq file
+NULL
 
 anccall_c <- function(deltaf, window, SMAX, anclikdir, output) {
     invisible(.Call(`_rLCLAE_anccall_c`, deltaf, window, SMAX, anclikdir, output))

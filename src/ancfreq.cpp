@@ -12,12 +12,17 @@ using namespace Rcpp;
 //' @param input the dir of the input genolik file
 //' @param output the dir of the output ancfreq file
 // [[Rcpp::export]]
-void ancfreq_c(int n, int type, std::string pop1, std::string pop2, std::string input, std::string output) {
+void ancfreq_c(int n, int type, NumericVector pop1, NumericVector pop2, std::string input, std::string output) {
   int a, b, pos, flag, *Pop1, *Pop2, c, anc1, anc2;
   double L1, L2, L3, f1, f2, **lik, deltaf, anc1_num, anc2_num;
 
   Rcout<<"Finding "<<n<<" individuals in the input"<<std::endl;
-  FILE *pop1_, *pop2_, *geno, *out;
+  FILE *geno, *out; //*pop1_, *pop2_,
+  //string pop1_,pop2_;
+
+  //Rcout << pop1 << std::endl;
+  //Rcout << pop2 << std::endl;
+
   Pop1 = (int *) malloc ((n+1) * sizeof (int));
   Pop2 = (int *) malloc ((n+1) * sizeof (int));
   for (a=1; a<=n; ++a) {
@@ -28,32 +33,38 @@ void ancfreq_c(int n, int type, std::string pop1, std::string pop2, std::string 
   for (a=1; a<=n; ++a)
     lik[a] = (double *) malloc (3 * sizeof (double *));
 
-  pop1_=fopen(pop1.c_str(),"r");
-  if(std::fscanf(pop1_, "%d ", &b)==EOF){
-    Rcout<<"Fscanf meets EOF, please recheck input!"<<std::endl;
-  }
-
+  //pop1_=fopen(pop1.c_str(),"r");
+  //pop1_=pop1;
+  //if(std::scanf(pop1_, "%d ", &b)==EOF){
+    //Rcout<<"Fscanf meets EOF, please recheck input!"<<std::endl;
+  //}
+  b=int(pop1[0]);
   Rcout<<"Finding "<<b<<" individuals for reference population 1"<<std::endl;
   for (a=0; a<b; ++a) {
-    if(fscanf (pop1_, "%d ", &c)==EOF){
-      Rcout<<"Fscanf meets EOF, please recheck input!"<<std::endl;
-    }
+    //if(std::scanf (pop1_, "%d ", &c)==EOF){
+      //Rcout<<"Fscanf meets EOF, please recheck input!"<<std::endl;
+    //}
+    c=int(pop1[a+1]);
+    //Rcout<<c<<std::endl;
     Pop1[c] = 1;
   }
-  fclose (pop1_);
+  //fclose (pop1_);
 
-  pop2_=fopen(pop2.c_str(),"r");
-  if(std::fscanf(pop2_, "%d ", &b)==EOF){
-    Rcout<<"Fscanf meets the EOF, please recheck your input!"<<std::endl;
-  }
+  //pop2_=fopen(pop2.c_str(),"r");
+  //pop2_=pop2;
+  //if(std::scanf(pop2_, "%d ", &b)==EOF){
+    //Rcout<<"Fscanf meets the EOF, please recheck your input!"<<std::endl;
+  //}
+  b=int(pop2[0]);
   Rcout<<"Finding "<<b<<" individuals for reference population 2"<<std::endl;
   for (a=0; a<b; ++a) {
-    if(fscanf (pop2_, "%d ", &c)==EOF){
-      Rcout<<"Fscanf meets the EOF, please recheck your input!"<<std::endl;
-    }
+    //if(std::scanf (pop2_, "%d ", &c)==EOF){
+      //Rcout<<"Fscanf meets the EOF, please recheck your input!"<<std::endl;
+    //}
+    c=int(pop2[a+1]);
     Pop2[c] = 1;
   }
-  fclose (pop2_);
+  //fclose (pop2_);
 
   geno=fopen(input.c_str(),"r");
   out=fopen(output.c_str(),"w");

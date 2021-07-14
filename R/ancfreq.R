@@ -1,11 +1,13 @@
 #' @title ancfreq
 #' @description A function to calculate ancestral allele frequency based on two reference populations.
 #' @param inputdir_dip The dir to a file containing diploid genotype likelihood data.
-#' @param pop1_dip The dir to a file containing information of reference population 1 for diploid data.
-#' @param pop2_dip The dir to a file containing information of reference population 2 for diploid data.
+# @param pop1_dip The dir to a file containing information of reference population 1 for diploid data.
+# @param pop2_dip The dir to a file containing information of reference population 2 for diploid data.
+#' @param pop1_dip A numeric vector specifying the index of reference population 1 for diploid data.
+#' @param pop2_dip A numeric vector specifying the index of reference population 2 for diploid data.
 #' @param inputdir_hap The dir to a file containing haploid genotype likelihood data.
-#' @param pop1_hap The dir to a file containing information of reference population 1 for haploid data.
-#' @param pop2_hap The dir to a file containing information of reference population 2 for haploid data.
+#' @param pop1_hap A numeric vector specifying the index of reference population 1 for haploid data.
+#' @param pop2_hap A numeric vector specifying the index of reference population 2 for haploid data.
 #' @param outputdir The dir to the output file. A postfix ('_dip','_hap','_merge') will be added.
 #' @param mergetype A parameter for merging type ("intersect","union","full_dip","full_hap")
 #' @return Nothing
@@ -20,15 +22,35 @@ ancfreq<-function(outputdir,inputdir_dip="missing",pop1_dip="missing",pop2_dip="
   flag=0
   if(inputdir_dip!='missing'){
     flag=datacheck(inputdir_dip,character='[^0-9.[:space:]-]',field = '2- -d \" \"')
-    if(pop1_dip=='missing'){
+    if((length(pop1_dip)==1)&&pop1_dip=='missing'){
       print("Please provide input for diploid reference population 1.")
       flag=1
     }
-    else if(pop2_dip=='missing'){
+    else if((length(pop2_dip)==1)&&pop2_dip=='missing'){
       print("Please provide input for diploid reference population 2.")
       flag=1
     }
     else{
+
+    # Converting ref population info for diploid data from a numeric vector into a string
+    pop1_dip_str<-length(pop1_dip)
+    pop2_dip_str<-length(pop2_dip)
+    if(pop1_dip_str<1 || pop2_dip_str<1){
+      print(paste(pop1_dip_str,"individuals in reference population 1, and",
+                  pop2_dip_str,"individuals in reference population 2,",
+                  "at least 1 individual is expected for each reference population,',
+                  'please double check your input."))
+      flag = 1
+    }
+    else{
+      pop1_dip_str<-c(length(pop1_dip),pop1_dip)
+      pop2_dip_str<-c(length(pop2_dip),pop2_dip)
+      print(pop1_dip_str)
+      print(pop2_dip_str)
+    }
+
+
+
     input=file(inputdir_dip,'r')
     line=unlist(strsplit(readLines(input,n=1),split = ' '))
     #print(line)
@@ -92,19 +114,19 @@ ancfreq<-function(outputdir,inputdir_dip="missing",pop1_dip="missing",pop2_dip="
       if(typenum>=0){
         outmerge=paste(outputdir,'_merge',sep = '')
         #int n, int type, std::string pop1, std::string pop2, std::string input, std::string output
-        ancfreq_c(n=indnum_dip,type=2,pop1=pop1_dip,pop2=pop2_dip,input=inputdir_dip,output=outdip)
-        ancfreq_c(n=indnum_hap,type=1,pop1=pop1_hap,pop2=pop2_hap,input=inputdir_hap,output=outhap)
+        ancfreq_c(n=indnum_dip,type=2,pop1=pop1_dip_str,pop2=pop2_dip_str,input=inputdir_dip,output=outdip)
+        ancfreq_c(n=indnum_hap,type=1,pop1=pop1_hap_str,pop2=pop2_hap_str,input=inputdir_hap,output=outhap)
         #std::string hapfreq, std::string dipfreq, std::string outputdir, int type
         ancfreq_merge(hapfreq=outhap,dipfreq=outdip,outputdir=outmerge,type=typenum)
       }
     }
     else if(inputdir_dip!='missing'){
       print('Generating ancestral allele frequency for diploid data only.')
-      ancfreq_c(n=indnum_dip,type=2,pop1=pop1_dip,pop2=pop2_dip,input=inputdir_dip,output=outdip)
+      ancfreq_c(n=indnum_dip,type=2,pop1=pop1_dip_str,pop2=pop2_dip_str,input=inputdir_dip,output=outdip)
     }
     else if(inputdir_hap!='missing'){
       print('Generating ancestral allele frequency for haploid data only.')
-      ancfreq_c(n=indnum_hap,type=1,pop1=pop1_hap,pop2=pop2_hap,input=inputdir_hap,output=outhap)
+      ancfreq_c(n=indnum_hap,type=1,pop1=pop1_hap_str,pop2=pop2_hap_str,input=inputdir_hap,output=outhap)
     }
     else{
       print("The input can't be missing for both types.")
