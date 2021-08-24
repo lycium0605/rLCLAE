@@ -155,7 +155,7 @@ anclik(genodir = './genolik_chrX', ancfreqdir = './ancfreq_merge',
 
 ### 4. Estimating local ancestry
 
-In this step, the ancestry state at each snp for each individual is estimated based on majority rule (???Need to explain what majority rule is???)(I am not sure how to explain this. The ancestry state with highest frequency in the defined sliding window? ASF: Is this function similar to the geno_lik2 function in LCLAE, i.e., the sliding window estimation???). The function, anccall, will output a data frame where each row corresponds to a snp. The first column corresponds to the snp position and the second column corresponds to the ancestry state called for that snp where a value of 0 corresponds to homozygous ancestry for ancestral population 1, 1 corresponds to heterozygous ancestry, and 2 corresponds to homozygous ancestry for ancestral population 2.
+In this step, the ancestry state at each snp for each individual is estimated based on majority rule. The function, anccall, will output a data frame where each row corresponds to a snp. The first column corresponds to the snp position and the second column corresponds to the ancestry state called for that snp where a value of 0 corresponds to homozygous ancestry for ancestral population 1, 1 corresponds to heterozygous ancestry, and 2 corresponds to homozygous ancestry for ancestral population 2.
 
 ```{r anccall}
 # delta: the minimum ancestral allele frequency difference for snps which will be evaluated; e.g., delta=0.2 will only evaluate snps with >= 20% allele frequency difference between the ancestral populations
@@ -166,8 +166,7 @@ anccall(delta = 0.2, window_size = 50000,
 
 ### 5. Generating ancestry tracts
 
-In this step, neighboring snps with the same inferred ancestry states are assembled into ancestry tracts. The gettract command will generate two output files, one with a suffix of '.MajorityRule.txt' and one with '.tracts.txt'. (???Again, tell the reader/user exactly what is generated in each of these files here - what are the rows and columns in each output file? Also, how is the MajorityRule.txt file here different from the output file generated in the previous step because you say in that step that you're generating majority rule calls there???)
-(I actually never really look into the majority rule file in this step, will take a further look!)
+In this step, neighboring snps with the same inferred ancestry states are assembled into ancestry tracts. The gettract command will generate two output files, one with a suffix of '.MajorityRule.txt' and one with '.tracts.txt'. The former file contains eight columns. The 'snp' column corresponds to the snp position, the 'call' column corresponds to the original call at this snp, the 'chrom' and 'indiv' column describes the chromosome and the individual this call belongs to. The 'n' column corresponds to the number of calls within current sliding window, the 'mode' column corresponds to the call that is the majority in this window, and the 'n_mode' corresponds to the total number of this majority call, the 'perc' colmun corresponds to the percentage of this majority call. 
 
 ```{r call2tract}
 gettract('./anccall_1', # input dir
@@ -178,5 +177,19 @@ gettract('./anccall_1', # input dir
          value=35000, # window size
          mode_n=0.5, # the minimum percentage for a call to be made using majority rule
          min_n=20, # the minimum number of SNPs within the window to make a call
-         exclude=50000) # how much of the start/end of each chromosome to ignore if any (???Can you do exclude=0 if you don't want to ignore anything???) I think so??
+         exclude=50000) # how much of the start/end of each chromosome to ignore if any
+```
+
+### 6. Wrapping up 3-5
+
+To simplify the workflow, a wrapped up function is provided. To use this function, the user need to define the parameters as below, and eventually the intermediate files and final result including ancestral likelihood, local ancestry and ancestry tract will be output to the given folder.
+
+```{r ancgen}
+ancgen(genodir = './geno', # input dir for genolik file
+       ancfreqdir = './ancfreq', # input dir for ancfreq file
+       outputdir = './ancestry_estimation_result', # output folder
+       type = "dip", test = "all", #anclik parameter
+       delta = 0.2 , window = 35000, #anccall parameter
+       chrlength = '142711496', mode_n = 0.5, min_n = 20, exclude = 50000 # Get tract parameter
+)
 ```
