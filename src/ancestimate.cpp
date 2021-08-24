@@ -1,19 +1,20 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-//' ancest_c: Generating ancestry call along the chromosome
+//' @title anccall_c: Generating ancestry call along the chromosome
 //'
 //' @param deltaf The cut-off for minimum delta f between two reference populations
 //' @param window Size of the sliding window
 //' @param SMAX The number of all snp sites
 //' @param anclikdir the dir to anclik file
 //' @param output the dir of the output ancfreq file
-// @export
 // [[Rcpp::export]]
 void anccall_c(double deltaf, int window, int SMAX,
-              std::string anclikdir, std::string output) {
+              std::string anclikdir, std::string output,
+              std::string chrom, std::string indiv,
+              double mode, int n) {
 
-  int a, c1, c2, c0, b, c, s, *anc;
+  int a, c1, c2, c0, b, c, s, nsum, *anc, *anc2, *majmode;
   double *pos, *lik2, *lik1, *lik0, p0, p1, p2, d, delta, t, posit;
   FILE *anclik, *out;
   t=window;
@@ -25,6 +26,8 @@ void anccall_c(double deltaf, int window, int SMAX,
   lik0 = (double *) malloc (SMAX * sizeof (double));
   pos = (double *) malloc (SMAX * sizeof (double));
   anc = (int *) malloc (SMAX * sizeof (int));
+  anc2 = (int *) malloc (SMAX * sizeof (int));
+  majmode = (int *) malloc (5 * sizeof (int));
   anclik=fopen(anclikdir.c_str(),"r");
   out=fopen(output.c_str(),"w");
   s=0;
@@ -70,17 +73,67 @@ void anccall_c(double deltaf, int window, int SMAX,
       }
     }
       if (c0>c1 && c0>c2)
-        {c = 0;}
+        {//c = 0;
+        anc2[a] = 0;
+        }
       else if (c1>c0 && c1>c2)
-        {c = 1;}
+        {//c = 1;
+        anc2[a] = 1;
+        }
       else if (c2>c0 && c2>c1)
-        {c = 2;}
+        {//c = 2;
+        anc2[a] = 2;
+        }
       else
-        {c = -1;}
-
-      fprintf(out,"%f\t%d\n", pos[a], c);
+        {//c = -1;
+        anc2[a] = -1;
+        }
+      //fprintf(out,"%f\t%d\n", pos[a], c);
   }
-  Rcout<<"Smoothing finshed.\nOutput stored in "<<output<<std::endl;
+  Rcout<<"Second round of smoothing finshed."<<std::endl;
+  for (a=0; a<s; ++a) {
+    c1 = c2 = c0 = 0;
+    for (b=0; b<s; ++b){
+      //using double length window
+      if ((pos[a]-pos[b]) < t && (pos[a]-pos[b])>(t*(-1))) {
+        if (anc2[b] == 0){++c0;}
+
+        else if (anc2[b] == 1){++c1;}
+
+        else if (anc2[b] == 2){++c2;}
+
+      }
+    }
+    if (c0>c1 && c0>c2)
+    {c = 0;
+      //anc[a] = 0;
+    }
+    else if (c1>c0 && c1>c2)
+    {c = 1;
+      //anc[a] = 1;
+    }
+    else if (c2>c0 && c2>c1)
+    {c = 2;
+      //anc[a] = 2;
+    }
+    else
+    {c = -1;
+      //anc[a] = -1;
+    }
+    majmode[0] = c0;
+    majmode[1] = c1;
+    majmode[2] = c2;
+    nsum = c0+c1+c2;
+    if (c!=-1 && nsum>=n && majmode[c]/nsum >= mode){
+      //snp,call,chrom,indiv,n,mode,n_mode,perc
+      fprintf(out,"%f\t%d\t%s\t%s\t%d\t%d\t%d\t%f\n",
+              pos[a], anc2[a],chrom.c_str(),indiv.c_str(),nsum,c,majmode[c],double(majmode[c])/double(nsum));
+    }
+  }
+  Rcout<<"Third round of smoothing / filtering finshed.\n Filter used:\n"<<
+    "Minimum required snp in a window:"<< n <<
+    "\n Minimum percentage of the majority call:"<< mode <<
+    "\n Output stored in "<<output<<std::endl;
   fclose(anclik);
   fclose(out);
   }

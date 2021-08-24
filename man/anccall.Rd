@@ -4,16 +4,33 @@
 \alias{anccall}
 \title{anccall}
 \usage{
-anccall(delta = 0.2, window_size = 50000, inputdir, outputdir)
+anccall(
+  inputdir,
+  outputdir,
+  chrom_name,
+  indiv_name,
+  mode_min = 0.5,
+  n_min = 0,
+  delta = 0.2,
+  window_size = 50000
+)
 }
 \arguments{
-\item{delta}{The cutoff for ancestral allele frequency difference}
-
-\item{window_size}{The size of the sliding window}
-
 \item{inputdir}{The file to the ancestral likelihood file}
 
 \item{outputdir}{The file to store the ancestry call}
+
+\item{chrom_name}{The name of the chromosome}
+
+\item{indiv_name}{The name of the individual}
+
+\item{mode_min}{The minimum percentage for the mode to make a call, default set to 0.5}
+
+\item{n_min}{the minimum number of SNPs within the window to make a call, default set to zero}
+
+\item{delta}{The cutoff for ancestral allele frequency difference}
+
+\item{window_size}{The size of the sliding window}
 }
 \value{
 nothing

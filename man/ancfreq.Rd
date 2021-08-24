@@ -20,15 +20,15 @@ ancfreq(
 
 \item{inputdir_dip}{The dir to a file containing diploid genotype likelihood data.}
 
-\item{pop1_dip}{The dir to a file containing information of reference population 1 for diploid data.}
+\item{pop1_dip}{A numeric vector specifying the index of reference population 1 for diploid data.}
 
-\item{pop2_dip}{The dir to a file containing information of reference population 2 for diploid data.}
+\item{pop2_dip}{A numeric vector specifying the index of reference population 2 for diploid data.}
 
 \item{inputdir_hap}{The dir to a file containing haploid genotype likelihood data.}
 
-\item{pop1_hap}{The dir to a file containing information of reference population 1 for haploid data.}
+\item{pop1_hap}{A numeric vector specifying the index of reference population 1 for haploid data.}
 
-\item{pop2_hap}{The dir to a file containing information of reference population 2 for haploid data.}
+\item{pop2_hap}{A numeric vector specifying the index of reference population 2 for haploid data.}
 
 \item{mergetype}{A parameter for merging type ("intersect","union","full_dip","full_hap")}
 }
