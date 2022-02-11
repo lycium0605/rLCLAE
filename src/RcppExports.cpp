@@ -5,6 +5,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // anccall_c
 void anccall_c(double deltaf, int window, int SMAX, std::string anclikdir, std::string output, std::string chrom, std::string indiv, double mode, int n);
 RcppExport SEXP _rLCLAE_anccall_c(SEXP deltafSEXP, SEXP windowSEXP, SEXP SMAXSEXP, SEXP anclikdirSEXP, SEXP outputSEXP, SEXP chromSEXP, SEXP indivSEXP, SEXP modeSEXP, SEXP nSEXP) {

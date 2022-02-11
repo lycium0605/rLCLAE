@@ -159,6 +159,7 @@ if (nrow(i1) > 0) {
   #Blocks starts at 1 and goes to the end of the chromosome.
 
   t <- blocks[, c(1, 7, 8, 6, 9:11)]
+  #print(blocks[1,])
   colnames(t) <- c("chrom", "start", "end", "state", "length", "prev_inferred", "after_inferred")
   t$name <- as.character(indiv_name)
   #t$length2 <- as.numeric(t$end) - as.numeric(t$start)

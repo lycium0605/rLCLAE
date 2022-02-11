@@ -32,15 +32,18 @@ void anccall_c(double deltaf, int window, int SMAX,
   out=fopen(output.c_str(),"w");
   s=0;
   while (fscanf(anclik,"%lf\t%lf\t%lf\t%lf\t%lf\n", &posit, &delta, &p2, &p1, &p0) != EOF) {
-    if ((delta > (d - 1.E-10)) && p0>1.E-10 && p1>1.E-10 && p2>1.E-10) {
+    if ((delta > (d - 1.E-10)) && (p0>1.E-10 || p2>1.E-10)) { //for hap p1==0
       lik2[s] = log (p2);
       lik1[s] = log (p1);
       lik0[s] = log (p0);
       pos[s] = posit;
       ++s;
     }
+    //else{
+      //++s;
+    //}
   }
-  Rcout<<"Scanning finished"<<std::endl;
+  Rcout<<"Scanning finished, "<<s<<" sites found."<<std::endl;
 
   for (a=0; a<s; ++a) {
     p0 = p1 = p2 = 0.;
@@ -60,7 +63,7 @@ void anccall_c(double deltaf, int window, int SMAX,
         anc[a] = 2;
   }
   Rcout<<"First round of ancestry call finished. Starting smoothing with the sliding window..."<<std::endl;
-  for (a=0; a<s; ++a) {
+    for (a=0; a<s; ++a) {
     c1 = c2 = c0 = 0;
     for (b=0; b<s; ++b){
       if ((pos[a]-pos[b]) < t*.5 && (pos[a]-pos[b])>(t*(-.5))) {
@@ -126,8 +129,9 @@ void anccall_c(double deltaf, int window, int SMAX,
     nsum = c0+c1+c2;
     if (c!=-1 && nsum>=n && majmode[c]/nsum >= mode){
       //snp,call,chrom,indiv,n,mode,n_mode,perc
-      fprintf(out,"%f\t%d\t%s\t%s\t%d\t%d\t%d\t%f\n",
-              pos[a], anc2[a],chrom.c_str(),indiv.c_str(),nsum,c,majmode[c],double(majmode[c])/double(nsum));
+      //fprintf(out,"%f\t%d\t%s\t%s\t%d\t%d\t%d\t%f\n",
+              //pos[a], anc2[a],chrom.c_str(),indiv.c_str(),nsum,c,majmode[c],double(majmode[c])/double(nsum));
+      fprintf(out,"%f\t%d\n",pos[a], anc2[a]);
     }
   }
   Rcout<<"Third round of smoothing / filtering finshed.\n Filter used:\n"<<

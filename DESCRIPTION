@@ -8,7 +8,7 @@ Depends: R (>= 3.3.0)
 Description: Low coverage local ancestry estimation method rewritten in R.
 License: GPL
 Encoding: UTF-8
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Imports: 
     data.table (>= 1.14.0),
     Rcpp

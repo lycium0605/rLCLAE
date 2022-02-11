@@ -27,6 +27,7 @@ anccall<-function(inputdir,outputdir,
     system(paste("echo $(wc -l",inputdir,")"), intern = TRUE)->lines
     nline<-unlist(strsplit(lines,split = ' '))
     smax=as.numeric(nline[1])
+    print(paste("Set SMAX to",smax))
     #得到一个包含snp,call,chrom,indiv,n,mode,n_mode,perc的表格maj_rule
     #Call ancestry
     anccall_c(deltaf=delta,window=window_size,
