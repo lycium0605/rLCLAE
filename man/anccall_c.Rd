@@ -2,9 +2,9 @@
 % Please edit documentation in R/RcppExports.R
 \name{anccall_c}
 \alias{anccall_c}
-\title{ancest_c: Generating ancestry call along the chromosome}
+\title{anccall_c: Generating ancestry call along the chromosome}
 \usage{
-anccall_c(deltaf, window, SMAX, anclikdir, output)
+anccall_c(deltaf, window, SMAX, anclikdir, output, chrom, indiv, mode, n)
 }
 \arguments{
 \item{deltaf}{The cut-off for minimum delta f between two reference populations}
@@ -18,5 +18,5 @@ anccall_c(deltaf, window, SMAX, anclikdir, output)
 \item{output}{the dir of the output ancfreq file}
 }
 \description{
-ancest_c: Generating ancestry call along the chromosome
+anccall_c: Generating ancestry call along the chromosome
 }

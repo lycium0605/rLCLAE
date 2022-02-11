@@ -6,8 +6,8 @@
 using namespace Rcpp;
 
 // anccall_c
-void anccall_c(double deltaf, int window, int SMAX, std::string anclikdir, std::string output);
-RcppExport SEXP _rLCLAE_anccall_c(SEXP deltafSEXP, SEXP windowSEXP, SEXP SMAXSEXP, SEXP anclikdirSEXP, SEXP outputSEXP) {
+void anccall_c(double deltaf, int window, int SMAX, std::string anclikdir, std::string output, std::string chrom, std::string indiv, double mode, int n);
+RcppExport SEXP _rLCLAE_anccall_c(SEXP deltafSEXP, SEXP windowSEXP, SEXP SMAXSEXP, SEXP anclikdirSEXP, SEXP outputSEXP, SEXP chromSEXP, SEXP indivSEXP, SEXP modeSEXP, SEXP nSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type deltaf(deltafSEXP);
@@ -15,19 +15,23 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type SMAX(SMAXSEXP);
     Rcpp::traits::input_parameter< std::string >::type anclikdir(anclikdirSEXP);
     Rcpp::traits::input_parameter< std::string >::type output(outputSEXP);
-    anccall_c(deltaf, window, SMAX, anclikdir, output);
+    Rcpp::traits::input_parameter< std::string >::type chrom(chromSEXP);
+    Rcpp::traits::input_parameter< std::string >::type indiv(indivSEXP);
+    Rcpp::traits::input_parameter< double >::type mode(modeSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    anccall_c(deltaf, window, SMAX, anclikdir, output, chrom, indiv, mode, n);
     return R_NilValue;
 END_RCPP
 }
 // ancfreq_c
-void ancfreq_c(int n, int type, std::string pop1, std::string pop2, std::string input, std::string output);
+void ancfreq_c(int n, int type, NumericVector pop1, NumericVector pop2, std::string input, std::string output);
 RcppExport SEXP _rLCLAE_ancfreq_c(SEXP nSEXP, SEXP typeSEXP, SEXP pop1SEXP, SEXP pop2SEXP, SEXP inputSEXP, SEXP outputSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< int >::type n(nSEXP);
     Rcpp::traits::input_parameter< int >::type type(typeSEXP);
-    Rcpp::traits::input_parameter< std::string >::type pop1(pop1SEXP);
-    Rcpp::traits::input_parameter< std::string >::type pop2(pop2SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type pop1(pop1SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type pop2(pop2SEXP);
     Rcpp::traits::input_parameter< std::string >::type input(inputSEXP);
     Rcpp::traits::input_parameter< std::string >::type output(outputSEXP);
     ancfreq_c(n, type, pop1, pop2, input, output);
@@ -59,6 +63,19 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< std::string >::type ancfreq(ancfreqSEXP);
     Rcpp::traits::input_parameter< std::string >::type output(outputSEXP);
     anclik_c(sum, type, testid, genolik, ancfreq, output);
+    return R_NilValue;
+END_RCPP
+}
+// anctract_c
+void anctract_c(int chrlen, int excludelen, std::string input, std::string output);
+RcppExport SEXP _rLCLAE_anctract_c(SEXP chrlenSEXP, SEXP excludelenSEXP, SEXP inputSEXP, SEXP outputSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type chrlen(chrlenSEXP);
+    Rcpp::traits::input_parameter< int >::type excludelen(excludelenSEXP);
+    Rcpp::traits::input_parameter< std::string >::type input(inputSEXP);
+    Rcpp::traits::input_parameter< std::string >::type output(outputSEXP);
+    anctract_c(chrlen, excludelen, input, output);
     return R_NilValue;
 END_RCPP
 }
@@ -103,10 +120,11 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_rLCLAE_anccall_c", (DL_FUNC) &_rLCLAE_anccall_c, 5},
+    {"_rLCLAE_anccall_c", (DL_FUNC) &_rLCLAE_anccall_c, 9},
     {"_rLCLAE_ancfreq_c", (DL_FUNC) &_rLCLAE_ancfreq_c, 6},
     {"_rLCLAE_ancfreq_merge", (DL_FUNC) &_rLCLAE_ancfreq_merge, 4},
     {"_rLCLAE_anclik_c", (DL_FUNC) &_rLCLAE_anclik_c, 6},
+    {"_rLCLAE_anctract_c", (DL_FUNC) &_rLCLAE_anctract_c, 4},
     {"_rLCLAE_filt1_dip", (DL_FUNC) &_rLCLAE_filt1_dip, 5},
     {"_rLCLAE_filt1_hap", (DL_FUNC) &_rLCLAE_filt1_hap, 5},
     {"_rLCLAE_glpow", (DL_FUNC) &_rLCLAE_glpow, 1},

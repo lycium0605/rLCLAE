@@ -13,7 +13,8 @@ getmode <- function(v) {
   uniqv[which.max(tabulate(match(v, uniqv)))]
 }
 
-utils::globalVariables(c(".", "chrom","loc_Dummy", "loc_Minus100", "loc_Plus100", "nxt", "nxt_chrom", "nxt_state",
+utils::globalVariables(c(".", "chrom","loc_Dummy", "loc_Minus100", "loc_Plus100",
+                         "nxt", "nxt_chrom", "nxt_state",
                          "snp"))
 
 #' @title gettract
@@ -60,6 +61,7 @@ colnames(indv) <- c('snp', 'call', 'chrom')
 indv$indiv <- as.character(indiv_name)
 #tract1 <- read.table("~/Desktop/Jennylab/LCLAE/Agreement analysis/reftract/gen10.m1.tracts.txt",header = T)
 
+#Till here, 4 columns: snp/call/chrom/indiv(individual_name)
 
 #read.delim("/data/tunglab/shared/genomes/panubis1/Panubis1.0.fa.fai", header=F) -> chroms; subset(chroms, chroms$V1 %in% unique(indv$chrom)) -> chroms
 
@@ -85,10 +87,14 @@ indv -> tmp
 #if (nrow(tmp) > 0) {
 ## Index and setkeys for match. Then run match to get sets of sites within $VALUE of each SNP. Then get the mode of all calls, the total number of calls, and the number of calls which were the mode.
 #tmp[,loc_Dummy := snp]; tmp[,.(snp, call)] -> tmp2
+
 tmp[,loc_Dummy := snp]; tmp[,list(snp, call)] -> tmp2
+
+
 tmp2[,loc_Plus100 := snp + value]; tmp2[,loc_Minus100 := snp - value]
+
 setkey(tmp,snp,loc_Dummy); setkey(tmp2,loc_Minus100, loc_Plus100)
-print(nrow(tmp))
+#print(nrow(tmp))
 #print(paste("Now doing matches for", j, "....", sep=""))
 Matches <- foverlaps(tmp[,.(snp, loc_Dummy)], tmp2[,.(loc_Minus100,loc_Plus100,call)])
 Matches[,.(n = .N, mode = getmode(call), n_mode=sum(call==getmode(call))), by = .(snp)] -> i1
@@ -127,8 +133,8 @@ if (nrow(i1) > 0) {
 
   blocks$chrom <- blocks$nxt_chrom <- as.character('chrX')
 
-  write.table(blocks, paste(outputdir,"./tmp2.INDIV.COVERAGE.txt",sep = ''), row.names=F, col.names=T, sep="\t")
-  read.delim(paste(outputdir,"./tmp2.INDIV.COVERAGE.txt",sep = '')) -> blocks
+  #write.table(blocks, paste(outputdir,"_tmp2.INDIV.COVERAGE.txt",sep = ''), row.names=F, col.names=T, sep="\t")
+  #read.delim(paste(outputdir,"_tmp2.INDIV.COVERAGE.txt",sep = '')) -> blocks
 
   blocks$brk <- (as.numeric(blocks$nxt) + as.numeric(blocks$snp))/2
   blocks$brk[1] <- 1

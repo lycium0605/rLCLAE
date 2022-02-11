@@ -2,7 +2,9 @@
 
 export(anccall)
 export(ancfreq)
+export(ancgen)
 export(anclik)
+export(anctract)
 export(freqsum)
 export(genolik)
 export(gettract)
