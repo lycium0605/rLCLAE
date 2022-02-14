@@ -1,5 +1,6 @@
 #include <Rcpp.h>
 #include<cmath>
+
 using namespace Rcpp;
 
 //' @title ancfreq_c
@@ -7,21 +8,21 @@ using namespace Rcpp;
 //'
 //' @param n an integer, the number of individuals contain in the input
 //' @param type 1 or 2, specifying diploid/haploid data.
-//' @param pop1 the dir of a file containing individuals belonging to reference population 1
-//' @param pop2 the dir of a file containing individuals belonging to reference population 2
+//' @param n_pop1 number of individual for ref pop 1
+//' @param n_pop2 number of individual for ref pop 2
+//' @param pop1 a numeric vector of index for reference population 1, sep = ' '
+//' @param pop2 a numeric vector of index for reference population 2, sep = ' '
 //' @param input the dir of the input genolik file
 //' @param output the dir of the output ancfreq file
 // [[Rcpp::export]]
-void ancfreq_c(int n, int type, NumericVector pop1, NumericVector pop2, std::string input, std::string output) {
+void ancfreq_c(int n, int type, NumericVector pop1, int n_pop1,int n_pop2, NumericVector pop2, std::string input, std::string output) {
+
   int a, b, pos, flag, *Pop1, *Pop2, c, anc1, anc2;
   double L1, L2, L3, f1, f2, **lik, deltaf, anc1_num, anc2_num;
 
   Rcout<<"Finding "<<n<<" individuals in the input"<<std::endl;
-  FILE *geno, *out; //*pop1_, *pop2_,
-  //string pop1_,pop2_;
+  FILE *geno, *out;
 
-  //Rcout << pop1 << std::endl;
-  //Rcout << pop2 << std::endl;
 
   Pop1 = (int *) malloc ((n+1) * sizeof (int));
   Pop2 = (int *) malloc ((n+1) * sizeof (int));
@@ -38,32 +39,33 @@ void ancfreq_c(int n, int type, NumericVector pop1, NumericVector pop2, std::str
   //if(std::scanf(pop1_, "%d ", &b)==EOF){
     //Rcout<<"Fscanf meets EOF, please recheck input!"<<std::endl;
   //}
-  b=int(pop1[0]);
+  b=n_pop1;
   Rcout<<"Finding "<<b<<" individuals for reference population 1"<<std::endl;
+
   for (a=0; a<b; ++a) {
-    //if(std::scanf (pop1_, "%d ", &c)==EOF){
-      //Rcout<<"Fscanf meets EOF, please recheck input!"<<std::endl;
+    //if(std::sscanf(pop1.c_str(), "%d", &c)==EOF){
+    //  Rcout<<"Fscanf meets EOF, please recheck input!"<<std::endl;
     //}
-    c=int(pop1[a+1]);
-    //Rcout<<c<<std::endl;
+  Rcout<<pop1[a]<<std::endl;
+    c = pop1[a];
     Pop1[c] = 1;
   }
-  //fclose (pop1_);
 
   //pop2_=fopen(pop2.c_str(),"r");
   //pop2_=pop2;
   //if(std::scanf(pop2_, "%d ", &b)==EOF){
     //Rcout<<"Fscanf meets the EOF, please recheck your input!"<<std::endl;
   //}
-  b=int(pop2[0]);
+  b=n_pop2;
   Rcout<<"Finding "<<b<<" individuals for reference population 2"<<std::endl;
+  //Rcout << pop2.c_str() << std::endl;
+
   for (a=0; a<b; ++a) {
-    //if(std::scanf (pop2_, "%d ", &c)==EOF){
-      //Rcout<<"Fscanf meets the EOF, please recheck your input!"<<std::endl;
-    //}
-    c=int(pop2[a+1]);
+    Rcout<<pop2[a]<<std::endl;
+    c = pop2[a];
     Pop2[c] = 1;
   }
+
   //fclose (pop2_);
 
   geno=fopen(input.c_str(),"r");
@@ -164,10 +166,12 @@ void ancfreq_c(int n, int type, NumericVector pop1, NumericVector pop2, std::str
             std::fprintf(out,"%d\t%.8lf\t%.8lf\t%.6lf\t%d\t%d\n", pos, f1, f2,deltaf, anc1, anc2);
           }
     }
+
   }
 
   fclose(geno);
   fclose(out);
+
   Rcout<<"Ancestral allele frequency calculation finished."<<std::endl;
 }
 

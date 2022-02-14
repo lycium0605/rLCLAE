@@ -29,17 +29,19 @@ BEGIN_RCPP
 END_RCPP
 }
 // ancfreq_c
-void ancfreq_c(int n, int type, NumericVector pop1, NumericVector pop2, std::string input, std::string output);
-RcppExport SEXP _rLCLAE_ancfreq_c(SEXP nSEXP, SEXP typeSEXP, SEXP pop1SEXP, SEXP pop2SEXP, SEXP inputSEXP, SEXP outputSEXP) {
+void ancfreq_c(int n, int type, NumericVector pop1, int n_pop1, int n_pop2, NumericVector pop2, std::string input, std::string output);
+RcppExport SEXP _rLCLAE_ancfreq_c(SEXP nSEXP, SEXP typeSEXP, SEXP pop1SEXP, SEXP n_pop1SEXP, SEXP n_pop2SEXP, SEXP pop2SEXP, SEXP inputSEXP, SEXP outputSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< int >::type n(nSEXP);
     Rcpp::traits::input_parameter< int >::type type(typeSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type pop1(pop1SEXP);
+    Rcpp::traits::input_parameter< int >::type n_pop1(n_pop1SEXP);
+    Rcpp::traits::input_parameter< int >::type n_pop2(n_pop2SEXP);
     Rcpp::traits::input_parameter< NumericVector >::type pop2(pop2SEXP);
     Rcpp::traits::input_parameter< std::string >::type input(inputSEXP);
     Rcpp::traits::input_parameter< std::string >::type output(outputSEXP);
-    ancfreq_c(n, type, pop1, pop2, input, output);
+    ancfreq_c(n, type, pop1, n_pop1, n_pop2, pop2, input, output);
     return R_NilValue;
 END_RCPP
 }
@@ -126,7 +128,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_rLCLAE_anccall_c", (DL_FUNC) &_rLCLAE_anccall_c, 9},
-    {"_rLCLAE_ancfreq_c", (DL_FUNC) &_rLCLAE_ancfreq_c, 6},
+    {"_rLCLAE_ancfreq_c", (DL_FUNC) &_rLCLAE_ancfreq_c, 8},
     {"_rLCLAE_ancfreq_merge", (DL_FUNC) &_rLCLAE_ancfreq_merge, 4},
     {"_rLCLAE_anclik_c", (DL_FUNC) &_rLCLAE_anclik_c, 6},
     {"_rLCLAE_anctract_c", (DL_FUNC) &_rLCLAE_anctract_c, 4},

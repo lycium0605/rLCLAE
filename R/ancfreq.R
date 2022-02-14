@@ -45,8 +45,8 @@ ancfreq<-function(outputdir,inputdir_dip="missing",pop1_dip="missing",pop2_dip="
     else{
       pop1_dip_str<-c(length(pop1_dip),pop1_dip)
       pop2_dip_str<-c(length(pop2_dip),pop2_dip)
-      print(pop1_dip_str)
-      print(pop2_dip_str)
+      #print(pop1_dip_str)
+      #print(pop2_dip_str)
     }
 
 
@@ -114,20 +114,34 @@ ancfreq<-function(outputdir,inputdir_dip="missing",pop1_dip="missing",pop2_dip="
       if(typenum>=0){
         outmerge=paste(outputdir,'_merge',sep = '')
         #int n, int type, std::string pop1, std::string pop2, std::string input, std::string output
-        ancfreq_c(n=indnum_dip,type=2,pop1=pop1_dip_str,pop2=pop2_dip_str,input=inputdir_dip,output=outdip)
-        ancfreq_c(n=indnum_hap,type=1,pop1=pop1_hap_str,pop2=pop2_hap_str,input=inputdir_hap,output=outhap)
+        ancfreq_c(n=indnum_dip,type=2,
+                  n_pop1=length(pop1_dip),n_pop2=length(pop2_dip),
+                  pop1=pop1_dip,pop2=pop2_dip,
+                 input=inputdir_dip,output=outdip)
+        ancfreq_c(n=indnum_hap,type=1,
+                  n_pop1=length(pop1_hap),n_pop2=length(pop2_hap),
+                  pop1=pop1_hap,pop2=pop2_hap,
+                  input=inputdir_hap,output=outhap)
         #std::string hapfreq, std::string dipfreq, std::string outputdir, int type
         ancfreq_merge(hapfreq=outhap,dipfreq=outdip,outputdir=outmerge,type=typenum)
       }
     }
     else if(inputdir_dip!='missing'){
       print('Generating ancestral allele frequency for diploid data only.')
-      ancfreq_c(n=indnum_dip,type=2,pop1=pop1_dip_str,pop2=pop2_dip_str,input=inputdir_dip,output=outdip)
-    }
+      #ancfreq_c(n=indnum_dip,type=2,pop1=pop1_dip_str,pop2=pop2_dip_str,input=inputdir_dip,output=outdip)
+      ancfreq_c(n=indnum_dip,type=2,
+                n_pop1=length(pop1_dip),n_pop2=length(pop2_dip),
+                pop1=pop1_dip,pop2=pop2_dip,
+                input=inputdir_dip,output=outdip)
+       }
     else if(inputdir_hap!='missing'){
       print('Generating ancestral allele frequency for haploid data only.')
-      ancfreq_c(n=indnum_hap,type=1,pop1=pop1_hap_str,pop2=pop2_hap_str,input=inputdir_hap,output=outhap)
-    }
+      #ancfreq_c(n=indnum_hap,type=1,pop1=pop1_hap_str,pop2=pop2_hap_str,input=inputdir_hap,output=outhap)
+      ancfreq_c(n=indnum_hap,type=1,
+                n_pop1=length(pop1_hap),n_pop2=length(pop2_hap),
+                pop1=pop1_hap,pop2=pop2_hap,
+                input=inputdir_hap,output=outhap)
+      }
     else{
       print("The input can't be missing for both types.")
     }

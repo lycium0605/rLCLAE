@@ -17,12 +17,14 @@ anccall_c <- function(deltaf, window, SMAX, anclikdir, output, chrom, indiv, mod
 #'
 #' @param n an integer, the number of individuals contain in the input
 #' @param type 1 or 2, specifying diploid/haploid data.
-#' @param pop1 the dir of a file containing individuals belonging to reference population 1
-#' @param pop2 the dir of a file containing individuals belonging to reference population 2
+#' @param n_pop1 number of individual for ref pop 1
+#' @param n_pop2 number of individual for ref pop 2
+#' @param pop1 a numeric vector of index for reference population 1, sep = ' '
+#' @param pop2 a numeric vector of index for reference population 2, sep = ' '
 #' @param input the dir of the input genolik file
 #' @param output the dir of the output ancfreq file
-ancfreq_c <- function(n, type, pop1, pop2, input, output) {
-    invisible(.Call(`_rLCLAE_ancfreq_c`, n, type, pop1, pop2, input, output))
+ancfreq_c <- function(n, type, pop1, n_pop1, n_pop2, pop2, input, output) {
+    invisible(.Call(`_rLCLAE_ancfreq_c`, n, type, pop1, n_pop1, n_pop2, pop2, input, output))
 }
 
 #' ancfreq_merge: Merging haploid & dipoid dataset

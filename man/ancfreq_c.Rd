@@ -4,16 +4,20 @@
 \alias{ancfreq_c}
 \title{ancfreq_c}
 \usage{
-ancfreq_c(n, type, pop1, pop2, input, output)
+ancfreq_c(n, type, pop1, n_pop1, n_pop2, pop2, input, output)
 }
 \arguments{
 \item{n}{an integer, the number of individuals contain in the input}
 
 \item{type}{1 or 2, specifying diploid/haploid data.}
 
-\item{pop1}{the dir of a file containing individuals belonging to reference population 1}
+\item{pop1}{a numeric vector of index for reference population 1, sep = ' '}
 
-\item{pop2}{the dir of a file containing individuals belonging to reference population 2}
+\item{n_pop1}{number of individual for ref pop 1}
+
+\item{n_pop2}{number of individual for ref pop 2}
+
+\item{pop2}{a numeric vector of index for reference population 2, sep = ' '}
 
 \item{input}{the dir of the input genolik file}
 
