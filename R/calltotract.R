@@ -126,12 +126,12 @@ if (nrow(i1) > 0) {
   first <- as.data.frame(t(matrix(c(blocks$chrom[1], blocks$chrom[1], 1, blocks$snp[1], modes$mode[1], blocks$mode[1]))))
   colnames(first) <- colnames(blocks); rbind(first, blocks) -> blocks; rm(first)
 
-  #last <- as.data.frame(matrix(c(as.character(chroms[j,1]), as.character(chroms[j,1]), max(modes$snp), chroms[j,2], modes$nxt_state[nrow(modes)], modes$nxt_state[nrow(modes)]), ncol=6)); as.numeric(as.character(last$V3)) -> last$V3; as.numeric(as.character(last$V4)) -> last$V4; as.numeric(as.character(last$V5)) -> last$V5;as.numeric(as.character(last$V6)) -> last$V6;
-  last <- as.data.frame(matrix(c('chrX', 'chrX', max(modes$snp), chroms[j,2], modes$nxt_state[nrow(modes)], modes$nxt_state[nrow(modes)]), ncol=6)); as.numeric(as.character(last$V3)) -> last$V3; as.numeric(as.character(last$V4)) -> last$V4; as.numeric(as.character(last$V5)) -> last$V5;as.numeric(as.character(last$V6)) -> last$V6;
+  last <- as.data.frame(matrix(c(as.character(chroms[j,1]), as.character(chroms[j,1]), max(modes$snp), chroms[j,2], modes$nxt_state[nrow(modes)], modes$nxt_state[nrow(modes)]), ncol=6)); as.numeric(as.character(last$V3)) -> last$V3; as.numeric(as.character(last$V4)) -> last$V4; as.numeric(as.character(last$V5)) -> last$V5;as.numeric(as.character(last$V6)) -> last$V6;
+  #last <- as.data.frame(matrix(c('chrX', 'chrX', max(modes$snp), chroms[j,2], modes$nxt_state[nrow(modes)], modes$nxt_state[nrow(modes)]), ncol=6)); as.numeric(as.character(last$V3)) -> last$V3; as.numeric(as.character(last$V4)) -> last$V4; as.numeric(as.character(last$V5)) -> last$V5;as.numeric(as.character(last$V6)) -> last$V6;
 
   colnames(last) <- colnames(blocks); rbind(blocks, last) -> blocks; rm(last)
 
-  blocks$chrom <- blocks$nxt_chrom <- as.character('chrX')
+  blocks$chrom <- blocks$nxt_chrom <- as.character(chroms[j,1])
 
   #write.table(blocks, paste(outputdir,"_tmp2.INDIV.COVERAGE.txt",sep = ''), row.names=F, col.names=T, sep="\t")
   #read.delim(paste(outputdir,"_tmp2.INDIV.COVERAGE.txt",sep = '')) -> blocks
