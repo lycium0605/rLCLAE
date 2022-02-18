@@ -62,7 +62,7 @@ j=1
 
 indv -> tmp
 subset(tmp, !(tmp$call == -1)) -> tmp
-
+tmp -> indv
 if (nrow(tmp) > 0) {
   # index temporary file of chromosome calls and use setkeys to prepare the data for matching sites within $VALUE of each SNP
   # run match to get sets of sites within `value` of each SNP
@@ -152,6 +152,10 @@ if (nrow(tmp) > 0) {
 
     # merge with list of tracts per individual
     if (j==1) {t -> tracts} else {rbind(tracts,t) -> tracts}
+    if(nrow(tracts == 1) & length(unique(indv$call)==1)){
+      tracts$state<-indv$call[1]
+      tracts$length<-tracts$end - tracts$start
+    }
     rm(t); rm(modes)
     rm(blocks)
   }
