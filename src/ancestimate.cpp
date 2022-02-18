@@ -33,9 +33,9 @@ void anccall_c(double deltaf, int window, int SMAX,
   s=0;
   while (fscanf(anclik,"%lf\t%lf\t%lf\t%lf\t%lf\n", &posit, &delta, &p2, &p1, &p0) != EOF) {
     if ((delta > (d - 1.E-10)) && (p0>1.E-10 || p2>1.E-10)) { //for hap p1==0
-      lik2[s] = log (p2);
-      lik1[s] = log (p1);
-      lik0[s] = log (p0);
+      lik2[s] = log (p2+1.E-7); //avoid 0
+      lik1[s] = log (p1+1.E-7);
+      lik0[s] = log (p0+1.E-7);
       pos[s] = posit;
       ++s;
     }
@@ -57,10 +57,16 @@ void anccall_c(double deltaf, int window, int SMAX,
     }
       if (p0>p1 && p0>p2)
         anc[a] = 0;
-      else if (p1>p0 && p1>p2)
+      else if (p1>p0 && p1>p2){
         anc[a] = 1;
+        //Rcout<<"Finding het, "<<p0<<" "<<p1<<" "<<p2<<" "<<std::endl;
+      }
       else if (p2>p0 && p2>p1)
         anc[a] = 2;
+      else{
+        anc[a] = -1;
+        //Rcout<<"Finding outlier, "<<p0<<" "<<p1<<" "<<p2<<" "<<std::endl;
+      }
   }
   Rcout<<"First round of ancestry call finished. Starting smoothing with the sliding window..."<<std::endl;
     for (a=0; a<s; ++a) {
@@ -69,7 +75,9 @@ void anccall_c(double deltaf, int window, int SMAX,
       if ((pos[a]-pos[b]) < t*.5 && (pos[a]-pos[b])>(t*(-.5))) {
         if (anc[b] == 0){++c0;}
 
-        else if (anc[b] == 1){++c1;}
+        else if (anc[b] == 1){++c1;
+          //Rcout<<"Finding het in 1, "<<lik0[b]<<" "<<lik1[b]<<" "<<lik2[b]<<" "<<std::endl;
+          }
 
         else if (anc[b] == 2){++c2;}
 
@@ -82,6 +90,7 @@ void anccall_c(double deltaf, int window, int SMAX,
       else if (c1>c0 && c1>c2)
         {//c = 1;
         anc2[a] = 1;
+        //Rcout<<"Findint het, "<<c0<<" "<<c1<<" "<<c2<<" "<<std::endl;
         }
       else if (c2>c0 && c2>c1)
         {//c = 2;
