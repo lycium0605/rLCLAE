@@ -12,6 +12,17 @@ anccall_c <- function(deltaf, window, SMAX, anclikdir, output, chrom, indiv, mod
     invisible(.Call(`_rLCLAE_anccall_c`, deltaf, window, SMAX, anclikdir, output, chrom, indiv, mode, n))
 }
 
+#' @title anccall_c: Generating ancestry call along the chromosome
+#'
+#' @param deltaf The cut-off for minimum delta f between two reference populations
+#' @param window Size of the sliding window
+#' @param SMAX The number of all snp sites
+#' @param anclikdir the dir to anclik file
+#' @param output the dir of the output ancfreq file
+anccall_c_test <- function(deltaf, window, SMAX, anclikdir, output, chrom, indiv, mode, n) {
+    invisible(.Call(`_rLCLAE_anccall_c_test`, deltaf, window, SMAX, anclikdir, output, chrom, indiv, mode, n))
+}
+
 #' @title ancfreq_c
 #' @description Calculating the allele frequency in two different ancestral population
 #'

@@ -152,9 +152,10 @@ if (nrow(tmp) > 0) {
 
     # merge with list of tracts per individual
     if (j==1) {t -> tracts} else {rbind(tracts,t) -> tracts}
-    if(nrow(tracts == 1) & length(unique(indv$call)==1)){
+    if(nrow(tracts) == 1 & length(unique(indv$call)==1)){
       tracts$state<-indv$call[1]
       tracts$length<-tracts$end - tracts$start
+      print("Only one tract, using the unique value.")
     }
     rm(t); rm(modes)
     rm(blocks)

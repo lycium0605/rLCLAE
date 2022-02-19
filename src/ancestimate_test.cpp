@@ -9,16 +9,24 @@ using namespace Rcpp;
 //' @param anclikdir the dir to anclik file
 //' @param output the dir of the output ancfreq file
 // [[Rcpp::export]]
-void anccall_c(double deltaf, int window, int SMAX,
+void anccall_c_test(double deltaf, int window, int SMAX,
               std::string anclikdir, std::string output,
               std::string chrom, std::string indiv,
               double mode, int n) {
 
   int a, c1, c2, c0, b, c, s, nsum, *anc, *anc2, *majmode;
-  double *pos, *lik2, *lik1, *lik0, p0, p1, p2, d, delta, t, posit;
+  double *pos, *lik2, *lik1, *lik0, p0, p1, p2, d, delta, t, posit , tmp;
   FILE *anclik, *out;
   t=window;
   d=deltaf;
+  tmp=0;
+  c=0;
+  a=0;
+  b=0;
+  s=0;
+  nsum=0;
+  delta = 0;
+  posit = 0;
   Rcout<<"Finding "<<SMAX<<" snps in the file. Scanning ancestral likelihood..."<<std::endl;
   SMAX=SMAX+200;
   lik2 = (double *) malloc (SMAX * sizeof (double));
@@ -33,9 +41,9 @@ void anccall_c(double deltaf, int window, int SMAX,
   s=0;
   while (fscanf(anclik,"%lf\t%lf\t%lf\t%lf\t%lf\n", &posit, &delta, &p2, &p1, &p0) != EOF) {
     if ((delta > (d - 1.E-10)) && (p0>1.E-10 || p2>1.E-10)) { //for hap p1==0
-      lik2[s] = log (p2+1.E-6); //avoid 0
-      lik1[s] = log (p1+1.E-6);
-      lik0[s] = log (p0+1.E-6);
+      lik2[s] = log (p2); //avoid 0
+      lik1[s] = log (p1);
+      lik0[s] = log (p0);
       pos[s] = posit;
       ++s;
     }
@@ -60,14 +68,17 @@ void anccall_c(double deltaf, int window, int SMAX,
       else if (p1>p0 && p1>p2){
         anc[a] = 1;
         //Rcout<<"Finding het, "<<p0<<" "<<p1<<" "<<p2<<" "<<std::endl;
+        //Rcout<<"Ancestral state defined as "<<anc[a]<<std::endl;
       }
       else if (p2>p0 && p2>p1)
         anc[a] = 2;
       else{
-        anc[a] = -1;
-        Rcout<<"Finding outlier, "<<p0<<" "<<p1<<" "<<p2<<" "<<std::endl;
-        Rcout<<"Warning, warning, outlier warning, what is happening"<<std::endl;
+        Rcout<<anc[a]<<std::endl;
+        //anc[a] = -1;
+        //Rcout<<"Finding outlier, "<<p0<<" "<<p1<<" "<<p2<<" "<<std::endl;
+        //Rcout<<"Ancestral state defined as "<<anc[a]<<std::endl;
       }
+
   }
   Rcout<<"First round of ancestry call finished. Starting smoothing with the sliding window..."<<std::endl;
     for (a=0; a<s; ++a) {
@@ -77,7 +88,11 @@ void anccall_c(double deltaf, int window, int SMAX,
         if (anc[b] == 0){++c0;}
 
         else if (anc[b] == 1){++c1;
-          //Rcout<<"Finding het in 1, "<<lik0[b]<<" "<<lik1[b]<<" "<<lik2[b]<<" "<<std::endl;
+          if(pos[b]>tmp){
+            Rcout<<pos[b]<<std::endl;
+            tmp=pos[b];
+          }
+          //Rcout<<"Finding het at "<<pos[b]<<" in first round smoothing."<<std::endl; //<<lik0[b]<<" "<<lik1[b]<<" "<<lik2[b]<<" "<<std::endl;
           }
 
         else if (anc[b] == 2){++c2;}
@@ -91,7 +106,7 @@ void anccall_c(double deltaf, int window, int SMAX,
       else if (c1>c0 && c1>c2)
         {//c = 1;
         anc2[a] = 1;
-        //Rcout<<"Findint het, "<<c0<<" "<<c1<<" "<<c2<<" "<<std::endl;
+        //Rcout<<"Findint het in first round smoothing and is in majority, "<<c0<<" "<<c1<<" "<<c2<<" "<<std::endl;
         }
       else if (c2>c0 && c2>c1)
         {//c = 2;
@@ -111,7 +126,9 @@ void anccall_c(double deltaf, int window, int SMAX,
       if ((pos[a]-pos[b]) < t && (pos[a]-pos[b])>(t*(-1))) {
         if (anc2[b] == 0){++c0;}
 
-        else if (anc2[b] == 1){++c1;}
+        else if (anc2[b] == 1){++c1;
+
+          }
 
         else if (anc2[b] == 2){++c2;}
 
@@ -124,6 +141,7 @@ void anccall_c(double deltaf, int window, int SMAX,
     else if (c1>c0 && c1>c2)
     {c = 1;
       //anc[a] = 1;
+      //Rcout<<"Findint het in second round smoothing and is in majority, "<<c0<<" "<<c1<<" "<<c2<<" "<<std::endl;
     }
     else if (c2>c0 && c2>c1)
     {c = 2;
