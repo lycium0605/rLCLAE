@@ -30,6 +30,11 @@ anccall<-function(inputdir,outputdir,
     print(paste("Set SMAX to",smax))
     #得到一个包含snp,call,chrom,indiv,n,mode,n_mode,perc的表格maj_rule
     #Call ancestry
+    anccall_c_test(deltaf=delta,window=window_size,
+              SMAX=smax,
+              anclikdir=inputdir,output=outputdir,
+              chrom=chrom_name,indiv=indiv_name,
+              mode=mode_min,n=n_min)
     anccall_c(deltaf=delta,window=window_size,
               SMAX=smax,
               anclikdir=inputdir,output=outputdir,

@@ -43,7 +43,7 @@ void anccall_c(double deltaf, int window, int SMAX,
       //++s;
     //}
   }
-  Rcout<<"Scanning finished, "<<s<<" sites found."<<std::endl;
+  Rcout<<"Scanning finished, "<<s<<" informative sites found."<<std::endl;
 
   for (a=0; a<s; ++a) {
     p0 = p1 = p2 = 0.;

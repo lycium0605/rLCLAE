@@ -14,7 +14,7 @@ void anccall_c_test(double deltaf, int window, int SMAX,
               std::string chrom, std::string indiv,
               double mode, int n) {
 
-  int a, c1, c2, c0, b, c, s, nsum, *anc, *anc2, *majmode;
+  int a, c1, c2, c0, b, c, s, nsum, *anc, *anc2, *majmode, zerosite;
   double *pos, *lik2, *lik1, *lik0, p0, p1, p2, d, delta, t, posit , tmp;
   FILE *anclik, *out;
   t=window;
@@ -27,7 +27,8 @@ void anccall_c_test(double deltaf, int window, int SMAX,
   nsum=0;
   delta = 0;
   posit = 0;
-  Rcout<<"Finding "<<SMAX<<" snps in the file. Scanning ancestral likelihood..."<<std::endl;
+  zerosite = 0;
+  //Rcout<<"Finding "<<SMAX<<" snps in the file. Scanning ancestral likelihood..."<<std::endl;
   SMAX=SMAX+200;
   lik2 = (double *) malloc (SMAX * sizeof (double));
   lik1 = (double *) malloc (SMAX * sizeof (double));
@@ -51,7 +52,8 @@ void anccall_c_test(double deltaf, int window, int SMAX,
       //++s;
     //}
   }
-  Rcout<<"Scanning finished, "<<s<<" sites found."<<std::endl;
+  //Rcout<<"Scanning finished, "<<s<<" sites found."<<std::endl;
+
 
   for (a=0; a<s; ++a) {
     p0 = p1 = p2 = 0.;
@@ -73,14 +75,18 @@ void anccall_c_test(double deltaf, int window, int SMAX,
       else if (p2>p0 && p2>p1)
         anc[a] = 2;
       else{
-        Rcout<<anc[a]<<std::endl;
+        //Rcout<<anc[a]<<std::endl;
         //anc[a] = -1;
-        //Rcout<<"Finding outlier, "<<p0<<" "<<p1<<" "<<p2<<" "<<std::endl;
+        //Rcout<<"Finding zero site, "<<p0<<" "<<p1<<" "<<p2<<" "<<std::endl;
+        zerosite+=1;
         //Rcout<<"Ancestral state defined as "<<anc[a]<<std::endl;
       }
 
   }
-  Rcout<<"First round of ancestry call finished. Starting smoothing with the sliding window..."<<std::endl;
+  //Rcout<<"First round of ancestry call finished. Starting smoothing with the sliding window..."<<std::endl;
+  Rcout << "Scanning of zero sites finished, finding "<< zerosite <<" sites out of "<<s<< std::endl;
+
+   /*
     for (a=0; a<s; ++a) {
     c1 = c2 = c0 = 0;
     for (b=0; b<s; ++b){
@@ -166,6 +172,7 @@ void anccall_c_test(double deltaf, int window, int SMAX,
     "Minimum required snp in a window:"<< n <<
     "\n Minimum percentage of the majority call:"<< mode <<
     "\n Output stored in "<<output<<std::endl;
+   */
   fclose(anclik);
   fclose(out);
   }
