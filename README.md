@@ -157,7 +157,7 @@ ancfreq(outputdir = './ancfreq',
 mergefreq(hap = './ancfreq_hap', dip = './ancfreq_dip', 
           merge = './ancfreq_merge', type = 'union')
 
-## In a generated ancfreq file, there will be six columns, corresponding to the following: the snp position, the allele frequency of 'A' in ancestral populations 1 and 2, and the number of chromosomes used for the allele frequency calculation in ancestral populations 1 and 2. (???What do you mean by 'A' here? Is this the reference allele???)
+## In a generated ancfreq file, there will be six columns, corresponding to the following: the snp position, the allele frequency of 'A' in ancestral populations 1 and 2, and the number of individuals (not chromosomes) used for the allele frequency calculation in ancestral populations 1 and 2. (???What do you mean by 'A' here? Is this the reference allele???)
 ```
 
 `mergetype` has several options:  
