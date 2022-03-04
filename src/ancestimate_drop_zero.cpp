@@ -1,7 +1,7 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-//' @title anccall_c: Generating ancestry call along the chromosome
+//' @title anccall_c_nozero: Generating ancestry call along the chromosome
 //'
 //' @param deltaf The cut-off for minimum delta f between two reference populations
 //' @param window Size of the sliding window
@@ -9,7 +9,7 @@ using namespace Rcpp;
 //' @param anclikdir the dir to anclik file
 //' @param output the dir of the output ancfreq file
 // [[Rcpp::export]]
-void anccall_c(double deltaf, int window, int SMAX,
+void anccall_c_nozero(double deltaf, int window, int SMAX,
               std::string anclikdir, std::string output,
               std::string chrom, std::string indiv,
               double mode, int n) {
@@ -32,10 +32,10 @@ void anccall_c(double deltaf, int window, int SMAX,
   out=fopen(output.c_str(),"w");
   s=0;
   while (fscanf(anclik,"%lf\t%lf\t%lf\t%lf\t%lf\n", &posit, &delta, &p2, &p1, &p0) != EOF) {
-    if ((delta > (d - 1.E-10)) && (p0>1.E-10 || p2>1.E-10)) { //for hap p1==0
-      lik2[s] = log (p2+1.E-6); //avoid 0
-      lik1[s] = log (p1+1.E-6);
-      lik0[s] = log (p0+1.E-6);
+    if ((delta > (d - 1.E-10)) && (p0>1.E-10 && p2>1.E-10)) { //for hap p1==0
+      lik2[s] = log (p2); //avoid 0
+      lik1[s] = log (p1);
+      lik0[s] = log (p0);
       pos[s] = posit;
       ++s;
     }

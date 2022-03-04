@@ -70,8 +70,8 @@ if (nrow(tmp) > 0) {
   tmp[,loc_Dummy := snp]; tmp[,.(snp, call)] -> tmp2
   tmp2[,loc_Plus100 := snp + value]; tmp2[,loc_Minus100 := snp - value]
   setkey(tmp,snp,loc_Dummy); setkey(tmp2,loc_Minus100, loc_Plus100)
-  print(nrow(tmp))
-  print(paste("Now doing matches for", chroms[j,1], "....", sep=""))
+  #print(nrow(tmp))
+  print(paste("Now doing matches for ", chroms[j,1], "....", sep=""))
   Matches <- foverlaps(tmp[,.(snp, loc_Dummy)], tmp2[,.(loc_Minus100,loc_Plus100,call)])
   Matches[,.(n = .N, mode = getmode(call), n_mode=sum(call==getmode(call))), by = .(snp)] -> i1
   rm(Matches); gc(); rm(tmp2)

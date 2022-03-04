@@ -28,6 +28,24 @@ BEGIN_RCPP
     return R_NilValue;
 END_RCPP
 }
+// anccall_c_nozero
+void anccall_c_nozero(double deltaf, int window, int SMAX, std::string anclikdir, std::string output, std::string chrom, std::string indiv, double mode, int n);
+RcppExport SEXP _rLCLAE_anccall_c_nozero(SEXP deltafSEXP, SEXP windowSEXP, SEXP SMAXSEXP, SEXP anclikdirSEXP, SEXP outputSEXP, SEXP chromSEXP, SEXP indivSEXP, SEXP modeSEXP, SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type deltaf(deltafSEXP);
+    Rcpp::traits::input_parameter< int >::type window(windowSEXP);
+    Rcpp::traits::input_parameter< int >::type SMAX(SMAXSEXP);
+    Rcpp::traits::input_parameter< std::string >::type anclikdir(anclikdirSEXP);
+    Rcpp::traits::input_parameter< std::string >::type output(outputSEXP);
+    Rcpp::traits::input_parameter< std::string >::type chrom(chromSEXP);
+    Rcpp::traits::input_parameter< std::string >::type indiv(indivSEXP);
+    Rcpp::traits::input_parameter< double >::type mode(modeSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    anccall_c_nozero(deltaf, window, SMAX, anclikdir, output, chrom, indiv, mode, n);
+    return R_NilValue;
+END_RCPP
+}
 // anccall_c_test
 void anccall_c_test(double deltaf, int window, int SMAX, std::string anclikdir, std::string output, std::string chrom, std::string indiv, double mode, int n);
 RcppExport SEXP _rLCLAE_anccall_c_test(SEXP deltafSEXP, SEXP windowSEXP, SEXP SMAXSEXP, SEXP anclikdirSEXP, SEXP outputSEXP, SEXP chromSEXP, SEXP indivSEXP, SEXP modeSEXP, SEXP nSEXP) {
@@ -146,6 +164,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_rLCLAE_anccall_c", (DL_FUNC) &_rLCLAE_anccall_c, 9},
+    {"_rLCLAE_anccall_c_nozero", (DL_FUNC) &_rLCLAE_anccall_c_nozero, 9},
     {"_rLCLAE_anccall_c_test", (DL_FUNC) &_rLCLAE_anccall_c_test, 9},
     {"_rLCLAE_ancfreq_c", (DL_FUNC) &_rLCLAE_ancfreq_c, 8},
     {"_rLCLAE_ancfreq_merge", (DL_FUNC) &_rLCLAE_ancfreq_merge, 4},
