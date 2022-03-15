@@ -23,6 +23,43 @@ anccall_c_nozero <- function(deltaf, window, SMAX, anclikdir, output, chrom, ind
     invisible(.Call(`_rLCLAE_anccall_c_nozero`, deltaf, window, SMAX, anclikdir, output, chrom, indiv, mode, n))
 }
 
+#' @title anccall_c_nozero_int: Generating ancestry call along the chromosome
+#'
+#' @param deltaf The cut-off for minimum delta f between two reference populations
+#' @param window Size of the sliding window
+#' @param SMAX The number of all snp sites
+#' @param anclikdir the dir to anclik file
+#' @param int1 output intermediate file 1 call
+#' @param int2 output intermediate file 2 after 1st smoothing
+#' @param output the dir of the output anccall file
+anccall_c_nozero_int <- function(deltaf, window, SMAX, anclikdir, int1, int2, output, chrom, indiv, mode, n) {
+    invisible(.Call(`_rLCLAE_anccall_c_nozero_int`, deltaf, window, SMAX, anclikdir, int1, int2, output, chrom, indiv, mode, n))
+}
+
+#' @title anccall_c_int: Generating ancestry call along the chromosome
+#'
+#' @param deltaf The cut-off for minimum delta f between two reference populations
+#' @param window Size of the sliding window
+#' @param SMAX The number of all snp sites
+#' @param anclikdir the dir to anclik file
+#' @param int1 output intermediate file 1 call
+#' @param int2 output intermediate file 2 after 1st smoothing
+#' @param output the dir of the output anccall file
+anccall_c_int <- function(deltaf, window, SMAX, anclikdir, int1, int2, output, chrom, indiv, mode, n) {
+    invisible(.Call(`_rLCLAE_anccall_c_int`, deltaf, window, SMAX, anclikdir, int1, int2, output, chrom, indiv, mode, n))
+}
+
+#' @title anccall_c_ori: Generating ancestry call along the chromosome
+#'
+#' @param deltaf The cut-off for minimum delta f between two reference populations
+#' @param window Size of the sliding window
+#' @param SMAX The number of all snp sites
+#' @param anclikdir the dir to anclik file
+#' @param output the dir of the output anccall file
+anccall_c_ori <- function(deltaf, window, SMAX, anclikdir, output, chrom, indiv, mode, n) {
+    invisible(.Call(`_rLCLAE_anccall_c_ori`, deltaf, window, SMAX, anclikdir, output, chrom, indiv, mode, n))
+}
+
 #' @title anccall_c: Generating ancestry call along the chromosome
 #'
 #' @param deltaf The cut-off for minimum delta f between two reference populations
