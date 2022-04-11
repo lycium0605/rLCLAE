@@ -63,6 +63,7 @@ j=1
 indv -> tmp
 subset(tmp, !(tmp$call == -1)) -> tmp
 tmp -> indv
+
 if (nrow(tmp) > 0) {
   # index temporary file of chromosome calls and use setkeys to prepare the data for matching sites within $VALUE of each SNP
   # run match to get sets of sites within `value` of each SNP
@@ -83,8 +84,10 @@ if (nrow(tmp) > 0) {
   # Some format adjustment
   tmp$snp<-as.numeric(as.character(tmp$snp))
   chroms[j,2]<-as.numeric(as.character(chroms[j,2]))
-
-  if (nrow(i1) > 0) {
+  if(nrow(i1)<=0){
+    print("No consensus call under mode",mode_n,"and min snp number",min_n)
+  }
+  else if (nrow(i1) > 0) {
     # merge majority rule calls for this chromosome to the growing file, removing the first and last X kb (set by "exclude").
     #if (j==1) {cbind(tmp,i1)[tmp$snp >= exclude & tmp$snp <= chroms[j,2]-exclude,-c(5:6)] -> maj_rule} else {cbind(tmp,i1) -> te; rbind(maj_rule, te[tmp$snp >= exclude & tmp$snp <= chroms[j,2]-exclude,-c(5:6)]) -> maj_rule}
     cbind(tmp,i1)[as.numeric(tmp$snp) >= exclude & as.numeric(tmp$snp) <= as.numeric(chroms[j,2])-exclude,-c(5:6)] -> maj_rule
@@ -161,8 +164,9 @@ if (nrow(tmp) > 0) {
     rm(blocks)
   }
 }
-
-write.table(maj_rule, maj_dir, row.names=F, col.names=T, quote=F, sep="\t")
-write.table(tracts, tractdir, row.names=F, col.names=T, quote=F, sep="\t")
+if(nrow(maj_rule)>0&&nrow(tracts>0)){
+  write.table(maj_rule, maj_dir, row.names=F, col.names=T, quote=F, sep="\t")
+  write.table(tracts, tractdir, row.names=F, col.names=T, quote=F, sep="\t")
+}
 }
 
