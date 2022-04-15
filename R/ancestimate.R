@@ -15,8 +15,9 @@
 # @examples
 anccall<-function(inputdir,outputdir,
                   chrom_name,indiv_name,
-                  mode_min=0.5,n_min=0,
-                  delta=0.2, window_size=50000){
+                  mode_min=0.5,n_min=20,
+                  delta=0.2, window_size=50000,
+                  round1=1,round2=1,round3=2){
   flag=0
   if(!file.exists(inputdir)){
     print("The ancestral likelihood file you provided does not exist. Please check.")
@@ -39,6 +40,7 @@ anccall<-function(inputdir,outputdir,
               SMAX=smax,
               anclikdir=inputdir,output=outputdir,
               chrom=chrom_name,indiv=indiv_name,
-              mode=mode_min,n=n_min)
+              mode=mode_min,n=n_min,
+              round1=round1,round2=round2,round3=round3)
   }
   }

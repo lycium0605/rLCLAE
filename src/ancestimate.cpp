@@ -12,7 +12,8 @@ using namespace Rcpp;
 void anccall_c(double deltaf, int window, int SMAX,
               std::string anclikdir, std::string output,
               std::string chrom, std::string indiv,
-              double mode, int n) {
+              double mode, int n,
+              double round1, double round2, double round3) {
 
   int a, c1, c2, c0, b, c, s, nsum, *anc, *anc2, *majmode;
   double *pos, *lik2, *lik1, *lik0, p0, p1, p2, d, delta, t, posit;
@@ -33,9 +34,9 @@ void anccall_c(double deltaf, int window, int SMAX,
   s=0;
   while (fscanf(anclik,"%lf\t%lf\t%lf\t%lf\t%lf\n", &posit, &delta, &p2, &p1, &p0) != EOF) {
     if ((delta > (d - 1.E-10)) && (p0>1.E-10 || p2>1.E-10)) { //for hap p1==0
-      lik2[s] = log (p2+1.E-6); //avoid 0
-      lik1[s] = log (p1+1.E-6);
-      lik0[s] = log (p0+1.E-6);
+      lik2[s] = log (p2+1.E-7); //avoid 0
+      lik1[s] = log (p1+1.E-7);
+      lik0[s] = log (p0+1.E-7);
       pos[s] = posit;
       ++s;
     }
@@ -48,8 +49,8 @@ void anccall_c(double deltaf, int window, int SMAX,
   for (a=0; a<s; ++a) {
     p0 = p1 = p2 = 0.;
 
-    for (b=0; b<s && pos[b]<(pos[a]+t*.5); ++b){
-      if (pos[b]>(pos[a]-t*.5)) {
+    for (b=0; b<s && pos[b]<(pos[a]+t*.5*round1); ++b){
+      if (pos[b]>(pos[a]-t*.5*round1)) {
         p0 += lik0[b];
         p1 += lik1[b];
         p2 += lik2[b];
@@ -75,7 +76,7 @@ void anccall_c(double deltaf, int window, int SMAX,
     for (a=0; a<s; ++a) {
     c1 = c2 = c0 = 0;
     for (b=0; b<s; ++b){
-      if ((pos[a]-pos[b]) < t*.5 && (pos[a]-pos[b])>(t*(-.5))) {
+      if ((pos[a]-pos[b]) < t*.5*round2 && (pos[a]-pos[b])>(t*(-.5)*round2)) {
         if (anc[b] == 0){++c0;}
 
         else if (anc[b] == 1){++c1;
@@ -110,7 +111,7 @@ void anccall_c(double deltaf, int window, int SMAX,
     c1 = c2 = c0 = 0;
     for (b=0; b<s; ++b){
       //using double length window
-      if ((pos[a]-pos[b]) < t && (pos[a]-pos[b])>(t*(-1))) {
+      if ((pos[a]-pos[b]) < t*.5*round3 && (pos[a]-pos[b])>(t*(-.5)*round3)) {
         if (anc2[b] == 0){++c0;}
 
         else if (anc2[b] == 1){++c1;}

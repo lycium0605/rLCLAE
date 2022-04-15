@@ -30,19 +30,19 @@ anccall_check_int<-function(inputdir,outputdir,
     print(paste("Set SMAX to",smax))
     #得到一个包含snp,call,chrom,indiv,n,mode,n_mode,perc的表格maj_rule
     #Call ancestry
-    anccall_c_test(deltaf=delta,window=window_size,
-              SMAX=smax,
-              anclikdir=inputdir,output=outputdir,
-              chrom=chrom_name,indiv=indiv_name,
-              mode=mode_min,n=n_min)
-    anccall_c_nozero_int(deltaf=delta,window=window_size,
-              SMAX=smax,
-              anclikdir=inputdir,
-              int1=paste0(outputdir,"_nozero_int1"),
-              int2=paste0(outputdir,"_nozero_int2"),
-              output=paste0(outputdir,"_nozero"),
-              chrom=chrom_name,indiv=indiv_name,
-              mode=mode_min,n=n_min)
+    # anccall_c_test(deltaf=delta,window=window_size,
+    #           SMAX=smax,
+    #           anclikdir=inputdir,output=outputdir,
+    #           chrom=chrom_name,indiv=indiv_name,
+    #           mode=mode_min,n=n_min)
+    # anccall_c_nozero_int(deltaf=delta,window=window_size,
+    #           SMAX=smax,
+    #           anclikdir=inputdir,
+    #           int1=paste0(outputdir,"_nozero_int1"),
+    #           int2=paste0(outputdir,"_nozero_int2"),
+    #           output=paste0(outputdir,"_nozero"),
+    #           chrom=chrom_name,indiv=indiv_name,
+    #           mode=mode_min,n=n_min)
     anccall_c_int(deltaf=delta,window=window_size,
                          SMAX=smax,
                          anclikdir=inputdir,
