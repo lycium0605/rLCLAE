@@ -9,6 +9,9 @@
 #' @param n_min the minimum number of SNPs within the window to make a call, default set to zero
 #' @param delta The cutoff for ancestral allele frequency difference
 #' @param window_size The size of the sliding window
+#' @param round3 The scaler for window_size for third round
+#' @param ploidy "hap" or "dip", default set to "dip"
+#' @param chrlength chromosome length, default set to baboon X: 142711496
 #' @return nothing
 #' @export
 #'
@@ -17,7 +20,9 @@ anccall<-function(inputdir,outputdir,
                   chrom_name,indiv_name,
                   mode_min=0.5,n_min=20,
                   delta=0.2, window_size=50000,
-                  round1=1,round2=1,round3=2){
+                  round1=1,round2=1,round3=2,
+                  ploidy="dip",chrlength=142711496,
+                  zero_value=10^(-7)){
   flag=0
   if(!file.exists(inputdir)){
     print("The ancestral likelihood file you provided does not exist. Please check.")
@@ -28,6 +33,13 @@ anccall<-function(inputdir,outputdir,
     system(paste("echo $(wc -l",inputdir,")"), intern = TRUE)->lines
     nline<-unlist(strsplit(lines,split = ' '))
     smax=as.numeric(nline[1])
+
+    # optimized scaler
+    round1=(150000*30000*chrlength)/(window_size*142711496)
+    if(ploidy=="hap"){
+      round1<-round1/3
+    }
+
     print(paste("Set SMAX to",smax))
     #得到一个包含snp,call,chrom,indiv,n,mode,n_mode,perc的表格maj_rule
     #Call ancestry
@@ -41,6 +53,7 @@ anccall<-function(inputdir,outputdir,
               anclikdir=inputdir,output=outputdir,
               chrom=chrom_name,indiv=indiv_name,
               mode=mode_min,n=n_min,
-              round1=round1,round2=round2,round3=round3)
+              round1=round1,round2=round2,round3=round3,
+              zero_value=zero_value)
   }
   }

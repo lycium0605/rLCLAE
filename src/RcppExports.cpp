@@ -11,8 +11,8 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // anccall_c
-void anccall_c(double deltaf, int window, int SMAX, std::string anclikdir, std::string output, std::string chrom, std::string indiv, double mode, int n, double round1, double round2, double round3);
-RcppExport SEXP _rLCLAE_anccall_c(SEXP deltafSEXP, SEXP windowSEXP, SEXP SMAXSEXP, SEXP anclikdirSEXP, SEXP outputSEXP, SEXP chromSEXP, SEXP indivSEXP, SEXP modeSEXP, SEXP nSEXP, SEXP round1SEXP, SEXP round2SEXP, SEXP round3SEXP) {
+void anccall_c(double deltaf, int window, int SMAX, std::string anclikdir, std::string output, std::string chrom, std::string indiv, double mode, int n, double round1, double round2, double round3, double zero_value);
+RcppExport SEXP _rLCLAE_anccall_c(SEXP deltafSEXP, SEXP windowSEXP, SEXP SMAXSEXP, SEXP anclikdirSEXP, SEXP outputSEXP, SEXP chromSEXP, SEXP indivSEXP, SEXP modeSEXP, SEXP nSEXP, SEXP round1SEXP, SEXP round2SEXP, SEXP round3SEXP, SEXP zero_valueSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type deltaf(deltafSEXP);
@@ -27,7 +27,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type round1(round1SEXP);
     Rcpp::traits::input_parameter< double >::type round2(round2SEXP);
     Rcpp::traits::input_parameter< double >::type round3(round3SEXP);
-    anccall_c(deltaf, window, SMAX, anclikdir, output, chrom, indiv, mode, n, round1, round2, round3);
+    Rcpp::traits::input_parameter< double >::type zero_value(zero_valueSEXP);
+    anccall_c(deltaf, window, SMAX, anclikdir, output, chrom, indiv, mode, n, round1, round2, round3, zero_value);
     return R_NilValue;
 END_RCPP
 }
@@ -70,8 +71,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // anccall_c_int
-void anccall_c_int(double deltaf, int window, int SMAX, std::string anclikdir, std::string int1, std::string int2, std::string output, std::string chrom, std::string indiv, double mode, int n, double round1, double round2, double round3);
-RcppExport SEXP _rLCLAE_anccall_c_int(SEXP deltafSEXP, SEXP windowSEXP, SEXP SMAXSEXP, SEXP anclikdirSEXP, SEXP int1SEXP, SEXP int2SEXP, SEXP outputSEXP, SEXP chromSEXP, SEXP indivSEXP, SEXP modeSEXP, SEXP nSEXP, SEXP round1SEXP, SEXP round2SEXP, SEXP round3SEXP) {
+void anccall_c_int(double deltaf, int window, int SMAX, std::string anclikdir, std::string int1, std::string int2, std::string output, std::string chrom, std::string indiv, double mode, int n, double round1, double round2, double round3, double zero_value);
+RcppExport SEXP _rLCLAE_anccall_c_int(SEXP deltafSEXP, SEXP windowSEXP, SEXP SMAXSEXP, SEXP anclikdirSEXP, SEXP int1SEXP, SEXP int2SEXP, SEXP outputSEXP, SEXP chromSEXP, SEXP indivSEXP, SEXP modeSEXP, SEXP nSEXP, SEXP round1SEXP, SEXP round2SEXP, SEXP round3SEXP, SEXP zero_valueSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< double >::type deltaf(deltafSEXP);
@@ -88,7 +89,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type round1(round1SEXP);
     Rcpp::traits::input_parameter< double >::type round2(round2SEXP);
     Rcpp::traits::input_parameter< double >::type round3(round3SEXP);
-    anccall_c_int(deltaf, window, SMAX, anclikdir, int1, int2, output, chrom, indiv, mode, n, round1, round2, round3);
+    Rcpp::traits::input_parameter< double >::type zero_value(zero_valueSEXP);
+    anccall_c_int(deltaf, window, SMAX, anclikdir, int1, int2, output, chrom, indiv, mode, n, round1, round2, round3, zero_value);
     return R_NilValue;
 END_RCPP
 }
@@ -227,10 +229,10 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_rLCLAE_anccall_c", (DL_FUNC) &_rLCLAE_anccall_c, 12},
+    {"_rLCLAE_anccall_c", (DL_FUNC) &_rLCLAE_anccall_c, 13},
     {"_rLCLAE_anccall_c_nozero", (DL_FUNC) &_rLCLAE_anccall_c_nozero, 9},
     {"_rLCLAE_anccall_c_nozero_int", (DL_FUNC) &_rLCLAE_anccall_c_nozero_int, 11},
-    {"_rLCLAE_anccall_c_int", (DL_FUNC) &_rLCLAE_anccall_c_int, 14},
+    {"_rLCLAE_anccall_c_int", (DL_FUNC) &_rLCLAE_anccall_c_int, 15},
     {"_rLCLAE_anccall_c_ori", (DL_FUNC) &_rLCLAE_anccall_c_ori, 9},
     {"_rLCLAE_anccall_c_test", (DL_FUNC) &_rLCLAE_anccall_c_test, 9},
     {"_rLCLAE_ancfreq_c", (DL_FUNC) &_rLCLAE_ancfreq_c, 8},

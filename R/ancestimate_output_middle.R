@@ -16,7 +16,10 @@
 anccall_check_int<-function(inputdir,outputdir,
                   chrom_name,indiv_name,
                   mode_min=0.5,n_min=0,
-                  delta=0.2, window_size=50000){
+                  delta=0.2, window_size=50000,
+                  round1=1,round2=1,round3=2,
+                  ploidy="dip",chrlength=142711496,
+                  zero_value=10^(-7)){
   flag=0
   if(!file.exists(inputdir)){
     print("The ancestral likelihood file you provided does not exist. Please check.")
@@ -27,6 +30,13 @@ anccall_check_int<-function(inputdir,outputdir,
     system(paste("echo $(wc -l",inputdir,")"), intern = TRUE)->lines
     nline<-unlist(strsplit(lines,split = ' '))
     smax=as.numeric(nline[1])
+
+    # optimized scaler
+    round1=(150000*30000*chrlength)/(window_size*142711496)
+    if(ploidy=="hap"){
+      round1<-round1/3
+    }
+
     print(paste("Set SMAX to",smax))
     #得到一个包含snp,call,chrom,indiv,n,mode,n_mode,perc的表格maj_rule
     #Call ancestry
@@ -50,6 +60,8 @@ anccall_check_int<-function(inputdir,outputdir,
                          int2=paste0(outputdir,"_int2"),
                          output=outputdir,
                          chrom=chrom_name,indiv=indiv_name,
-                         mode=mode_min,n=n_min)
+                         mode=mode_min,n=n_min,
+                  round1=round1,round2=round2,round3=round3,
+                  zero_value=zero_value)
   }
   }

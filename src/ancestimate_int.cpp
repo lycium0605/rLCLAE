@@ -17,7 +17,8 @@ void anccall_c_int(double deltaf, int window, int SMAX,
               std::string output,
               std::string chrom, std::string indiv,
               double mode, int n,
-              double round1, double round2, double round3) {
+              double round1, double round2, double round3,
+              double zero_value) {
 
   int a, c1, c2, c0, b, c, s, nsum, *anc, *anc2, *majmode;
   double *pos, *lik2, *lik1, *lik0, p0, p1, p2, d, delta, t, posit; //, round1, round2, round3;
@@ -41,11 +42,12 @@ void anccall_c_int(double deltaf, int window, int SMAX,
   //round1=1.5;
   //round2=1;
   //round3=1.5;
+  Rcout<<"Adding small values "<<zero_value<<" to avoid zeroes."<<std::endl;
   while (fscanf(anclik,"%lf\t%lf\t%lf\t%lf\t%lf\n", &posit, &delta, &p2, &p1, &p0) != EOF) {
     if ((delta > (d - 1.E-10)) && (p0>-1.E-10 && p2>-1.E-10)) { //for hap p1==0
-      lik2[s] = log (p2+1.E-7); //avoid 0
-      lik1[s] = log (p1+1.E-7);
-      lik0[s] = log (p0+1.E-7);
+      lik2[s] = log (p2+zero_value); //avoid 0
+      lik1[s] = log (p1+zero_value);
+      lik0[s] = log (p0+zero_value);
       pos[s] = posit;
       ++s;
     }
@@ -54,7 +56,8 @@ void anccall_c_int(double deltaf, int window, int SMAX,
     //}
   }
   Rcout<<"Scanning finished, "<<s<<" informative sites found."<<std::endl;
-
+  round1=round1/s;
+  Rcout<<"Using "<<round1*t<<" as window size for round1."<<std::endl;
   for (a=0; a<s; ++a) {
     p0 = p1 = p2 = 0.;
 
