@@ -12,6 +12,7 @@
 #' @param round3 The scaler for window_size for third round
 #' @param ploidy "hap" or "dip", default set to "dip"
 #' @param chrlength chromosome length, default set to baboon X: 142711496
+#' @param zero_value The small value added to avoid zeroes, default to 10^-7
 #' @return nothing
 #' @export
 #'

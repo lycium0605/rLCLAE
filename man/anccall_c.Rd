@@ -4,7 +4,21 @@
 \alias{anccall_c}
 \title{anccall_c: Generating ancestry call along the chromosome}
 \usage{
-anccall_c(deltaf, window, SMAX, anclikdir, output, chrom, indiv, mode, n)
+anccall_c(
+  deltaf,
+  window,
+  SMAX,
+  anclikdir,
+  output,
+  chrom,
+  indiv,
+  mode,
+  n,
+  round1,
+  round2,
+  round3,
+  zero_value
+)
 }
 \arguments{
 \item{deltaf}{The cut-off for minimum delta f between two reference populations}

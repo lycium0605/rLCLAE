@@ -15,7 +15,11 @@ anccall_c_int(
   chrom,
   indiv,
   mode,
-  n
+  n,
+  round1,
+  round2,
+  round3,
+  zero_value
 )
 }
 \arguments{

@@ -9,6 +9,9 @@
 #' @param n_min the minimum number of SNPs within the window to make a call, default set to zero
 #' @param delta The cutoff for ancestral allele frequency difference
 #' @param window_size The size of the sliding window
+#' @param ploidy "hap" or "dip", default set to "dip"
+#' @param chrlength chromosome length, default set to baboon X: 142711496
+#' @param zero_value The small value added to avoid zeroes, default to 10^-7
 #' @return nothing
 #' @export
 #'

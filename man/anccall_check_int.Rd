@@ -12,7 +12,13 @@ anccall_check_int(
   mode_min = 0.5,
   n_min = 0,
   delta = 0.2,
-  window_size = 50000
+  window_size = 50000,
+  round1 = 1,
+  round2 = 1,
+  round3 = 2,
+  ploidy = "dip",
+  chrlength = 142711496,
+  zero_value = 10^(-7)
 )
 }
 \arguments{
