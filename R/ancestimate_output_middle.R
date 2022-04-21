@@ -35,7 +35,7 @@ anccall_check_int<-function(inputdir,outputdir,
     smax=as.numeric(nline[1])
 
     # optimized scaler
-    round1=(150000*30000*chrlength)/(window_size*142711496)
+    round1=(180000*30000*chrlength)/(window_size*142711496)
     if(ploidy=="hap"){
       round1<-round1/3
     }
