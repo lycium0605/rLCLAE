@@ -43,6 +43,8 @@ anccall(
 \item{ploidy}{"hap" or "dip", default set to "dip"}
 
 \item{chrlength}{chromosome length, default set to baboon X: 142711496}
+
+\item{zero_value}{The small value added to avoid zeroes, default to 10^-7}
 }
 \value{
 nothing

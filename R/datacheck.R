@@ -22,7 +22,7 @@ datacheck<-function(input,character="[^0-9[:space:]]",field='1-'){
   command_ = paste(sep='', 'cat ',input,cut,field,grep,character,out)
   #print(command_)
   system(command = command_,intern = TRUE) -> charcheck
-  print(charcheck)
+  #print(charcheck)
   if(charcheck=='Pass character test'){
     return (0)
   }

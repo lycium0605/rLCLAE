@@ -47,7 +47,9 @@ void anccall_c(double deltaf, int window, int SMAX,
     //}
   }
   Rcout<<"Scanning finished, "<<s<<" informative sites found."<<std::endl;
-  round1=round1/s;
+
+  //round1=round1/s; adjust window size based on snp density, recover if needed
+
   Rcout<<"Using "<<round1*t<<" as window size for round1."<<std::endl;
   for (a=0; a<s; ++a) {
     p0 = p1 = p2 = 0.;

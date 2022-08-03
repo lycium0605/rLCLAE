@@ -51,10 +51,10 @@ genolik<-function(inputdir,outputdir,type='dip'){
     chr<-x[seq(2,length(x),2)]
     rep<-as.numeric(x[seq(1,length(x),2)])
 
-    print(paste("Finding",length(chr),"unique chromosomes in the input vcf."))
+    #print(paste("Finding",length(chr),"unique chromosomes in the input vcf."))
 
     for(i in 1:length(chr)){
-      print(paste("Calculating genotype likelihood for chromosome",chr[i]))
+      message(paste("Calculating genotype likelihood for chromosome",chr[i]))
       root_chr=paste(root,"_",chr[i],sep = "")
       #print(root_chr)
       read_line=as.integer(rep[i])
@@ -67,13 +67,15 @@ genolik<-function(inputdir,outputdir,type='dip'){
         filt1_hap(indnum,skip_line,read_line,inputdir,root_chr)
       }
       else{
-        print("Please specify a type, dip or hap")
+        stop("Please specify a type, dip or hap")
       }
       skip_line=skip_line+read_line
       #print(skip_line)
     }
+  }else{
+    stop("Input check failed.")
   }
-
+return(chr)
 }
 
 

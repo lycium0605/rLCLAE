@@ -16,20 +16,21 @@
 anclik<-function(genodir,ancfreqdir,outputdir,type='dip',test='all'){
   flag=datacheck(ancfreqdir,'[^0-9.[:space:]]')
   if(!file.exists(genodir)){
-    print("The genotype likelihood file you provided does not exist. Please check.")
+    stop("The genotype likelihood file you provided does not exist. Please check.")
     flag=1
   }
   if(!file.exists(ancfreqdir)){
-    print("The ancestral frequency file you provided does not exist. Please check.")
+    stop("The ancestral frequency file you provided does not exist. Please check.")
     flag=1
   }
   input=file(genodir,'r')
   line=unlist(strsplit(readLines(input,n=1),split = ' '))
+  on.exit(close(input))
   if(type=='dip'){
     typenum=2
     indnum=(length(line)-2)/3
     if(floor(indnum)!=indnum || indnum < 1){
-      print(paste("Unexpectedly finding",indnum,"individuals in the file,
+      stop(paste("Unexpectedly finding",indnum,"individuals in the file,
                   please double check your input format"))
       flag = 1
     }
@@ -38,18 +39,19 @@ anclik<-function(genodir,ancfreqdir,outputdir,type='dip',test='all'){
     typenum=1
     indnum=(length(line)-2)/2
     if(floor(indnum)!=indnum || indnum < 1){
-      print(paste("Unexpectedly finding",indnum,"individuals in the file,
+      stop(paste("Unexpectedly finding",indnum,"individuals in the file,
                   please double check your input format"))
       flag = 1
     }
   }
   else{
-    print("Wrong data type, should be either hap or dip.")
+    stop("Wrong data type, should be either hap or dip.")
     flag = 1
   }
 
   if(flag==0){
     if(length(test==1)&&test=='all'){
+      ind_seq<-1:indnum
       for(i in 1:indnum){
         outputdir_=paste(outputdir,i,sep = '_')
         anclik_c(sum=indnum,type=typenum,testid=i,
@@ -57,6 +59,7 @@ anclik<-function(genodir,ancfreqdir,outputdir,type='dip',test='all'){
       }
     }
     else{
+      ind_seq<-test
       for(i in test){
         i_=as.numeric(i)
         if(i_<=indnum){
@@ -68,6 +71,6 @@ anclik<-function(genodir,ancfreqdir,outputdir,type='dip',test='all'){
     }
 
   }
-
+return(ind_seq)
 }
 
