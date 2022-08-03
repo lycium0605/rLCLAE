@@ -16,6 +16,7 @@ anccall(
   round1 = 1,
   round2 = 1,
   round3 = 2,
+  auto_optimize = F,
   ploidy = "dip",
   chrlength = 142711496,
   zero_value = 10^(-7)

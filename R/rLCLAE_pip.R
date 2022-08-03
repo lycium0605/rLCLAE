@@ -1,3 +1,24 @@
+#' rLCLAE
+#' @description The summarized pipeline for rLCLAE
+#' @param input vcf input
+#' @param tmp intermediate file storage
+#' @param output final output (not yet used)
+#' @param chrlist a data frame for chr name & length, from fai
+#' @param refpop1_dip numeric vector for index of ref ind for pop1, need expand
+#' @param refpop2_dip numeric vector for index of ref ind for pop2, need expand
+#' @param test_ind numeric vector for index of test individual, default all
+#' @param inputtype hap or dip
+#' @param freqtype hap, dip or merge
+#' @param window window size
+#' @param mode_min mode min
+#' @param n_min n min in window
+#' @param delta freq diff lower cutoff
+#' @param exclude exclude length
+#'
+#'
+#' @export
+#'
+#'
 rLCLAE<-function(
   input, # input vcf directory
   tmp, # a folder for temporary files
