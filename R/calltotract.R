@@ -128,19 +128,18 @@ if (nrow(tmp) > 0) {
     #write.table(blocks, "./tmp2.INDIV.txt", row.names=F, col.names=T, sep="\t")
     #read.delim("./tmp2.INDIV.txt") -> blocks
 
-    blocks$brk <- (as.numeric(blocks$nxt) + as.numeric(blocks$snp))/2
+    blocks$brk <- (as.numeric(as.character(blocks$nxt)) + as.numeric(as.character(blocks$snp)))/2
     blocks$brk[1] <- 1  # start at the first bp of the chromosome
     modes$snp[1] -> blocks$brk[1] # assume the a single ancestry tract up until the first called SNP
 
     chroms[j,2]  -> blocks$brk[nrow(blocks)] # extend the last tract until the end of the chromosome
-    blocks$nxt_brk <- c(as.numeric(blocks$brk[-1]),'end')
+    blocks$nxt_brk <- c(as.numeric(as.character(blocks$brk[-1])),'end')
     blocks[-nrow(blocks),] -> blocks  # last line no longer matters, we've already extended from the last SNP to the end of the chromosome
 
     blocks$length <- as.numeric(blocks$nxt_brk) - as.numeric(blocks$brk)
-    #blocks$length[1] <- NA; blocks$length[nrow(blocks)-1] <- NA
+    blocks$length[1] <- NA; blocks$length[nrow(blocks)-1] <- NA
 
-    print("Head of blocks")
-    print(head(blocks))
+
 
     # remove uncertainty because we really don't need this now that I'm not doing as much methods testing.
     #uncertainty of the break points to each side
@@ -149,6 +148,9 @@ if (nrow(tmp) > 0) {
     blocks$u_next <- c(as.numeric(blocks$u_prev[-1]),NA)
     ## blocks u_prev is the number of bases at the start of that tract which were inferred (i.e. before the first AIM with that ancestry call)
     ## blocks u_next is the same thing for the end of that tract
+
+    print("Head of blocks")
+    print(head(blocks))
 
     #Blocks starts at the first SNP and goes to the last one.
 
