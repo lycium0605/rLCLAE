@@ -139,6 +139,9 @@ if (nrow(tmp) > 0) {
     blocks$length <- as.numeric(blocks$nxt_brk) - as.numeric(blocks$brk)
     #blocks$length[1] <- NA; blocks$length[nrow(blocks)-1] <- NA
 
+    print("Head of blocks")
+    print(head(blocks))
+
     # remove uncertainty because we really don't need this now that I'm not doing as much methods testing.
     #uncertainty of the break points to each side
     blocks$u_prev <- (as.numeric(blocks$nxt) - as.numeric(blocks$snp))/2
@@ -156,6 +159,9 @@ if (nrow(tmp) > 0) {
     t$end <- as.numeric(as.character(t$end))
     t$start <- as.numeric(as.character(t$start))
 
+    print("Head of t")
+    print(head(t))
+
     # fix the extremes of `t`, cropping the first and last `exclude`bp from the chromosome
     t <- subset(t, t$start <= (as.numeric(chroms[j,2])-exclude) & t$end >= exclude)
     t$start[t$start < exclude] <- exclude
@@ -164,7 +170,7 @@ if (nrow(tmp) > 0) {
 
     # merge with list of tracts per individual
     if (j==1) {t -> tracts} else {rbind(tracts,t) -> tracts}
-    if(nrow(tracts) == 1 & length(unique(indv$call)==1)){
+    if(nrow(tracts) == 1 & length(unique(indv$call))==1){
       tracts$state<-indv$call[1]
       tracts$length<-tracts$end - tracts$start
       print("Only one tract, using the unique value.")
