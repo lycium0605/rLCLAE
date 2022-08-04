@@ -109,10 +109,11 @@ void anccall_c(double deltaf, int window, int SMAX,
         {//c = -1;
         anc2[a] = -1;
         }
-      //fprintf(out,"%f\t%d\n", pos[a], c);
+      fprintf(out,"%f\t%d\n", pos[a], anc2[a]);
   }
   Rcout<<"Second round of smoothing finshed."<<std::endl;
-  for (a=0; a<s; ++a) {
+  /*
+   for (a=0; a<s; ++a) {
     c1 = c2 = c0 = 0;
     for (b=0; b<s; ++b){
       //using double length window
@@ -152,7 +153,8 @@ void anccall_c(double deltaf, int window, int SMAX,
       fprintf(out,"%f\t%d\n",pos[a], c);
     }
   }
-  Rcout<<"Third round of smoothing / filtering finshed.\n Filter used:\n"<<
+  */
+  Rcout<<"No round 3.\n Filter used:\n"<<
     "Minimum required snp in a window:"<< n <<
     "\n Minimum percentage of the majority call:"<< mode <<
     "\n Output stored in "<<output<<std::endl;
