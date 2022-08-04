@@ -77,6 +77,10 @@ if (nrow(tmp) > 0) {
   # get the mode of all calls, the total number of calls, and the number of calls which were the mode.
   tmp[,loc_Dummy := snp]; tmp[,.(snp, call)] -> tmp2
   tmp2[,loc_Plus100 := snp + value]; tmp2[,loc_Minus100 := snp - value]
+
+  print(str(tmp))
+  print(str(tmp2))
+
   setkey(tmp,snp,loc_Dummy); setkey(tmp2,loc_Minus100, loc_Plus100)
   #print(nrow(tmp))
   print(paste("Now doing matches for ", chroms[j,1], "....", sep=""))
