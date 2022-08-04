@@ -173,12 +173,19 @@ if (nrow(tmp) > 0) {
 
     print("Head of t")
     print(head(t))
+    print(str(t))
 
     # fix the extremes of `t`, cropping the first and last `exclude`bp from the chromosome
     t <- subset(t, t$start <= (as.numeric(chroms[j,2])-exclude) & t$end >= exclude)
+    t$end <- as.numeric(as.character(t$end))
+    t$start <- as.numeric(as.character(t$start))
     t$start[t$start < exclude] <- exclude
     t$end[t$end > (as.numeric(chroms[j,2])-exclude)] <- (as.numeric(chroms[j,2])-exclude)
     t$length[c(1,nrow(t))] <- NA
+
+    print("Head of t")
+    print(head(t))
+    print(str(t))
 
     # merge with list of tracts per individual
     if (j==1) {t -> tracts} else {rbind(tracts,t) -> tracts}
