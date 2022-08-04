@@ -14,6 +14,10 @@
 #' @param n_min n min in window
 #' @param delta freq diff lower cutoff
 #' @param exclude exclude length
+#' @param inputdir_hap missing, do not touch, not finished for ancfreq
+#' @param refpop1_hap missing, do not touch, not finished for ancfreq
+#' @param refpop2_hap missing, do not touch, not finished for ancfreq
+#' @param mergetype union, do not touch, not finished for ancfreq
 #'
 #'
 #' @export
@@ -33,7 +37,12 @@ rLCLAE<-function(
   mode_min=0.3,
   n_min=10,
   delta=0.1,
-  exclude=1000
+  exclude=1000,
+  #ancfreq input
+  inputdir_hap = "missing",
+  refpop1_hap = "missing",
+  refpop2_hap = "missing",
+  mergetype = "union"
 ){
 
   # Check if the directory end with /
@@ -66,7 +75,11 @@ rLCLAE<-function(
     ancfreq(outputdir = ancfreq_out,
             inputdir_dip = ancfreq_in,
             pop1_dip = refpop1_dip,
-            pop2_dip = refpop2_dip)
+            pop2_dip = refpop2_dip,
+            inputdir_hap = inputdir_hap,
+            pop1_hap = refpop1_hap,
+            pop2_hap = refpop2_hap,
+            mergetype = mergetype)
 
 # 04. Calculate ancestral likelihood --------------------------------------
     anclik_in<-ancfreq_in
@@ -86,10 +99,17 @@ rLCLAE<-function(
 ### 05. Generating ancestral call -------------------------------------------
       anccall_in<-paste0(tmp,"/04_anclik_",chr,"_",ind)
       anccall_out<-paste0(tmp,"/05_anccall_",chr,"_",ind)
-      anccall(anccall_in,anccall_out,chr,as.character(ind),
-              mode_min=mode_min,n_min=n_min,chrlength = chrlen,
+      anccall(inputdir=anccall_in,
+              outputdir=anccall_out,
+              chrom_name=chr,
+              indiv_name=as.character(ind),
+              mode_min=mode_min,
+              n_min=n_min,
+              chrlength = chrlen,
               window_size = window,
-              delta = delta)
+              delta = delta,
+              ploidy = inputtype)
+      # fixed parameters: round1=1, round2=1, round3=2, auto_optimize=F, zero_value=10^-7
 
 # 06. Generating ancetry tract ----------------------------------------------
       gettract_in<-anccall_out

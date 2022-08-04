@@ -18,7 +18,11 @@ rLCLAE(
   mode_min = 0.3,
   n_min = 10,
   delta = 0.1,
-  exclude = 1000
+  exclude = 1000,
+  inputdir_hap = "missing",
+  refpop1_hap = "missing",
+  refpop2_hap = "missing",
+  mergetype = "union"
 )
 }
 \arguments{
@@ -49,6 +53,14 @@ rLCLAE(
 \item{delta}{freq diff lower cutoff}
 
 \item{exclude}{exclude length}
+
+\item{inputdir_hap}{missing, do not touch, not finished for ancfreq}
+
+\item{refpop1_hap}{missing, do not touch, not finished for ancfreq}
+
+\item{refpop2_hap}{missing, do not touch, not finished for ancfreq}
+
+\item{mergetype}{union, do not touch, not finished for ancfreq}
 }
 \description{
 The summarized pipeline for rLCLAE
