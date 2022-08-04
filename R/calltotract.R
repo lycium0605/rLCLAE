@@ -91,8 +91,14 @@ if (nrow(tmp) > 0) {
   i1$n_mode<-as.numeric(as.character(i1$n_mode))
   i1$n<-as.numeric(as.character(i1$n))
   i1$perc <- i1$n_mode/i1$n
+
+  print("head of i1")
+  print(head(i1))
+
   # remove sites where there is not a consensus call by majority rule (at least `mode_n` percent of calls with the same state) or enough nearby ancestry informative sites (`min_n` within `value`)
   subset(tmp, i1$perc >= mode_n & i1$n >= min_n) -> tmp; subset(i1, i1$perc >= mode_n & i1$n >= min_n) -> i1
+
+
 
   # Some format adjustment
   tmp$snp<-as.numeric(as.character(tmp$snp))
