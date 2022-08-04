@@ -188,6 +188,7 @@ if (nrow(tmp) > 0) {
 if(nrow(maj_rule)>0&&nrow(tracts>0)){
   write.table(maj_rule, maj_dir, row.names=F, col.names=T, quote=F, sep="\t")
   write.table(tracts, tractdir, row.names=F, col.names=T, quote=F, sep="\t")
-  #save.image(file = "My_Object.RData")}
+  #save.image(file = "My_Object.RData")
+  }
 }
 
