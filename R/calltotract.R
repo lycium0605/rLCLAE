@@ -53,23 +53,23 @@ tractdir<-paste(outputdir,indiv_name,'tracts.txt',sep = '.')
 # Prepare a data column with snp, call, chrom, indiv_name
 fread(filedir,showProgress = T,stringsAsFactors = F) -> indv_ #chr17 pos call
 data.table(indv_,stringsAsFactors = F)->indv
-print(str(indv))
+# print(str(indv))
 #indv$chrom <- 'chrX' #add a line full of chrX
 indv$chrom<-chr
-print(head(indv))
+# print(head(indv))
 colnames(indv) <- c('snp', 'call', 'chrom')
 indv$snp<-as.numeric(as.character(indv$snp))
 indv$call<-as.numeric(as.character(indv$call))
 indv$indiv <- as.character(indiv_name)
-print(str(indv))
-print(unique(indv$call))
+# print(str(indv))
+# print(unique(indv$call))
 chroms<-cbind(chr,chrlength)
 j=1
 
 indv -> tmp
 subset(tmp, !(tmp$call == -1)) -> tmp
 tmp -> indv
-print(str(tmp))
+# print(str(tmp))
 
 if (nrow(tmp) > 0) {
   # index temporary file of chromosome calls and use setkeys to prepare the data for matching sites within $VALUE of each SNP
@@ -78,12 +78,12 @@ if (nrow(tmp) > 0) {
   tmp[,loc_Dummy := snp]; tmp[,.(snp, call)] -> tmp2
   tmp2[,loc_Plus100 := snp + value]; tmp2[,loc_Minus100 := snp - value]
 
-  print(str(tmp))
-  print(str(tmp2))
+  # print(str(tmp))
+  # print(str(tmp2))
 
   setkey(tmp,snp,loc_Dummy); setkey(tmp2,loc_Minus100, loc_Plus100)
   #print(nrow(tmp))
-  print(paste("Now doing matches for ", chroms[j,1], "....", sep=""))
+  message(paste("Now doing matches for ", chroms[j,1], "....", sep=""))
   Matches <- foverlaps(tmp[,.(snp, loc_Dummy)], tmp2[,.(loc_Minus100,loc_Plus100,call)])
   Matches[,.(n = .N, mode = getmode(call), n_mode=sum(call==getmode(call))), by = .(snp)] -> i1
   #rm(Matches); gc(); rm(tmp2)
@@ -92,8 +92,8 @@ if (nrow(tmp) > 0) {
   i1$n<-as.numeric(as.character(i1$n))
   i1$perc <- i1$n_mode/i1$n
 
-  print("head of i1")
-  print(head(i1))
+  # print("head of i1")
+  # print(head(i1))
 
   # remove sites where there is not a consensus call by majority rule (at least `mode_n` percent of calls with the same state) or enough nearby ancestry informative sites (`min_n` within `value`)
   subset(tmp, i1$perc >= mode_n & i1$n >= min_n) -> tmp; subset(i1, i1$perc >= mode_n & i1$n >= min_n) -> i1
@@ -105,7 +105,7 @@ if (nrow(tmp) > 0) {
   i1$snp<-as.numeric(as.character(i1$snp))
   chroms[j,2]<-as.numeric(as.character(chroms[j,2]))
   if(nrow(i1)<=0){
-    print("No consensus call under mode",mode_n,"and min snp number",min_n)
+    warning("No consensus call under mode",mode_n,"and min snp number",min_n)
   }
   else if (nrow(i1) > 0) {
     # merge majority rule calls for this chromosome to the growing file, removing the first and last X kb (set by "exclude").
@@ -159,8 +159,8 @@ if (nrow(tmp) > 0) {
     ## blocks u_prev is the number of bases at the start of that tract which were inferred (i.e. before the first AIM with that ancestry call)
     ## blocks u_next is the same thing for the end of that tract
 
-    print("Head of blocks")
-    print(head(blocks))
+    # print("Head of blocks")
+    # print(head(blocks))
 
     #Blocks starts at the first SNP and goes to the last one.
 
@@ -171,9 +171,9 @@ if (nrow(tmp) > 0) {
     t$end <- as.numeric(as.character(t$end))
     t$start <- as.numeric(as.character(t$start))
 
-    print("Head of t")
-    print(head(t))
-    print(str(t))
+    # print("Head of t")
+    # print(head(t))
+    # print(str(t))
 
     # fix the extremes of `t`, cropping the first and last `exclude`bp from the chromosome
     t <- subset(t, t$start <= (as.numeric(chroms[j,2])-exclude) & t$end >= exclude)
@@ -183,16 +183,16 @@ if (nrow(tmp) > 0) {
     t$end[t$end > (as.numeric(chroms[j,2])-exclude)] <- (as.numeric(chroms[j,2])-exclude)
     t$length[c(1,nrow(t))] <- NA
 
-    print("Head of t")
-    print(head(t))
-    print(str(t))
+    # print("Head of t")
+    # print(head(t))
+    # print(str(t))
 
     # merge with list of tracts per individual
     if (j==1) {t -> tracts} else {rbind(tracts,t) -> tracts}
     if(nrow(tracts) == 1 & length(unique(indv$call))==1){
       tracts$state<-indv$call[1]
       tracts$length<-tracts$end - tracts$start
-      print("Only one tract, using the unique value.")
+      message("Only one tract, using the unique value.")
     }
     #rm(t); rm(modes)
     #rm(blocks)
