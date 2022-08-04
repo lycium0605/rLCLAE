@@ -56,6 +56,8 @@ data.table(indv_)->indv
 #indv$chrom <- 'chrX' #add a line full of chrX
 indv$chrom<-chr
 colnames(indv) <- c('snp', 'call', 'chrom')
+indv$snp<-as.numeric(as.character(indv$snp))
+indv$call<-as.numeric(as.character(indv$call))
 indv$indiv <- as.character(indiv_name)
 chroms<-cbind(chr,chrlength)
 j=1
@@ -77,6 +79,8 @@ if (nrow(tmp) > 0) {
   Matches[,.(n = .N, mode = getmode(call), n_mode=sum(call==getmode(call))), by = .(snp)] -> i1
   rm(Matches); gc(); rm(tmp2)
   print("done with matches!")
+  i1$n_mode<-as.numeric(as.character(i1$n_mode))
+  i1$n<-as.numeric(as.character(i1$n))
   i1$perc <- i1$n_mode/i1$n
   # remove sites where there is not a consensus call by majority rule (at least `mode_n` percent of calls with the same state) or enough nearby ancestry informative sites (`min_n` within `value`)
   subset(tmp, i1$perc >= mode_n & i1$n >= min_n) -> tmp; subset(i1, i1$perc >= mode_n & i1$n >= min_n) -> i1

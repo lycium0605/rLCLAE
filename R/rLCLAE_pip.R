@@ -117,15 +117,14 @@ rLCLAE<-function(
       gettract(
         outputdir = gettract_out,
         datadir = gettract_in,
-        indiv_name = as.character(ind),
+        indiv_name = ind,
         chr = chr,
         chrlength = as.character(chrlen),
         value = window,
-        exclude = exclude,
-        min_n = n_min,
-        mode_n = mode_min
+        exclude = as.numeric(exclude),
+        min_n = as.numeric(n_min),
+        mode_n = as.numeric(mode_min)
       )
-
     }
 
 
