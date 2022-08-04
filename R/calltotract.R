@@ -51,20 +51,24 @@ maj_dir<-paste(outputdir,indiv_name,'MajorityRule.txt',sep = '.')
 tractdir<-paste(outputdir,indiv_name,'tracts.txt',sep = '.')
 
 # Prepare a data column with snp, call, chrom, indiv_name
-fread(filedir,showProgress = T) -> indv_ #chr17 pos call
-data.table(indv_)->indv
+fread(filedir,showProgress = T,stringsAsFactors = F) -> indv_ #chr17 pos call
+data.table(indv_,stringsAsFactors = F)->indv
+print(str(indv))
 #indv$chrom <- 'chrX' #add a line full of chrX
 indv$chrom<-chr
+print(head(indv))
 colnames(indv) <- c('snp', 'call', 'chrom')
 indv$snp<-as.numeric(as.character(indv$snp))
 indv$call<-as.numeric(as.character(indv$call))
 indv$indiv <- as.character(indiv_name)
+print(str(indv))
 chroms<-cbind(chr,chrlength)
 j=1
 
 indv -> tmp
 subset(tmp, !(tmp$call == -1)) -> tmp
 tmp -> indv
+print(str(tmp))
 
 if (nrow(tmp) > 0) {
   # index temporary file of chromosome calls and use setkeys to prepare the data for matching sites within $VALUE of each SNP
@@ -77,7 +81,7 @@ if (nrow(tmp) > 0) {
   print(paste("Now doing matches for ", chroms[j,1], "....", sep=""))
   Matches <- foverlaps(tmp[,.(snp, loc_Dummy)], tmp2[,.(loc_Minus100,loc_Plus100,call)])
   Matches[,.(n = .N, mode = getmode(call), n_mode=sum(call==getmode(call))), by = .(snp)] -> i1
-  rm(Matches); gc(); rm(tmp2)
+  #rm(Matches); gc(); rm(tmp2)
   print("done with matches!")
   i1$n_mode<-as.numeric(as.character(i1$n_mode))
   i1$n<-as.numeric(as.character(i1$n))
@@ -97,7 +101,7 @@ if (nrow(tmp) > 0) {
     cbind(tmp,i1)[as.numeric(tmp$snp) >= exclude & as.numeric(tmp$snp) <= as.numeric(chroms[j,2])-exclude,-c(5:6)] -> maj_rule
 
     # progress to calling ancestry tracts
-    cbind(tmp, i1) -> modes; rm(tmp); rm(i1); if (j > 1) {rm(te)}
+    cbind(tmp, i1) -> modes; #rm(tmp); rm(i1); if (j > 1) {rm(te)}
 
     modes$nxt <- c(as.numeric(modes$snp[-1]),max(modes$snp))
     modes$nxt_chrom <- c(as.character(modes$chrom[-1]),modes$chrom[nrow(modes)])
@@ -111,11 +115,11 @@ if (nrow(tmp) > 0) {
     # nxt_state is the one that defines that block
     # add the first block from position 1 to the first break pt
     first <- as.data.frame(t(matrix(c(blocks$chrom[1], blocks$chrom[1], 1, blocks$snp[1], modes$mode[1], blocks$mode[1]))))
-    colnames(first) <- colnames(blocks); rbind(first, blocks) -> blocks; rm(first)
+    colnames(first) <- colnames(blocks); rbind(first, blocks) -> blocks; #rm(first)
 
     last <- as.data.frame(matrix(c(as.character(chroms[j,1]), as.character(chroms[j,1]), max(modes$snp), chroms[j,2], modes$nxt_state[nrow(modes)], modes$nxt_state[nrow(modes)]), ncol=6)); as.numeric(as.character(last$V3)) -> last$V3; as.numeric(as.character(last$V4)) -> last$V4; as.numeric(as.character(last$V5)) -> last$V5
     ;as.numeric(as.character(last$V6)) -> last$V6;
-    colnames(last) <- colnames(blocks); rbind(blocks, last) -> blocks; rm(last)
+    colnames(last) <- colnames(blocks); rbind(blocks, last) -> blocks; #rm(last)
 
     blocks$chrom <- blocks$nxt_chrom <- as.character(chroms[j,1]) # If you want the numbers, this should be `j` instead of `chroms$V1[j]`
 
@@ -164,13 +168,13 @@ if (nrow(tmp) > 0) {
       tracts$length<-tracts$end - tracts$start
       print("Only one tract, using the unique value.")
     }
-    rm(t); rm(modes)
-    rm(blocks)
+    #rm(t); rm(modes)
+    #rm(blocks)
   }
 }
 if(nrow(maj_rule)>0&&nrow(tracts>0)){
   write.table(maj_rule, maj_dir, row.names=F, col.names=T, quote=F, sep="\t")
   write.table(tracts, tractdir, row.names=F, col.names=T, quote=F, sep="\t")
-}
+  save.image(file = "My_Object.RData")}
 }
 
