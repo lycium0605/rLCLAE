@@ -62,6 +62,7 @@ indv$snp<-as.numeric(as.character(indv$snp))
 indv$call<-as.numeric(as.character(indv$call))
 indv$indiv <- as.character(indiv_name)
 print(str(indv))
+print(unique(indv$call))
 chroms<-cbind(chr,chrlength)
 j=1
 
@@ -91,6 +92,7 @@ if (nrow(tmp) > 0) {
 
   # Some format adjustment
   tmp$snp<-as.numeric(as.character(tmp$snp))
+  i1$snp<-as.numeric(as.character(i1$snp))
   chroms[j,2]<-as.numeric(as.character(chroms[j,2]))
   if(nrow(i1)<=0){
     print("No consensus call under mode",mode_n,"and min snp number",min_n)
@@ -117,8 +119,7 @@ if (nrow(tmp) > 0) {
     first <- as.data.frame(t(matrix(c(blocks$chrom[1], blocks$chrom[1], 1, blocks$snp[1], modes$mode[1], blocks$mode[1]))))
     colnames(first) <- colnames(blocks); rbind(first, blocks) -> blocks; #rm(first)
 
-    last <- as.data.frame(matrix(c(as.character(chroms[j,1]), as.character(chroms[j,1]), max(modes$snp), chroms[j,2], modes$nxt_state[nrow(modes)], modes$nxt_state[nrow(modes)]), ncol=6)); as.numeric(as.character(last$V3)) -> last$V3; as.numeric(as.character(last$V4)) -> last$V4; as.numeric(as.character(last$V5)) -> last$V5
-    ;as.numeric(as.character(last$V6)) -> last$V6;
+    last <- as.data.frame(matrix(c(as.character(chroms[j,1]), as.character(chroms[j,1]), max(modes$snp), chroms[j,2], modes$nxt_state[nrow(modes)], modes$nxt_state[nrow(modes)]), ncol=6)); as.numeric(as.character(last$V3)) -> last$V3; as.numeric(as.character(last$V4)) -> last$V4; as.numeric(as.character(last$V5)) -> last$V5;as.numeric(as.character(last$V6)) -> last$V6;
     colnames(last) <- colnames(blocks); rbind(blocks, last) -> blocks; #rm(last)
 
     blocks$chrom <- blocks$nxt_chrom <- as.character(chroms[j,1]) # If you want the numbers, this should be `j` instead of `chroms$V1[j]`
