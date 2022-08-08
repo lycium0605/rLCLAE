@@ -35,16 +35,24 @@ void anccall_c(double deltaf, int window, int SMAX,
   s=0;
   Rcout<<"Adding small values "<<zero_value<<" to avoid zeroes."<<std::endl;
   while (fscanf(anclik,"%lf\t%lf\t%lf\t%lf\t%lf\n", &posit, &delta, &p2, &p1, &p0) != EOF) {
-    if ((delta > (d - 1.E-10)) && (p0>1.E-10 || p2>1.E-10)) { //for hap p1==0
-      lik2[s] = log (p2+zero_value); //avoid 0
-      lik1[s] = log (p1+zero_value);
-      lik0[s] = log (p0+zero_value);
-      pos[s] = posit;
-      ++s;
+    // if zero value ==0, then completely skip points containing zero
+    if(zero_value==0){
+      if ((delta > (d - 1.E-10)) && p0>1.E-10 && p2>1.E-10) { //for hap p1==0
+        lik2[s] = log (p2); //avoid 0
+        lik1[s] = log (p1);
+        lik0[s] = log (p0);
+        pos[s] = posit;
+        ++s;
+      }
+    }else if(zero_value>0){
+      if ((delta > (d - 1.E-10)) && (p0>1.E-10 || p2>1.E-10)) { //for hap p1==0
+        lik2[s] = log (p2+zero_value); //avoid 0
+        lik1[s] = log (p1+zero_value);
+        lik0[s] = log (p0+zero_value);
+        pos[s] = posit;
+        ++s;
+      }
     }
-    //else{
-      //++s;
-    //}
   }
   Rcout<<"Scanning finished, "<<s<<" informative sites found."<<std::endl;
 
