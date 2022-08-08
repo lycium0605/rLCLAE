@@ -37,7 +37,7 @@ void anccall_c(double deltaf, int window, int SMAX,
   while (fscanf(anclik,"%lf\t%lf\t%lf\t%lf\t%lf\n", &posit, &delta, &p2, &p1, &p0) != EOF) {
     // if zero value ==0, then completely skip points containing zero
     if(zero_value==0){
-      if ((delta > (d - 1.E-10)) && p0>1.E-10 && p2>1.E-10) { //for hap p1==0
+      if ((delta > (d - 1.E-10)) && p0>1.E-6 && p1>1.E-6 && p2>1.E-6) { //for hap p1==0
         lik2[s] = log (p2); //avoid 0
         lik1[s] = log (p1);
         lik0[s] = log (p0);
