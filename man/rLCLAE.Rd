@@ -22,7 +22,8 @@ rLCLAE(
   inputdir_hap = "missing",
   refpop1_hap = "missing",
   refpop2_hap = "missing",
-  mergetype = "union"
+  mergetype = "union",
+  zero_value = 10^(-7)
 )
 }
 \arguments{
@@ -61,6 +62,8 @@ rLCLAE(
 \item{refpop2_hap}{missing, do not touch, not finished for ancfreq}
 
 \item{mergetype}{union, do not touch, not finished for ancfreq}
+
+\item{zero_value}{a small zero value added to the zeros, if zero then throw out sites with any zero}
 }
 \description{
 The summarized pipeline for rLCLAE

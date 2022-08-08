@@ -18,7 +18,7 @@
 #' @param refpop1_hap missing, do not touch, not finished for ancfreq
 #' @param refpop2_hap missing, do not touch, not finished for ancfreq
 #' @param mergetype union, do not touch, not finished for ancfreq
-#'
+#' @param zero_value a small zero value added to the zeros, if zero then throw out sites with any zero
 #'
 #' @export
 #'
@@ -42,7 +42,8 @@ rLCLAE<-function(
   inputdir_hap = "missing",
   refpop1_hap = "missing",
   refpop2_hap = "missing",
-  mergetype = "union"
+  mergetype = "union",
+  zero_value = 10^(-7)
 ){
 
   # Check if the directory end with /
@@ -108,7 +109,8 @@ rLCLAE<-function(
               chrlength = chrlen,
               window_size = window,
               delta = delta,
-              ploidy = inputtype)
+              ploidy = inputtype,
+              zero_value = zero_value)
       # fixed parameters: round1=1, round2=1, round3=2, auto_optimize=F, zero_value=10^-7
 
 # 06. Generating ancetry tract ----------------------------------------------
