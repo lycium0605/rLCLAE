@@ -91,6 +91,7 @@ rLCLAE<-function(
            outputdir = anclik_out,
            type = freqtype,
            test = test_ind)
+
 # For each individual -----------------------------------------------------
     # Get chromosome length
     chrlen<-as.numeric(chrlist[which(chrlist[,1]==chr),2])

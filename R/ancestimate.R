@@ -54,12 +54,24 @@ anccall<-function(inputdir,outputdir,
     #           anclikdir=inputdir,output=outputdir,
     #           chrom=chrom_name,indiv=indiv_name,
     #           mode=mode_min,n=n_min)
-    anccall_c(deltaf=delta,window=window_size,
-              SMAX=smax,
-              anclikdir=inputdir,output=outputdir,
-              chrom=chrom_name,indiv=indiv_name,
-              mode=mode_min,n=n_min,
-              round1=round1,round2=round2,round3=round3,
-              zero_value=zero_value)
+    if(ploidy=="dip"){
+      anccall_c(deltaf=delta,window=window_size,
+                SMAX=smax,
+                anclikdir=inputdir,output=outputdir,
+                chrom=chrom_name,indiv=indiv_name,
+                mode=mode_min,n=n_min,
+                round1=round1,round2=round2,round3=round3,
+                zero_value=zero_value)
+    }else if(ploidy=="hap"){
+      anccall_hap_c(deltaf=delta,window=window_size,
+                SMAX=smax,
+                anclikdir=inputdir,output=outputdir,
+                chrom=chrom_name,indiv=indiv_name,
+                mode=mode_min,n=n_min,
+                round1=round1,round2=round2,round3=round3,
+                zero_value=zero_value)
+    }else{
+      stop(paste("Ploidy has to be set as either hap or dip. Currently set at:",ploidy))
+    }
   }
   }
