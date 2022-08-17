@@ -240,7 +240,7 @@ gettract('./anccall_1', # input dir
          chr='chrX', # chromosome name, will add a column
          chrlength='142711496', #chromosome length in bp
          value=35000, # window size
-         mode_n=0.5, # the minimum percentage for a call to be made using majority rule
+         mode_n=0.5, # the minimum percentage for a call to be made (0.5 = majority rule, <=0.33 = plurality rule)
          min_n=20, # the minimum number of SNPs within the window to make a call
          exclude=50000) # how much of the start/end of each chromosome to ignore if any
 ```
