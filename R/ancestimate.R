@@ -54,6 +54,7 @@ anccall<-function(inputdir,outputdir,
     #           anclikdir=inputdir,output=outputdir,
     #           chrom=chrom_name,indiv=indiv_name,
     #           mode=mode_min,n=n_min)
+    indiv_name<-as.character(indiv_name)
     if(ploidy=="dip"){
       anccall_c(deltaf=delta,window=window_size,
                 SMAX=smax,
