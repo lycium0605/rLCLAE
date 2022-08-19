@@ -21,7 +21,7 @@ gettract(
 
 \item{outputdir}{output tract file}
 
-\item{indiv_name}{name or index to specify the individual}
+\item{indiv_name}{The unique identifier for the individual, which could be numeric index (e.g. 1) or character sample name (e.g. "sample_1")}
 
 \item{chr}{the chromosome it is on}
 

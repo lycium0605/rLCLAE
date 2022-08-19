@@ -21,7 +21,7 @@ utils::globalVariables(c(".", "chrom","loc_Dummy", "loc_Minus100", "loc_Plus100"
 #' @description Generating tract from snp level ancestry call.
 #' @param datadir input snp level ancestry call file
 #' @param outputdir output tract file
-#' @param indiv_name name or index to specify the individual
+#' @param indiv_name The unique identifier for the individual, which could be numeric index (e.g. 1) or character sample name (e.g. "sample_1")
 #' @param chr the chromosome it is on
 #' @param chrlength the length of the chromosome
 #' @param value window size

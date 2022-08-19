@@ -29,7 +29,7 @@ anccall(
 
 \item{chrom_name}{The name of the chromosome}
 
-\item{indiv_name}{The name of the individual}
+\item{indiv_name}{The unique identifier for the individual, which could be numeric index (e.g. 1) or character sample name (e.g. "sample_1")}
 
 \item{mode_min}{The minimum percentage for the mode to make a call, default set to 0.5}
 

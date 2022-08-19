@@ -15,7 +15,7 @@ anclik(genodir, ancfreqdir, outputdir, type = "dip", test = "all")
 
 \item{type}{'hap' or 'dip'}
 
-\item{test}{can be 'all' or a numeric vector containing the individual number to be estimated}
+\item{test}{can be 'all' or a numeric vector containing the numeric index (e.g. c(1,2,3) will represent the first, second and third individuals in the vcf file) of individuals to be estimated. A suffix "_n" will be added to each output file.}
 }
 \value{
 nothing

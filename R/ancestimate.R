@@ -4,7 +4,7 @@
 #' @param inputdir The file to the ancestral likelihood file
 #' @param outputdir The file to store the ancestry call
 #' @param chrom_name The name of the chromosome
-#' @param indiv_name The name of the individual
+#' @param indiv_name The unique identifier for the individual, which could be numeric index (e.g. 1) or character sample name (e.g. "sample_1")
 #' @param mode_min The minimum percentage for the mode to make a call, default set to 0.5
 #' @param n_min the minimum number of SNPs within the window to make a call, default set to zero
 #' @param delta The cutoff for ancestral allele frequency difference

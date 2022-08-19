@@ -7,7 +7,7 @@
 #' @param ancfreqdir ancestral allele frequency file
 #' @param outputdir ancestral state estimation
 #' @param type 'hap' or 'dip'
-#' @param test can be 'all' or a numeric vector containing the individual number to be estimated
+#' @param test can be 'all' or a numeric vector containing the numeric index (e.g. c(1,2,3) will represent the first, second and third individuals in the vcf file) of individuals to be estimated. A suffix "_n" will be added to each output file.
 #'
 #' @return nothing
 #' @export
