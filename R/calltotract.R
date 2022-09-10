@@ -147,7 +147,7 @@ if (nrow(tmp) > 0) {
     blocks[-nrow(blocks),] -> blocks  # last line no longer matters, we've already extended from the last SNP to the end of the chromosome
 
     blocks$length <- as.numeric(blocks$nxt_brk) - as.numeric(blocks$brk)
-    blocks$length[1] <- NA; blocks$length[nrow(blocks)-1] <- NA
+    #blocks$length[1] <- NA; blocks$length[nrow(blocks)-1] <- NA
 
 
 
