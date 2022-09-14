@@ -33,7 +33,7 @@ ancfreq(
 \item{mergetype}{A parameter for merging type ("intersect","union","full_dip","full_hap")}
 }
 \value{
-Nothing
+The output for ancfreq consists of a single line for each SNP. The first field shows the base position; the second to third fields show the estimated allele frequency for reference population 1 and 2; the third field shows the estimated difference in allele frequency in the two reference populations, the fourth to fifth fields show available individuals in reference population one and two.
 }
 \description{
 A function to calculate ancestral allele frequency based on two reference populations.

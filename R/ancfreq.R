@@ -10,7 +10,7 @@
 #' @param pop2_hap A numeric vector specifying the index of reference population 2 for haploid data.
 #' @param outputdir The dir to the output file. A postfix ('_dip','_hap','_merge') will be added.
 #' @param mergetype A parameter for merging type ("intersect","union","full_dip","full_hap")
-#' @return Nothing
+#' @return The output for ancfreq consists of a single line for each SNP. The first field shows the base position; the second to third fields show the estimated allele frequency for reference population 1 and 2; the third field shows the estimated difference in allele frequency in the two reference populations, the fourth to fifth fields show available individuals in reference population one and two.
 #' @export
 #'
 # @examples
@@ -71,11 +71,11 @@ ancfreq<-function(outputdir,inputdir_dip="missing",pop1_dip="missing",pop2_dip="
     if(inputdir_hap!='missing'){
       flag=datacheck(inputdir_hap,character='[^0-9.[:space:]-]',field = '2- -d \" \"')
       if(pop1_hap=='missing'){
-        print("Please provide input for haploid reference population 1.")
+        stop("Please provide input for haploid reference population 1.")
         flag=1
       }
       else if(pop2_hap=='missing'){
-        print("Please provide input for haploid reference population 2.")
+        stop("Please provide input for haploid reference population 2.")
         flag=1
       }
       else{
@@ -89,7 +89,7 @@ ancfreq<-function(outputdir,inputdir_dip="missing",pop1_dip="missing",pop2_dip="
 
     #Do ancestral allele frequency calculation
     if(inputdir_dip!="missing"&&inputdir_hap!="missing"){
-      print('Generating ancestral allele frequency for diploid, haploid data and merge them.')
+      message('Generating ancestral allele frequency for diploid, haploid data and merge them.')
       typenum=-1
       #"intersect","union","full_dip","full_hap"
       if(mergetype=="intersect"){
