@@ -158,3 +158,19 @@ glpow <- function(x) {
     .Call(`_rLCLAE_glpow`, x)
 }
 
+#' get_genolik_c: Get genolik directly from vcf
+#'
+#' @param input_file a string, the dir to cleaned vcf file
+#' @param output_file a string, the dir to the output file
+get_genolik_c <- function(input_file, output_file) {
+    invisible(.Call(`_rLCLAE_get_genolik_c`, input_file, output_file))
+}
+
+#' get_genolik_extended_c: Get genolik directly from vcf
+#'
+#' @param input_file a string, the dir to cleaned vcf file
+#' @param output_file a string, the dir to the output file
+get_genolik_extended_c <- function(input_file, output_file, format_type) {
+    invisible(.Call(`_rLCLAE_get_genolik_extended_c`, input_file, output_file, format_type))
+}
+

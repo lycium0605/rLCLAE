@@ -96,5 +96,22 @@ get_chrlist<-function(vcf="/Users/lycium/Desktop/Jennylab/rpackage_LCLAE/rawtest
 }
 
 
+#' get_genolik: vcf to genolik
+#'
+#' @param input vcf
+#' @param output genolik
+#'
+#' @return nothing
+#' @export
+#'
+
+get_genolik<-function(input,output,type="PL"){
+  if(type=="PL"){
+    get_genolik_c(input,output)
+  }else{
+    get_genolik_extended_c(input,output,type)
+  }
+
+}
 
 

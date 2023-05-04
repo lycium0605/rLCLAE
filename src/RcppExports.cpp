@@ -249,6 +249,29 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// get_genolik_c
+void get_genolik_c(std::string input_file, std::string output_file);
+RcppExport SEXP _rLCLAE_get_genolik_c(SEXP input_fileSEXP, SEXP output_fileSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type input_file(input_fileSEXP);
+    Rcpp::traits::input_parameter< std::string >::type output_file(output_fileSEXP);
+    get_genolik_c(input_file, output_file);
+    return R_NilValue;
+END_RCPP
+}
+// get_genolik_extended_c
+void get_genolik_extended_c(std::string input_file, std::string output_file, std::string format_type);
+RcppExport SEXP _rLCLAE_get_genolik_extended_c(SEXP input_fileSEXP, SEXP output_fileSEXP, SEXP format_typeSEXP) {
+BEGIN_RCPP
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type input_file(input_fileSEXP);
+    Rcpp::traits::input_parameter< std::string >::type output_file(output_fileSEXP);
+    Rcpp::traits::input_parameter< std::string >::type format_type(format_typeSEXP);
+    get_genolik_extended_c(input_file, output_file, format_type);
+    return R_NilValue;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_rLCLAE_anccall_c", (DL_FUNC) &_rLCLAE_anccall_c, 13},
@@ -265,6 +288,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_rLCLAE_filt1_dip", (DL_FUNC) &_rLCLAE_filt1_dip, 5},
     {"_rLCLAE_filt1_hap", (DL_FUNC) &_rLCLAE_filt1_hap, 5},
     {"_rLCLAE_glpow", (DL_FUNC) &_rLCLAE_glpow, 1},
+    {"_rLCLAE_get_genolik_c", (DL_FUNC) &_rLCLAE_get_genolik_c, 2},
+    {"_rLCLAE_get_genolik_extended_c", (DL_FUNC) &_rLCLAE_get_genolik_extended_c, 3},
     {NULL, NULL, 0}
 };
 
