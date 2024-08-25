@@ -70,11 +70,11 @@ ancfreq<-function(outputdir,inputdir_dip="missing",pop1_dip="missing",pop2_dip="
   if(flag==0){
     if(inputdir_hap!='missing'){
       flag=datacheck(inputdir_hap,character='[^0-9.[:space:]-]',field = '2- -d \" \"')
-      if(pop1_hap=='missing'){
+      if((length(pop1_hap)==1)&&pop1_hap=='missing'){
         stop("Please provide input for haploid reference population 1.")
         flag=1
       }
-      else if(pop2_hap=='missing'){
+      else if((length(pop2_hap)==1)&&pop2_hap=='missing'){
         stop("Please provide input for haploid reference population 2.")
         flag=1
       }

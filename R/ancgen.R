@@ -12,7 +12,7 @@
 #' @param min_n The minimum number of SNPs within the window to make a call, default set to zero.
 #' @param exclude The length of the start/end of each chromosome to ignore.
 #'
-#' @return
+#' @return something
 #' @export
 ancgen<-function(genodir,ancfreqdir,outputdir,
                  type = "dip", test = "all", #anclik parameter
